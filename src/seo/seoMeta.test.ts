@@ -85,7 +85,8 @@ describe('og:locale 的對應', () => {
 describe('pageMeta', () => {
   it('有標題時加站名後綴，沒有標題時用站名本身', () => {
     expect(pageMeta('關於', 'd', '/about', 'zh-TW')[0].title).toBe(`關於 - ${SITE_NAME}`);
-    expect(pageMeta(null, 'd', '/', 'zh-TW')[0].title).toBe(SITE_NAME);
+    // 留字面量：若寫成 `${SITE_NAME}`，SITE_NAME 被改成空字串這條也會綠，後綴行為就失去保護
+    expect(pageMeta(null, 'd', '/', 'zh-TW')[0].title).toBe('Example Site');
   });
 
   // og:url / twitter:url 是爬蟲用來去重的鍵，指錯就會被判成別頁的複製品

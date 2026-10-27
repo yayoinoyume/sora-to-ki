@@ -401,7 +401,7 @@ export default function Setup() {
               </div>
               {/* 老家那台：規格像開機自檢一樣一行一行打出來，滑過哪一行，草圖上那個位置就亮 */}
               <div key={current} className="su-post" style={{ '--step': `${POST_STEP_MS}ms` } as React.CSSProperties}>
-                <div className="su-post-head">KOIMSURAI BIOS · POWER-ON SELF TEST</div>
+                <div className="su-post-head">EXAMPLE BIOS · POWER-ON SELF TEST</div>
                 {POST_LINES.map((ln, i) => (
                   <div
                     key={ln.label}

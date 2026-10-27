@@ -126,7 +126,7 @@ struct Page {
 }
 
 const PAGES: [Page; 12] = [
-    Page { key: "home", name: "", caps: "KOIMSURAI", sub: "og.tagline" },
+    Page { key: "home", name: "", caps: "EXAMPLE", sub: "og.tagline" },
     Page { key: "notes", name: "siteNav.notes", caps: "NOTES", sub: "blog.subtitle" },
     Page { key: "moments", name: "siteNav.moments", caps: "MOMENTS", sub: "thinking.subtitle" },
     Page { key: "works", name: "siteNav.works", caps: "WORK", sub: "works.subtitle" },

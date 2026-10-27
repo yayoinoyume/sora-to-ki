@@ -43,7 +43,7 @@ import SignatureSVG from '@/components/common/SignatureSVG';
 import { LinkCard } from '@/components/common/LinkCard';
 import { LinkHoverPreview } from '@/components/common/LinkHoverPreview';
 import { Modal, ModalTitle } from '@/components/common/Modal';
-import { SITE_HOST } from '@/lib/site';
+import { SITE_HOST, SITE_NAME } from '@/lib/site';
 import { MdxContent } from '@/components/mdx/MdxContent';
 // slugify / extractHeadings / computeReadTime：與 BlogPostPage（SSR fallback）共用同一份，
 // 確保 heading anchor id / TOC / 閱讀時間兩邊逐字一致。
@@ -935,7 +935,7 @@ const SubscribeModal = ({ onClose }: { onClose: () => void }) => {
               }}
               className="subscribe-form"
               toolname="subscribe_newsletter"
-              tooldescription="訂閱 koimsurai 電子報，有新文章時以 email 通知"
+              tooldescription={`訂閱 ${SITE_NAME} 電子報，有新文章時以 email 通知`}
             >
               <label className="subscribe-field">
                 <span>{t('newsletter.fieldName')}</span>

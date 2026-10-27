@@ -108,7 +108,7 @@ describe('pageMeta', () => {
 describe('articleMeta', () => {
   it('og:title 用純標題，<title> 才加站名後綴', () => {
     const m = articleMeta(post(), '/blog/42', 'zh-TW');
-    expect(m[0].title).toBe(`測試文章 - ${SITE_NAME}`);
+    expect(m[0].title).toBe('測試文章 - Example Site');
     expect(pick(m, 'og:title')).toBe('測試文章');
   });
 
@@ -195,7 +195,7 @@ describe('articleJsonLd', () => {
 
   it('沒有作者時退回站主名稱，不會變成 null', () => {
     const bp = graph(articleJsonLd(post({ author: undefined }), '/blog/42'))[0];
-    expect((bp.author as Record<string, unknown>).name).toBe(SITE_NAME);
+    expect((bp.author as Record<string, unknown>).name).toBe('Example Site');
   });
 });
 

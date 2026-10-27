@@ -159,7 +159,7 @@ const AdminLayout = () => {
         <aside id="adm-side" className="adm-side" data-open={menuOpen || undefined}>
           <div className="adm-brand">
             <Link to="/admin/dashboard" className="adm-wordmark" onClick={close}>
-              sora to ki
+              Example Site
             </Link>
             <span className="adm-caps">管制室 · Admin</span>
           </div>
@@ -246,7 +246,7 @@ const AdminLayout = () => {
               {menuOpen ? '收起' : '選單'}
             </button>
             <Link to="/admin/dashboard" className="adm-wordmark">
-              sora to ki
+              Example Site
             </Link>
           </div>
         )}

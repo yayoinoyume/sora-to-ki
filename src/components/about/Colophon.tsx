@@ -4,7 +4,6 @@
 // 換頁進來時琥珀點落在望遠鏡的鏡筒前端，視線從那裡拉到第一顆星；離開時點從正在測的那顆星飛走。
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LinkCard } from '@/components/common/LinkCard';
 import { usePageTransition } from '@/hooks/usePageTransition';
 import { LocaleLink } from '@/i18n/locale-link';
 import { lookupOr } from '@/lib/tableLookup';
@@ -283,12 +282,9 @@ export default function Colophon() {
     {
       q: stripNumber(qa.q3),
       a: (
-        <>
-          <p>
-            {qa.a3} <code>thumbhash</code> {qa.a3_mid}
-          </p>
-          <LinkCard href="https://koimsurai.com/blog/21" />
-        </>
+        <p>
+          {qa.a3} <code>thumbhash</code> {qa.a3_mid}
+        </p>
       ),
     },
     { q: stripNumber(qa.q4), a: <p>{qa.a4}</p> },

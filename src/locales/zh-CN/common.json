@@ -295,7 +295,7 @@
   },
   "setup": {
     "title": "我的装备 · My Setup",
-    "description": "Example Site 的设备清单：主力机、跑着这个网站的服务器、网络与智能家居，还有一张家里怎么连起来的拓扑图。",
+    "description": "Example Site 的设备清单：主力机、跑着这个网站的家用服务器、网络与智能家居，还有一张家里怎么连起来的拓扑图。",
     "heroTitle": "设备",
     "subtitle": "解构精密，安放偏执。",
     "cat": {
@@ -639,7 +639,7 @@
     "legendDim": "越暗：越久没更新",
     "dockLabel": "两艘正要对接的船，中间有一道信号",
     "cardTitle": "本站资料",
-    "siteDesc": "一个写代码的人，偶尔造点东西",
+    "siteDesc": "一个个人网站",
     "formTitle": "成为下一颗",
     "fieldName": "名字",
     "fieldNameHint": "你的网站名称",
@@ -878,6 +878,6 @@
     "fontReading": "读文章时还能换成黑体、楷体或现代无衬线，四种都按语系由站上提供。MiSans 是小米的免费商用字体。"
   },
   "og": {
-    "tagline": "一个写代码的人，偶尔造点东西。"
+    "tagline": "一个个人网站。"
   }
 }

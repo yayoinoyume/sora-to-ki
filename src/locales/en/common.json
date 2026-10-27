@@ -295,7 +295,7 @@
   },
   "setup": {
     "title": "My Setup",
-    "description": "Example Site's gear: the main rig, the server running this site, networking and smart home — plus a map of how it all connects.",
+    "description": "Example Site's gear: the main rig, the home server running this site, networking and smart home — plus a map of how it all connects.",
     "heroTitle": "Setup",
     "subtitle": "Taking precision apart, giving obsession a place to rest.",
     "cat": {
@@ -639,7 +639,7 @@
     "legendDim": "Dimmer: longer since the last update",
     "dockLabel": "Two ships about to dock, a signal passing between them",
     "cardTitle": "This site",
-    "siteDesc": "Someone who writes code and occasionally builds things",
+    "siteDesc": "A personal website",
     "formTitle": "Be the next one",
     "fieldName": "Name",
     "fieldNameHint": "Your site's name",
@@ -878,6 +878,6 @@
     "fontReading": "Articles can also be read in a sans, a handwritten-style or a modern sans face, each served per language by this site. MiSans is a free commercial font by Xiaomi."
   },
   "og": {
-    "tagline": "Someone who writes code and occasionally builds things."
+    "tagline": "A personal website."
   }
 }

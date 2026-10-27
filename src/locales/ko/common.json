@@ -295,7 +295,7 @@
   },
   "setup": {
     "title": "내 장비 · My Setup",
-    "description": "Example Site의 장비 목록: 메인 PC, 이 사이트를 돌리는 서버, 네트워크와 스마트홈, 그리고 집 안 연결도.",
+    "description": "Example Site의 장비 목록: 메인 PC, 이 사이트를 돌리는 홈 서버, 네트워크와 스마트홈, 그리고 집 안 연결도.",
     "heroTitle": "장비",
     "subtitle": "정밀함을 해체하고, 집착을 내려놓을 자리를 만든다.",
     "cat": {
@@ -639,7 +639,7 @@
     "legendDim": "어두울수록: 업데이트가 오래됨",
     "dockLabel": "도킹 직전의 두 우주선, 그 사이를 오가는 신호",
     "cardTitle": "이 사이트 정보",
-    "siteDesc": "코드를 쓰는 사람. 가끔 뭔가를 만든다",
+    "siteDesc": "개인 사이트입니다",
     "formTitle": "다음 별이 되기",
     "fieldName": "이름",
     "fieldNameHint": "사이트 이름",
@@ -878,6 +878,6 @@
     "fontReading": "글은 고딕, 손글씨풍, 모던 산세리프로도 바꿔 읽을 수 있으며, 모두 언어별로 이 사이트에서 제공합니다. MiSans는 샤오미의 무료 상업용 글꼴입니다."
   },
   "og": {
-    "tagline": "코드를 쓰는 사람. 가끔 뭔가를 만든다."
+    "tagline": "개인 사이트입니다."
   }
 }

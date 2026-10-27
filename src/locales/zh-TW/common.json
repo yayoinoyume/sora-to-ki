@@ -295,7 +295,7 @@
   },
   "setup": {
     "title": "我的配備 · My Setup",
-    "description": "Example Site 的設備清單：主力機、跑著這個網站的伺服器、網路與智慧家庭，還有一張家裡怎麼連起來的拓撲圖。",
+    "description": "Example Site 的設備清單：主力機、跑著這個網站的家用伺服器、網路與智慧家庭，還有一張家裡怎麼連起來的拓撲圖。",
     "heroTitle": "設備",
     "subtitle": "解構精密，安放偏執。",
     "cat": {
@@ -639,7 +639,7 @@
     "legendDim": "越暗：越久沒更新",
     "dockLabel": "兩艘正要對接的船，中間有一道訊號",
     "cardTitle": "本站資料",
-    "siteDesc": "一個寫代碼的人，偶爾造點東西",
+    "siteDesc": "一個個人網站",
     "formTitle": "成為下一顆",
     "fieldName": "名字",
     "fieldNameHint": "你的網站名稱",
@@ -878,6 +878,6 @@
     "fontReading": "讀文章時還能換成黑體、楷體或現代無襯線，四種都照語系由站上提供。MiSans 是小米的免費商用字型。"
   },
   "og": {
-    "tagline": "一個寫代碼的人，偶爾造點東西。"
+    "tagline": "一個個人網站。"
   }
 }

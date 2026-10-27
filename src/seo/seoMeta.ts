@@ -221,7 +221,7 @@ export function siteJsonLd(locale: Locale = DEFAULT_LOCALE): { type: string; chi
         '@id': `${BASE_URL}/#person`,
         name: SITE_NAME,
         url: BASE_URL,
-        sameAs: ['https://github.com/timo9378'],
+        sameAs: [],
       },
     ],
   });

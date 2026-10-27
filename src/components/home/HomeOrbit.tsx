@@ -20,7 +20,7 @@ import { usePageTransition } from '@/hooks/usePageTransition';
 import './HomeOrbit.css';
 
 /** 作品頁做好之前，衛星上先列這幾個（照提案的作品清單） */
-const WORKS = ['tessera', 'nuntius', 'anigamer-rs', 'session-to-obsidian', 'flow2code', 'sora-to-ki', 'VoltiCar'];
+const WORKS: string[] = [];
 /** 滑鼠離衛星多近才算「靠近」（CSS 像素） */
 const NEAR_PX = 72;
 /** 閒置多久之後開始輪流提示 */

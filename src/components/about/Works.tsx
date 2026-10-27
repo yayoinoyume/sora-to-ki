@@ -200,6 +200,7 @@ export default function Works() {
 
       <div className="wk-spiral" ref={boxRef}>
         <canvas ref={canvasRef} aria-hidden="true" />
+        {works.length === 0 && <p className="wk-empty">{t('works.empty')}</p>}
         <ol className="wk-labels">
           {works.map((w, i) => {
             const inner = (

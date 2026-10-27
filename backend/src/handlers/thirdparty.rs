@@ -314,15 +314,7 @@ pub async fn github_contributions(
 ///
 /// 刻意寫死、不讓前端傳：這支用的是站上的 GITHUB_TOKEN，接受任意 repo 清單的話，
 /// 任何人換參數就能把 token 的 GraphQL 額度耗光。
-const WORK_REPOS: &[(&str, &str)] = &[
-    ("timo9378", "Volticar_API"),
-    ("timo9378", "sora-to-ki"),
-    ("timo9378", "flow2code"),
-    ("timo9378", "session-to-obsidian"),
-    ("timo9378", "anigamer-rs"),
-    ("timo9378", "nuntius"),
-    ("Limatura", "tessera"),
-];
+const WORK_REPOS: &[(&str, &str)] = &[];
 
 /// 一件作品的一種語言：GitHub 算的程式碼量（bytes）。
 #[derive(Debug, Serialize, specta::Type, utoipa::ToSchema)]
@@ -365,6 +357,10 @@ pub async fn github_works(State(state): State<AppState>) -> Response {
         (StatusCode::BAD_GATEWAY, Json(WorksResponse { error: Some(m), ..Default::default() }))
             .into_response()
     };
+    // 模板預設沒有任何作品：沒東西要查就不發請求（空 query 也會被 GraphQL 拒）
+    if WORK_REPOS.is_empty() {
+        return Json(WorksResponse::default()).into_response();
+    }
     let Some(token) = std::env::var("GITHUB_TOKEN").ok().filter(|s| !s.is_empty()) else {
         return fail("GITHUB_TOKEN 未設定（GraphQL 一定要認證）".into());
     };
@@ -2379,67 +2375,17 @@ mod tests {
         GhToken(g)
     }
 
+    // 作品清單在模板裡是空的（見 WORK_REPOS 的註解）：沒東西要查就不該打 GitHub
     #[tokio::test]
-    async fn github_works_每個_repo_一個_alias_私有的沒有連結_抓不到的那件跳過() {
+    async fn github_works_清單是空的時候不打_github() {
         let _t = with_gh_token().await;
         let server = MockServer::start().await;
-        Mock::given(method("POST"))
-            .and(path("/github/graphql"))
-            .respond_with(ResponseTemplate::new(200).set_body_json(json!({
-                "data": {
-                    "r0": {
-                        "nameWithOwner": "timo9378/Volticar_API", "url": "https://github.com/timo9378/Volticar_API",
-                        "isPrivate": true, "createdAt": "2025-03-21T00:00:00Z", "pushedAt": "2025-03-21T00:00:00Z",
-                        "stargazerCount": 0,
-                        "languages": { "edges": [ { "size": 21623, "node": { "name": "Python" } } ] },
-                        "defaultBranchRef": { "target": { "history": { "totalCount": 1 } } }
-                    },
-                    "r1": {
-                        "nameWithOwner": "timo9378/sora-to-ki", "url": "https://github.com/timo9378/sora-to-ki",
-                        "isPrivate": false, "createdAt": "2025-03-31T00:00:00Z", "pushedAt": "2026-10-23T00:00:00Z",
-                        "stargazerCount": 2,
-                        "languages": { "edges": [
-                            { "size": 2368532, "node": { "name": "TypeScript" } },
-                            { "size": 1381627, "node": { "name": "Rust" } }
-                        ] },
-                        "defaultBranchRef": { "target": { "history": { "totalCount": 732 } } }
-                    },
-                    "r2": null
-                },
-                "errors": [ { "message": "Could not resolve to a Repository" } ]
-            })))
-            .mount(&server)
-            .await;
 
         let st = state_with_mock(&server).await;
         let resp = github_works(axum::extract::State(st)).await;
-        assert_eq!(resp.status(), StatusCode::OK, "部分 repo 抓不到不算整支失敗");
-        let v = body_of(resp).await;
-        let works = v["works"].as_array().unwrap();
-        assert_eq!(works.len(), 2, "null 的那件不列");
-        assert!(works[0]["url"].is_null(), "私有 repo 不給連結");
-        assert_eq!(works[1]["url"], "https://github.com/timo9378/sora-to-ki");
-        assert_eq!(works[1]["commits"], 732);
-        assert_eq!(works[1]["languages"][1]["name"], "Rust");
-        assert_eq!(works[1]["languages"][1]["bytes"], 1381627);
-    }
-
-    #[tokio::test]
-    async fn github_works_整個查詢失敗回_502_讓快取層拿舊的頂著() {
-        let _t = with_gh_token().await;
-        let server = MockServer::start().await;
-        Mock::given(method("POST"))
-            .and(path("/github/graphql"))
-            .respond_with(ResponseTemplate::new(200).set_body_json(json!({
-                "errors": [ { "message": "API rate limit exceeded" } ]
-            })))
-            .mount(&server)
-            .await;
-
-        let st = state_with_mock(&server).await;
-        let resp = github_works(axum::extract::State(st)).await;
-        assert_eq!(resp.status(), StatusCode::BAD_GATEWAY);
-        assert_eq!(body_of(resp).await["error"], "API rate limit exceeded");
+        assert_eq!(resp.status(), StatusCode::OK);
+        assert!(body_of(resp).await["works"].as_array().unwrap().is_empty());
+        assert_eq!(server.received_requests().await.unwrap().len(), 0, "沒東西要查就不該打 GitHub");
     }
 
     #[tokio::test]

@@ -87,6 +87,18 @@
   pointer-events: none;
 }
 
+/* 一件作品都沒有時的一句話：畫布上什麼都不會畫，不能空成一片 */
+.wk-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+  padding: 0 24px;
+  max-width: 480px;
+  text-align: center;
+}
+
 .wk-label {
   position: absolute;
   top: 0;

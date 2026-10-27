@@ -383,8 +383,13 @@ export default function Colophon() {
       </div>
     ),
     license: (
-      <a className="cl-repo" href="https://github.com/timo9378/sora-to-ki" target="_blank" rel="noopener noreferrer">
-        github.com/timo9378/sora-to-ki
+      <a
+        className="cl-repo"
+        href="https://github.com/example-user/sora-to-ki"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        github.com/example-user/sora-to-ki
       </a>
     ),
   };

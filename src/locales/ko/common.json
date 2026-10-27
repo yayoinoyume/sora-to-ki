@@ -529,7 +529,8 @@
     "legendSurface": "지형: 주 언어",
     "legendRings": "고리: 다른 언어",
     "legendMoons": "위성: GitHub 스타",
-    "legendHover": "마우스를 올리면: 입체 천체로 펼쳐짐"
+    "legendHover": "마우스를 올리면: 입체 천체로 펼쳐짐",
+    "empty": "아직 작품이 없습니다. data/works.ts의 WORKS에 repo를 추가하면 여기에 나타납니다."
   },
   "collection": {
     "title": "컬렉션",

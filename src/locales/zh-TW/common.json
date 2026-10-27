@@ -529,7 +529,8 @@
     "legendSurface": "地貌：主要語言",
     "legendRings": "環：其他語言",
     "legendMoons": "衛星：GitHub 星星",
-    "legendHover": "滑過：展開成立體的星"
+    "legendHover": "滑過：展開成立體的星",
+    "empty": "還沒有作品。在 data/works.ts 的 WORKS 裡新增一個 repo 就會出現在這裡。"
   },
   "collection": {
     "title": "收藏",

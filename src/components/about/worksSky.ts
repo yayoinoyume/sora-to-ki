@@ -732,7 +732,8 @@ export function createSpiral(bodies: Body[]) {
     // 琥珀點是筆尖：從起點沿著航線往外畫，最後落在最新那一件，變成它的衛星
     // 落地之後光暈與亮線慢慢退掉，不是一到就不見
     const pen = grow < 1 ? 1 : 1 - settle;
-    if (grow > 0 && pen > 0) {
+    // 沒作品時 newest 是 -1，moonOf 會去讀 bodies[-1]；一件都沒有就沒有筆尖可言
+    if (newest >= 0 && grow > 0 && pen > 0) {
       const tail = Math.max(0, reach - PEN_TAIL);
       for (let k = 1; k <= 30; k++) {
         const [x0, y0] = P(tail + ((k - 1) / 30) * (reach - tail));

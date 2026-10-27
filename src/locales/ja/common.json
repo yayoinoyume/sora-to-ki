@@ -529,7 +529,8 @@
     "legendSurface": "地形：主な言語",
     "legendRings": "環：ほかの言語",
     "legendMoons": "衛星：GitHub のスター",
-    "legendHover": "カーソルを重ねる：立体の星に開く"
+    "legendHover": "カーソルを重ねる：立体の星に開く",
+    "empty": "まだ作品はありません。data/works.ts の WORKS に repo を追加するとここに並びます。"
   },
   "collection": {
     "title": "コレクション",

@@ -62,7 +62,7 @@
     "listening": "聴いている",
     "recently": "最近",
     "episode": "第 {{ep}} 話",
-    "aboutLead": "Koimsurai、コードを書く人。ときどき何かを作る。",
+    "aboutLead": "個人サイトです。",
     "aboutAll": "自己紹介"
   },
   "user": {
@@ -72,7 +72,7 @@
     "signInWithGoogle": "Google でログイン"
   },
   "hero": {
-    "description": "宙と木、Koimsurai の個人空間。コードを書く人。ときどき何かを作る。"
+    "description": "Example Site の個人空間。"
   },
   "footer": {
     "tagline": "Stay hungry. Stay foolish.",
@@ -116,7 +116,7 @@
   },
   "home": {
     "orbit": {
-      "title": "Koimsurai の個人サイト：ノート、つぶやき、作品、コレクション",
+      "title": "Example Site：ノート、つぶやき、作品、コレクション",
       "notesCount": "{{count}} 本 · 最新 {{date}}",
       "momentsCount": "最新 {{date}}",
       "worksCount": "{{count}} 件",
@@ -157,7 +157,7 @@
   },
   "activity": {
     "title": "アクティビティダッシュボード",
-    "description": "Koimsurai のリアルタイムアクティビティダッシュボード。",
+    "description": "Example Site のリアルタイムアクティビティダッシュボード。",
     "loading": "アクティビティを読み込み中",
     "labels": {
       "gameCollection": "ゲームコレクション",
@@ -203,7 +203,7 @@
     "more": "あと {{count}} 本",
     "minutes": "約 {{count}} 分",
     "metaTitle": "ノート",
-    "description": "Koimsurai の技術ノート、学習ノート、日々の随筆。フロントエンドアーキテクチャ、Rust、システム設計など。",
+    "description": "Example Site の技術ノート、学習ノート、日々の随筆。フロントエンドアーキテクチャ、Rust、システム設計など。",
     "heroTitle": "ノート",
     "loading": "記事を読み込み中",
     "search": "記事を検索...",
@@ -295,7 +295,7 @@
   },
   "setup": {
     "title": "私のセットアップ · My Setup",
-    "description": "Koimsurai の機材一覧：メインマシン、このサイトを動かす自宅サーバー、ネットワークとスマートホーム、そして家の接続図。",
+    "description": "Example Site の機材一覧：メインマシン、このサイトを動かすサーバー、ネットワークとスマートホーム、そして家の接続図。",
     "heroTitle": "機材",
     "subtitle": "精密を解きほぐし、こだわりを据える。",
     "cat": {
@@ -426,7 +426,7 @@
     "missingToken": "リンクに token がありません。ニュースレター下部の購読解除リンクをご利用ください。",
     "invalidLink": "リンクが無効か期限切れです。",
     "unsubscribeFailed": "購読解除に失敗しました",
-    "bodyConfirm": "<em>{{email}}</em> で Koimsurai ニュースレターを購読解除しようとしています。<br />解除後、新しい記事はメールで届きません。",
+    "bodyConfirm": "<em>{{email}}</em> で Example Site ニュースレターを購読解除しようとしています。<br />解除後、新しい記事はメールで届きません。",
     "btnConfirm": "購読解除を確定",
     "btnKeep": "やめて、続けます",
     "bodyDoneEmail": "<em>{{email}}</em> を購読リストから削除しました。",
@@ -441,7 +441,7 @@
   },
   "about": {
     "title": "私について",
-    "description": "Koimsurai — フルスタックエンジニア。スキル・経歴・コミュニティ・歩み。"
+    "description": "Example Site — フルスタックエンジニア。スキル・経歴・コミュニティ・歩み。"
   },
   "portfolio": {
     "title": "作品",
@@ -449,7 +449,7 @@
   },
   "photos": {
     "title": "写真作品集",
-    "description": "Koimsurai の写真作品集。旅先の光と影の記録。",
+    "description": "Example Site の写真作品集。旅先の光と影の記録。",
     "heading": "写真",
     "subtitle": "虚空を越えてきた微かな信号を、ここで一行ずつ現像する。",
     "station": "DSN · 地上局",
@@ -460,7 +460,7 @@
       "share": "この写真を共有",
       "shareShort": "共有",
       "shareTitle": "写真",
-      "shareText": "Koimsurai の写真",
+      "shareText": "Example Site の写真",
       "close": "ビューアを閉じる",
       "closeHint": "閉じる（Esc）",
       "prev": "前の写真",

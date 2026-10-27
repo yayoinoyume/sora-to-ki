@@ -250,7 +250,7 @@ function i18nProps(): Record<string, { type: 'string'; description: string }> {
 }
 
 // 完整撰寫指南——寫一篇文章前先讀。目標：Agent 一次產出結構完整、格式正確、可直接發布的文章。
-const AUTHORING_GUIDE = `# koimsurai 文章撰寫指南（給 AI）
+const AUTHORING_GUIDE = `# 文章撰寫指南（給 AI）
 
 寫「一篇完整文章」前先讀這份。目標：一次到位——結構完整、格式正確、站長只要審不用大改。
 
@@ -414,7 +414,7 @@ export function makeTools(api: ApiClient): Tool[] {
     {
       name: 'koimsurai_authoring_guide',
       description:
-        '取得 koimsurai 文章撰寫指南（欄位慣例、可用 block、彩色 alert、MDX 語法坑、檢查清單）。' +
+        '取得文章撰寫指南（欄位慣例、可用 block、彩色 alert、MDX 語法坑、檢查清單）。' +
         '寫「一篇完整文章」前先呼叫這個，尤其要用 format=mdx / 圖表 / 自訂 block 時。',
       inputSchema: EMPTY,
       handler: () => Promise.resolve(AUTHORING_GUIDE),

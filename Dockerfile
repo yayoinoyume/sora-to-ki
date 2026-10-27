@@ -136,6 +136,6 @@ ENV PORT=13579
 ENV HOST=0.0.0.0
 # 預設值對齊現況(compose 仍會覆寫);舊值 http://backend:3001 是 Express 時代的殘留
 ENV BACKEND_URL=http://backend-rs:3002
-ENV SITE_URL=https://koimsurai.com
+ENV SITE_URL=https://example.com
 
 CMD ["node", ".output/server/index.mjs"]

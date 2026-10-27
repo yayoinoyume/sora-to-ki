@@ -9,7 +9,7 @@
 //!      就多一條「哪天被拿去外送資料」的路。
 //!   3. **擋廣告外掛不會誤殺。** uBlock 那類會用通用規則比對 `/envelope/`、`/api/N/store/`
 //!      這種路徑。被擋的時候是**靜默的**——前端以為送出去了，你以為沒出錯。
-//!   4. **`glitchtip.koimsurai.com` 不必對公網開 ingest。** 那個子網域現在只剩
+//!   4. **錯誤上報服務不必對公網開 ingest。** 那個子網域現在只剩
 //!      你自己看儀表板用。
 //!
 //! ⚠️ 這兩個端點**無認證**（本來就不可能有：CSP report 是瀏覽器直接送的，帶不了
@@ -209,8 +209,8 @@ mod tests {
         // 沒有 port 時不要留下一個空的 ":"；寫了預設 port 也一樣省略
         for raw in ["https://k@glitchtip.koimsurai.com/1", "https://k@glitchtip.koimsurai.com:443/1"] {
             let d = Dsn::parse(raw).expect("無 port");
-            assert_eq!(d.envelope_url(), "https://glitchtip.koimsurai.com/api/1/envelope/?sentry_key=k");
-            assert_eq!(d.security_url(), "https://glitchtip.koimsurai.com/api/1/security/?sentry_key=k");
+            assert_eq!(d.envelope_url(), "https://glitchtip.example.com/api/1/envelope/?sentry_key=k");
+            assert_eq!(d.security_url(), "https://glitchtip.example.com/api/1/security/?sentry_key=k");
         }
     }
 

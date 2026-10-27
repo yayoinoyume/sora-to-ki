@@ -61,23 +61,23 @@ describe('toLocales', () => {
 
 describe('localeUrl / buildAlternateLinks', () => {
   it('預設語言無前綴、其餘帶前綴', () => {
-    expect(localeUrl('zh-TW', '')).toBe('https://koimsurai.com/');
-    expect(localeUrl('zh-TW', '/blog/39')).toBe('https://koimsurai.com/blog/39');
-    expect(localeUrl('en', 'blog/39')).toBe('https://koimsurai.com/en/blog/39');
-    expect(localeUrl('zh-CN', 'about')).toBe('https://koimsurai.com/zh-cn/about');
+    expect(localeUrl('zh-TW', '')).toBe('https://example.com/');
+    expect(localeUrl('zh-TW', '/blog/39')).toBe('https://example.com/blog/39');
+    expect(localeUrl('en', 'blog/39')).toBe('https://example.com/en/blog/39');
+    expect(localeUrl('zh-CN', 'about')).toBe('https://example.com/zh-cn/about');
   });
   it('canonical 指當前語言、附全語言 alternates 與 x-default', () => {
     const links = buildAlternateLinks('blog/39', 'en', ['zh-TW', 'en']);
-    expect(links[0]).toEqual({ rel: 'canonical', href: 'https://koimsurai.com/en/blog/39' });
+    expect(links[0]).toEqual({ rel: 'canonical', href: 'https://example.com/en/blog/39' });
     expect(links).toContainEqual({
       rel: 'alternate',
       hreflang: 'zh-TW',
-      href: 'https://koimsurai.com/blog/39',
+      href: 'https://example.com/blog/39',
     });
     expect(links).toContainEqual({
       rel: 'alternate',
       hreflang: 'x-default',
-      href: 'https://koimsurai.com/blog/39',
+      href: 'https://example.com/blog/39',
     });
     // 只列文章實際存在的語言（+canonical +x-default）
     expect(links).toHaveLength(4);

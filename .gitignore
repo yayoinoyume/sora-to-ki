@@ -127,3 +127,6 @@ lcov-e2e.info
 
 # 按頁裁字用的思源宋體原檔（17 MB，scripts/fetch-serif-font.mjs 下載）
 /.cache/fonts/
+
+# 改动前的本地备份（AGENTS.md 要求；不入库）
+.backups/

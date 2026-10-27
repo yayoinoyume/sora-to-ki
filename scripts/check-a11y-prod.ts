@@ -26,7 +26,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { chromium, type Browser } from '@playwright/test';
 
-const BASE = process.env.A11Y_BASE_URL ?? 'https://koimsurai.com';
+const BASE = process.env.A11Y_BASE_URL ?? 'https://example.com';
 
 /** 巡檢的頁面。挑的是「有實際資料才看得出差異」的那些，而不是全部。 */
 const PAGES = [

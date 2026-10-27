@@ -86,11 +86,11 @@ async fn 連結用_slug_而不是_id_沒有_slug_才退回_id() {
     seed_rss(&pool).await;
     let xml = rss(&app, "").await;
 
-    assert!(xml.contains("<link>https://koimsurai.com/blog/has-slug</link>"), "有 slug 就要用 slug");
+    assert!(xml.contains("<link>https://example.com/blog/has-slug</link>"), "有 slug 就要用 slug");
     assert!(!xml.contains("/blog/20<"), "不該出現 /blog/20");
-    assert!(xml.contains("<link>https://koimsurai.com/blog/21</link>"), "沒有 slug 才退回 id");
+    assert!(xml.contains("<link>https://example.com/blog/21</link>"), "沒有 slug 才退回 id");
     // guid 與 link 一致，且宣告 isPermaLink
-    assert!(xml.contains(r#"<guid isPermaLink="true">https://koimsurai.com/blog/has-slug</guid>"#));
+    assert!(xml.contains(r#"<guid isPermaLink="true">https://example.com/blog/has-slug</guid>"#));
 }
 
 #[tokio::test]
@@ -190,10 +190,10 @@ async fn 日文_feed_只收有日文譯文的文章() {
     assert!(!xml.contains("有 slug 的文章"), "沒有日文譯文的不該混進來");
     assert!(!xml.contains("沒有摘要的文章"));
     // 連結要帶語系前綴，頻道語言與 self link 也要跟著
-    assert!(xml.contains("<link>https://koimsurai.com/ja/blog/has-ja</link>"), "連結要帶 /ja");
+    assert!(xml.contains("<link>https://example.com/ja/blog/has-ja</link>"), "連結要帶 /ja");
     assert!(xml.contains("<language>ja</language>"));
-    assert!(xml.contains(r#"href="https://koimsurai.com/rss?lang=ja""#), "atom:self 要指回帶 lang 的網址");
-    assert!(xml.contains("<link>https://koimsurai.com/ja/blog</link>"), "頻道連結也要帶前綴");
+    assert!(xml.contains(r#"href="https://example.com/rss?lang=ja""#), "atom:self 要指回帶 lang 的網址");
+    assert!(xml.contains("<link>https://example.com/ja/blog</link>"), "頻道連結也要帶前綴");
 }
 
 #[tokio::test]
@@ -203,8 +203,8 @@ async fn 認不得的語系退回繁中且不加前綴() {
     for q in ["lang=de", "lang=", "lang=zh-TW", ""] {
         let xml = rss(&app, q).await;
         assert!(xml.contains("<language>zh-TW</language>"), "q={q:?}");
-        assert!(xml.contains("<link>https://koimsurai.com/blog</link>"), "q={q:?} 不該有語系前綴");
-        assert!(xml.contains(r#"href="https://koimsurai.com/rss""#), "q={q:?} self link 不帶 lang");
+        assert!(xml.contains("<link>https://example.com/blog</link>"), "q={q:?} 不該有語系前綴");
+        assert!(xml.contains(r#"href="https://example.com/rss""#), "q={q:?} self link 不帶 lang");
         assert!(xml.contains("有 slug 的文章"), "q={q:?} 退回繁中就該收得到中文文章");
     }
 }

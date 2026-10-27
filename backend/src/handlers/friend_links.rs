@@ -941,8 +941,8 @@ mod tests {
 
     #[test]
     fn 有沒有連回來_不分大小寫() {
-        assert!(links_back(r#"<a href="https://Koimsurai.com">宙と木</a>"#, "koimsurai.com"));
-        assert!(!links_back("<a href=\"https://other.example\">", "koimsurai.com"));
+        assert!(links_back(r#"<a href="https://Example.com">示例站点</a>"#, "example.com"));
+        assert!(!links_back("<a href=\"https://other.example\">", "example.com"));
         assert!(!links_back("anything", ""), "不知道自己的 host 時不能算有連回來");
     }
 }

@@ -23,7 +23,7 @@ import { readRegisteredBlocks } from './mdx-block-names';
 import { LOCALES, localesOf } from './post-locales';
 import { stripCode } from './strip-code';
 
-const SITE = (process.env.SITE_URL ?? 'https://koimsurai.com').replace(/\/$/, '');
+const SITE = (process.env.SITE_URL ?? 'https://example.com').replace(/\/$/, '');
 interface PostListItem {
   id: number;
   title: string;

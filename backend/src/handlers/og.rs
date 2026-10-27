@@ -193,7 +193,7 @@ fn build_html(card: &Card) -> String {
     display:flex; flex-direction:column; justify-content:space-between;">
     <div style="display:flex; flex-direction:row; align-items:baseline; gap:14px;">
       {brand}
-      <span style="font-family:'Fira Code'; font-size:15px; letter-spacing:0.16em; color:rgba(241,236,227,0.45);">koimsurai.com</span>
+      <span style="font-family:'Fira Code'; font-size:15px; letter-spacing:0.16em; color:rgba(241,236,227,0.45);">example.com</span>
     </div>
     <div style="display:flex; flex-direction:column; gap:20px;">
       <div style="font-family:'Fira Code',{sans}; font-size:18px; letter-spacing:0.12em; color:#e9c17a;">{kicker}</div>

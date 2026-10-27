@@ -5,7 +5,7 @@
  *
  * 連結會在沒有人動任何程式碼的情況下爛掉——對方改網址、關站、或是我們自己把某個頁面
  * 拿掉了。這種事沒有任何症狀，讀者點到 404 也不會回報。實測第一次跑就抓到
- * `https://koimsurai.com/now`：那是 2026-02 的文章提到的自家頁面，後來站台改版時消失了。
+ * `https://example.com/now`：那是 2026-02 的文章提到的自家頁面，後來站台改版時消失了。
  *
  * ## 兩件讓它不變成噪音的事
  *
@@ -30,7 +30,7 @@ import { pathToFileURL } from 'node:url';
 import { localesOf } from './post-locales';
 import { stripCode } from './strip-code';
 
-const SITE = (process.env.SITE_URL ?? 'https://koimsurai.com').replace(/\/$/, '');
+const SITE = (process.env.SITE_URL ?? 'https://example.com').replace(/\/$/, '');
 const SITE_HOST = new URL(SITE).hostname;
 
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';

@@ -37,17 +37,17 @@ describe('postPath', () => {
 });
 
 describe('postShareUrl', () => {
-  const O = 'https://koimsurai.com';
+  const O = 'https://example.com';
 
   it('用 slug 組 canonical 網址：別人點開不必先被 301 一次', () => {
     expect(postShareUrl({ slug: 'why-i-switched-to-zed', id: 39 }, 'zh-TW', O)).toBe(
-      'https://koimsurai.com/blog/why-i-switched-to-zed',
+      'https://example.com/blog/why-i-switched-to-zed',
     );
   });
 
   it('帶目前語系的前綴：英文版分享出去還是英文版', () => {
     expect(postShareUrl({ slug: 'why-i-switched-to-zed', id: 39 }, 'en', O)).toBe(
-      'https://koimsurai.com/en/blog/why-i-switched-to-zed',
+      'https://example.com/en/blog/why-i-switched-to-zed',
     );
   });
 });

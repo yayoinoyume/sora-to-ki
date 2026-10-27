@@ -7,7 +7,7 @@
  * nitro + backend + 一個很小的反向代理，裡面根本沒有 nginx。在那裡斷言標頭只會驗到
  * 我自己寫的假代理，不是線上真正在跑的設定——那種測試綠了也不代表什麼。
  *
- * 所以這支直接打 https://koimsurai.com。它在排程的 content job 裡跑（每天一次），
+ * 所以這支直接打 https://example.com。它在排程的 content job 裡跑（每天一次），
  * 不擋 PR：nginx 設定不在這個 repo 裡，PR 改不到它，拿它擋 PR 只會製造無關的紅燈。
  *
  * ## 它在防什麼
@@ -36,7 +36,7 @@ interface Rule {
   expectStatus?: number;
 }
 
-const BASE = process.env.BASE_URL ?? 'https://koimsurai.com';
+const BASE = process.env.BASE_URL ?? 'https://example.com';
 
 /**
  * 全站都該有的四條。內容也一起比對——只檢查「有沒有」的話，值被改壞看不出來。

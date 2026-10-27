@@ -37,7 +37,7 @@ fn simkl_api() -> String {
 
 const SIMKL_API: &str = "https://api.simkl.com";
 /// 官方要求帶「描述性」的 User-Agent（文件範例：`PlexMediaServer/1.43.1.10540`）。
-const SIMKL_UA: &str = "koimsurai/1.0 (+https://koimsurai.com)";
+const SIMKL_UA: &str = "site/1.0 (+https://example.com)";
 /// 游標的 key。值是 /sync/activities 的 `all` 欄位，原樣存、原樣送回去當 date_from。
 const CURSOR_KEY: &str = "simkl.activities_all";
 

@@ -38,7 +38,7 @@ services:
     environment:
       - TZ=Asia/Taipei
       - BACKEND_URL=http://backend-rs:3002
-      - SITE_URL=https://koimsurai.com
+      - SITE_URL=https://example.com
       # 發文/改文後 backend-rs 會打 /_revalidate 清 ISR 快取，不必等 TTL（文章頁 1h）。
       # 密鑰放未提交的 ./.env（compose 會自動載入做 ${} 替換）；沒設 = 端點回 404、功能不啟用。
       - REVALIDATE_SECRET=${REVALIDATE_SECRET:-}
@@ -68,7 +68,7 @@ services:
     environment:
       - TZ=Asia/Taipei
       - BACKEND_URL=http://backend-rs:3002
-      - SITE_URL=https://koimsurai.com
+      - SITE_URL=https://example.com
     ports:
       - "127.0.0.1:13589:13579"
     restart: unless-stopped

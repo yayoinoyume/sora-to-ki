@@ -40,7 +40,7 @@ fn site_id() -> String {
     std::env::var("PLAUSIBLE_SITE_ID")
         .ok()
         .filter(|s| !s.trim().is_empty())
-        .unwrap_or_else(|| "koimsurai.com".into())
+        .unwrap_or_else(|| "example.com".into())
 }
 
 #[derive(Debug, Deserialize, utoipa::IntoParams)]

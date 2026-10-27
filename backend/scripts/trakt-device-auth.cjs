@@ -34,7 +34,7 @@ async function main() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'koimsurai/1.0 (+https://koimsurai.com)',
+      'User-Agent': 'site/1.0 (+https://example.com)',
     },
     body: JSON.stringify({ client_id: CLIENT_ID }),
   });
@@ -60,7 +60,7 @@ async function main() {
       method: 'POST',
       headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'koimsurai/1.0 (+https://koimsurai.com)',
+      'User-Agent': 'site/1.0 (+https://example.com)',
     },
       body: JSON.stringify({
         code: device_code,

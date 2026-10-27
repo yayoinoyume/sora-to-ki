@@ -303,7 +303,7 @@ pub async fn link_preview(
     //   前台只剩一張空的降級卡，看起來就是「這個站的預覽壞了」。
     //   所以失敗時退回瀏覽器 UA 再試一次。這是 link unfurler 的常規做法
     //   （Slack/Discord 同樣行為），抓的也只是讀者自己 hover 的那個公開頁面。
-    const HONEST_UA: &str = "Mozilla/5.0 (compatible; koimsurai-linkpreview/1.0; +https://koimsurai.com)";
+    const HONEST_UA: &str = "Mozilla/5.0 (compatible; site-linkpreview/1.0; +https://example.com)";
     const BROWSER_UA: &str = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 \
                               (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
     let fetched = match fetch_with(HONEST_UA).await {

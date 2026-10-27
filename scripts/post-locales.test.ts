@@ -79,7 +79,7 @@ describe('hostHasNoDot', () => {
   // 反面才是重點：濾太寬等於連結從此不再被檢查，而那是這支腳本存在的反面。
   it('真的網域一律留著（含子網域、通訊埠、IP、非 ASCII 網域）', () => {
     for (const u of [
-      'https://koimsurai.com/blog/1',
+      'https://example.com/blog/1',
       'https://registry.npmjs.org/anigamer',
       'https://sub.domain.example.co.uk/a?b=c#d',
       'https://example.com:8443/x',

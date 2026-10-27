@@ -130,7 +130,7 @@ async fn 欄位不對的不收() {
         (json!({ "name": "a", "url": "http://127.0.0.1:8080" }), "指到本機"),
         (json!({ "name": "a", "url": "http://192.168.1.1" }), "指到內網"),
         (json!({ "name": "a", "url": "https://a.example", "email": "nope" }), "信箱不對"),
-        (json!({ "name": "a", "url": "https://koimsurai.com" }), "這個站自己"),
+        (json!({ "name": "a", "url": "https://example.com" }), "這個站自己"),
     ];
     for (body, why) in cases {
         let (st, v) = apply_from(&app, "203.0.113.10", body).await;

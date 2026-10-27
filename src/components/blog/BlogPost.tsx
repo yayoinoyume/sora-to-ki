@@ -43,6 +43,7 @@ import SignatureSVG from '@/components/common/SignatureSVG';
 import { LinkCard } from '@/components/common/LinkCard';
 import { LinkHoverPreview } from '@/components/common/LinkHoverPreview';
 import { Modal, ModalTitle } from '@/components/common/Modal';
+import { SITE_HOST } from '@/lib/site';
 import { MdxContent } from '@/components/mdx/MdxContent';
 // slugify / extractHeadings / computeReadTime：與 BlogPostPage（SSR fallback）共用同一份，
 // 確保 heading anchor id / TOC / 閱讀時間兩邊逐字一致。
@@ -362,7 +363,7 @@ export const CustomParagraph = ({
         host.includes('bilibili.com') ||
         host.includes('b23.tv') ||
         host.includes('spotify.com') ||
-        host.includes('koimsurai.com')
+        host.includes(SITE_HOST)
       );
     } catch {
       return false;

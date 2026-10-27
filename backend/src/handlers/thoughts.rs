@@ -375,7 +375,7 @@ async fn unfurl_url(http: &reqwest::Client, url: &str) -> Option<Value> {
     let resp = http
         .get(url)
         .timeout(std::time::Duration::from_secs(6))
-        .header("User-Agent", "Mozilla/5.0 (compatible; koimsurai-bot/1.0; +https://koimsurai.com)")
+        .header("User-Agent", "Mozilla/5.0 (compatible; site-bot/1.0; +https://example.com)")
         .send()
         .await
         .ok()?;
@@ -694,7 +694,7 @@ pub async fn thoughts_rss(State(state): State<AppState>) -> Response {
     };
     let mut items = String::new();
     for (id, content, ref_type, ref_url, ref_json, created_at) in &rows {
-        let link = format!("https://koimsurai.com/thinking/{id}");
+        let link = format!("https://example.com/thinking/{id}");
         // ref = safeParse(ref_json)：解析成功且 truthy 才算「有 ref」
         let ref_val: Option<Value> = ref_json.as_deref().and_then(|s| serde_json::from_str(s).ok());
         // desc = content || ''

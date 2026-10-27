@@ -50,7 +50,7 @@ pub async fn site_rss(State(state): State<AppState>, Query(q): Query<RssQuery>) 
     let site_url = std::env::var("SITE_URL")
         .ok()
         .filter(|s| !s.is_empty())
-        .unwrap_or_else(|| "https://koimsurai.com".into());
+        .unwrap_or_else(|| "https://example.com".into());
     type Row = (
         i64,
         Option<String>,

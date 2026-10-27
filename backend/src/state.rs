@@ -102,7 +102,7 @@ impl Default for ExternalUrls {
             korean_advice: "https://korean-advice-open-api.vercel.app".into(),
             bahamut_api: anigamer::DEFAULT_API_BASE.into(),
             bahamut_web: anigamer::DEFAULT_WEB_BASE.into(),
-            plausible: "https://plausible.koimsurai.com".into(),
+            plausible: "https://plausible.example.com".into(),
         }
     }
 }

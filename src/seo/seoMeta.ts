@@ -2,6 +2,7 @@
 import type { PostDetailResponse as PostData } from '@koimsurai/api-types';
 
 import { DEFAULT_LOCALE, type Locale, localePathname } from '@/lib/locales';
+import { SITE_URL } from '@/lib/site';
 
 // 文章頁的完整 SEO meta，放在路由 head() —— 那是唯一會進 SSR HTML 的地方。
 //
@@ -14,7 +15,7 @@ import { DEFAULT_LOCALE, type Locale, localePathname } from '@/lib/locales';
 // （2026-07：SEOHead 已全面退休。所有頁面的 title/description/og 都改由 head() 出、進 SSR；
 //  文章頁的 BlogPosting JSON-LD 也搬進 head().scripts。react-helmet-async 依賴已移除。）
 
-const BASE_URL = 'https://koimsurai.com';
+const BASE_URL = SITE_URL;
 const SITE_NAME = '宙と木 · Koimsurai';
 
 // 對齊 SEOHead 的既有對應表

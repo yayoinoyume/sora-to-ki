@@ -68,7 +68,7 @@ pub(crate) async fn send_one(
 /// 這個站的網址（不帶結尾的 /）。友鏈的「對方站上有連回這裡」也拿它的 host 去找
 pub(crate) fn public_site_url() -> String {
     // (PUBLIC_SITE_URL || default).replace(/\/$/, '')
-    let raw = env_or("PUBLIC_SITE_URL", "https://koimsurai.com");
+    let raw = env_or("PUBLIC_SITE_URL", "https://example.com");
     raw.strip_suffix('/').unwrap_or(&raw).to_string()
 }
 fn resend_base_url() -> String {
@@ -430,7 +430,7 @@ mod tests {
     #[test]
     fn 友鏈回信_站長的字照原樣分段_而且會跳脫() {
         let (html, text) = render_friend_reply(
-            "https://koimsurai.com",
+            "https://example.com",
             "Ink<Codes>",
             "收下了！\n已經加上去。\n\n<b>謝謝</b>",
         );
@@ -440,11 +440,11 @@ mod tests {
         assert!(html.contains("&lt;b&gt;謝謝&lt;/b&gt;"));
         assert!(html.contains("友鏈申請 · Ink&lt;Codes&gt;"));
         assert!(!html.contains("<b>謝謝"));
-        assert!(html.contains("https://koimsurai.com/friends"), "要有朋友頁的連結");
+        assert!(html.contains("https://example.com/friends"), "要有朋友頁的連結");
         // 純文字版：原文、署名、朋友頁
         assert_eq!(
             text,
-            "收下了！\n已經加上去。\n\n<b>謝謝</b>\n\n— 宙と木 · Koimsurai\nhttps://koimsurai.com/friends"
+            "收下了！\n已經加上去。\n\n<b>謝謝</b>\n\n— 宙と木 · Koimsurai\nhttps://example.com/friends"
         );
     }
 }

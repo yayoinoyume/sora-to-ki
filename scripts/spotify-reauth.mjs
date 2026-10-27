@@ -108,7 +108,7 @@ const server = createServer((req, res) => {
     console.log('接著：');
     console.log('  1) 把上面那行貼進 .env.backend（取代舊的 SPOTIFY_REFRESH_TOKEN）');
     console.log('  2) 重啟後端：docker compose up -d backend-rs');
-    console.log('  3) 驗證：curl -s https://koimsurai.com/api/spotify/recently-played | head -c 120\n');
+    console.log('  3) 驗證：curl -s https://example.com/api/spotify/recently-played | head -c 120\n');
     server.close();
   })();
 });

@@ -5,6 +5,9 @@
 // 變成「寫完當場知道」。
 import { BLOCK_NAMES } from './blocks.js';
 
+/** 本站網域：自己站上的圖片不算「外部熱連結」。 */
+const SITE_HOST = 'example.com';
+
 type Severity = 'error' | 'warning' | 'hint';
 
 interface Finding {
@@ -154,7 +157,7 @@ function staticChecks(raw: string, format: string): Finding[] {
 
   // 7) 外部圖片熱連結
   for (const m of content.matchAll(/!\[[^\]]*\]\((https?:\/\/[^)]+)\)/g)) {
-    if (m[1].includes('koimsurai.com')) continue;
+    if (m[1].includes(SITE_HOST)) continue;
     out.push({
       severity: 'warning',
       line: lineOf(content, m.index),

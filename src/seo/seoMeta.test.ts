@@ -90,14 +90,14 @@ describe('pageMeta', () => {
   // og:url / twitter:url 是爬蟲用來去重的鍵，指錯就會被判成別頁的複製品
   it('og:url 與 twitter:url 都是絕對網址，且與 canonicalPath 一致', () => {
     const m = pageMeta('t', 'd', '/en/music', 'en');
-    expect(pick(m, 'og:url')).toBe('https://koimsurai.com/en/music');
-    expect(pick(m, 'twitter:url')).toBe('https://koimsurai.com/en/music');
+    expect(pick(m, 'og:url')).toBe('https://example.com/en/music');
+    expect(pick(m, 'twitter:url')).toBe('https://example.com/en/music');
   });
 
   // 尺寸標錯的話 Facebook 會裁切或整個不顯示預覽圖
   it('og:image 帶著與實際圖一致的尺寸', () => {
     const m = pageMeta('t', 'd', '/', 'zh-TW');
-    expect(pick(m, 'og:image')).toBe('https://koimsurai.com/api/og/home.png');
+    expect(pick(m, 'og:image')).toBe('https://example.com/api/og/home.png');
     expect(pick(m, 'og:image:width')).toBe('1200');
     expect(pick(m, 'og:image:height')).toBe('630');
   });
@@ -111,17 +111,17 @@ describe('articleMeta', () => {
   });
 
   it('og:image 指向後端產的那張，網址帶文章 id', () => {
-    expect(pick(articleMeta(post(), '/blog/42', 'zh-TW'), 'og:image')).toBe('https://koimsurai.com/api/og/42.png');
+    expect(pick(articleMeta(post(), '/blog/42', 'zh-TW'), 'og:image')).toBe('https://example.com/api/og/42.png');
   });
 
   // 圖上的字照語系：繁中不帶參數，其他語系帶 ?l=，否則英文讀者分享出去的卡片是中文字
   it('og:image 跟著語系', () => {
-    expect(pick(articleMeta(post(), '/en/blog/42', 'en'), 'og:image')).toBe('https://koimsurai.com/api/og/42.png?l=en');
+    expect(pick(articleMeta(post(), '/en/blog/42', 'en'), 'og:image')).toBe('https://example.com/api/og/42.png?l=en');
     expect(pick(pageMeta('t', 'd', '/ja/blog', 'ja', 'notes'), 'og:image')).toBe(
-      'https://koimsurai.com/api/og/notes.png?l=ja',
+      'https://example.com/api/og/notes.png?l=ja',
     );
     expect(pick(pageMeta('t', 'd', '/zh-CN/watch', 'zh-CN', 'collection'), 'twitter:image')).toBe(
-      'https://koimsurai.com/api/og/collection.png?l=zh-CN',
+      'https://example.com/api/og/collection.png?l=zh-CN',
     );
   });
 
@@ -151,22 +151,22 @@ describe('articleJsonLd', () => {
     items.forEach((it, i) => {
       expect(it.position, `第 ${i + 1} 項的 position`).toBe(i + 1);
       expect(it.name, `第 ${i + 1} 項的 name`).toBeTruthy();
-      expect(String(it.item), `第 ${i + 1} 項的 item`).toMatch(/^https:\/\/koimsurai\.com/);
+      expect(String(it.item), `第 ${i + 1} 項的 item`).toMatch(/^https:\/\/example\.com/);
     });
   });
 
   it('麵包屑最後一項指向文章本身，中間那層指向該語系的 blog 列表', () => {
     const items = graph(articleJsonLd(post(), '/en/blog/42', 'en'))[1].itemListElement as Record<string, unknown>[];
-    expect(items[0].item).toBe('https://koimsurai.com/en');
-    expect(items[1].item).toBe('https://koimsurai.com/en/blog');
-    expect(items[2].item).toBe('https://koimsurai.com/en/blog/42');
+    expect(items[0].item).toBe('https://example.com/en');
+    expect(items[1].item).toBe('https://example.com/en/blog');
+    expect(items[2].item).toBe('https://example.com/en/blog/42');
   });
 
   // 預設語系不帶前綴（保留既有已索引的網址），這件事在麵包屑上最容易寫錯
   it('預設語系 zh-TW 的麵包屑不帶語系前綴', () => {
     const items = graph(articleJsonLd(post(), '/blog/42'))[1].itemListElement as Record<string, unknown>[];
-    expect(items[0].item).toBe('https://koimsurai.com/');
-    expect(items[1].item).toBe('https://koimsurai.com/blog');
+    expect(items[0].item).toBe('https://example.com/');
+    expect(items[1].item).toBe('https://example.com/blog');
   });
 
   it('inLanguage 跟著語系走——五語站台只靠 hreflang 推斷會被歸錯語言', () => {
@@ -217,7 +217,7 @@ describe('跨頁的 @id 必須對得起來', () => {
     const zh = graph(siteJsonLd('zh-TW'));
     const ja = graph(siteJsonLd('ja'));
     expect(ja.map((g) => g['@id'])).toEqual(zh.map((g) => g['@id']));
-    expect(ja[0].url).toBe('https://koimsurai.com/ja');
+    expect(ja[0].url).toBe('https://example.com/ja');
     expect(ja[0].inLanguage).toBe('ja');
   });
 });

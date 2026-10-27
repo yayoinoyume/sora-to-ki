@@ -19,7 +19,7 @@ use sqlx::Row;
 
 use crate::state::AppState;
 
-const OWNER_EMAIL: &str = "timo9378@gmail.com";
+const OWNER_EMAIL: &str = "no-reply@example.com";
 
 fn env_url(key: &str, default: &str) -> String {
     std::env::var(key).ok().filter(|s| !s.is_empty()).unwrap_or_else(|| default.to_string())

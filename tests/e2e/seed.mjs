@@ -119,7 +119,7 @@ function allBlocksArticle() {
     '',
     '一段內文，裡面有 <Annot note="這是註解的內容">帶註解的字</Annot>，',
     '也有 <Spoiler>被遮住的雷</Spoiler>，還有日文的 <Ruby text="請求書" reading="せいきゅうしょ" />。',
-    '按 <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> 開命令面板。提到 <Mention platform="github" user="timo9378" />。',
+    '按 <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> 開命令面板。提到 <Mention platform="github" user="example-user" />。',
     '',
     '<BarChart title="語言分佈" unit="%" data={[{label:"Rust",value:48},{label:"TypeScript",value:37},{label:"CSS",value:15}]} />',
     '',

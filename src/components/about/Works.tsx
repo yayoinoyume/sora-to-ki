@@ -82,6 +82,8 @@ export default function Works() {
       return b ? { tangent: spiral.tangent(b.w, b.h, clockRef.current, 0) } : null;
     },
     leave: () => {
+      // 一件作品都沒有時 newest 是 -1，moonOf 會讀 bodies[-1]；沒有衛星可收就交回預設的遮罩
+      if (works.length === 0) return null;
       const b = boxSize();
       if (!b) return null;
       leaveRef.current = performance.now();

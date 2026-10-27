@@ -71,7 +71,7 @@ async fn mock_github(user: Value, emails: Option<Value>) -> MockServer {
     server
 }
 
-const OWNER_EMAIL: &str = "timo9378@gmail.com";
+const OWNER_EMAIL: &str = "no-reply@example.com";
 
 // ── 完整流程 ──────────────────────────────────────────────────────────────
 

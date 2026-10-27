@@ -395,9 +395,17 @@ pub async fn github_works(State(state): State<AppState>) -> Response {
         let msg = v.pointer("/errors/0/message").and_then(|m| m.as_str()).unwrap_or(GH_PARSE_ERR);
         return fail(msg.to_string());
     };
-    // 個別 repo 抓不到（改名、刪掉）時 GraphQL 會回那個 alias 是 null 加一則 error：
-    // 那一件就不列，其他照常
-    let works = (0..WORK_REPOS.len())
+    let works = works_from_graphql(&data, WORK_REPOS);
+    Json(WorksResponse { works, error: None }).into_response()
+}
+
+/// 把 GraphQL 的 `r0..rN` alias 读成作品清單。
+///
+/// 抽出来是为了能直接测：`github_works` 在清單为空时早退，解析这段就跑不到了。
+/// 个别 repo 抓不到（改名、删掉）时 GraphQL 会回那个 alias 是 null 加一则 error：
+/// 那一件就不列，其他照常。
+fn works_from_graphql(data: &Value, repos: &[(&str, &str)]) -> Vec<WorkRepo> {
+    (0..repos.len())
         .filter_map(|i| {
             let r = data.get(format!("r{i}"))?;
             let s = |k: &str| r.get(k).and_then(|x| x.as_str()).map(String::from);
@@ -429,8 +437,7 @@ pub async fn github_works(State(state): State<AppState>) -> Response {
                     .unwrap_or_default(),
             })
         })
-        .collect();
-    Json(WorksResponse { works, error: None }).into_response()
+        .collect()
 }
 
 #[derive(Debug, Serialize, specta::Type, utoipa::ToSchema)]
@@ -1684,8 +1691,8 @@ mod tests {
     fn github_event_keeps_push_fields_and_drops_shaless_commits() {
         let ev = json!({
             "id": "12345", "type": "PushEvent", "created_at": "2026-07-28T10:00:00Z",
-            "repo": { "id": 1, "name": "timo9378/sora-to-ki" },
-            "actor": { "login": "timo9378" },
+            "repo": { "id": 1, "name": "example-user/sora-to-ki" },
+            "actor": { "login": "example-user" },
             "payload": {
                 "before": "aaa", "head": "bbb", "size": 2,
                 "commits": [
@@ -1698,7 +1705,7 @@ mod tests {
         let e = github_event_from(&ev).expect("應該收得下");
         assert_eq!(e.id, "12345");
         assert_eq!(e.kind, "PushEvent");
-        assert_eq!(e.repo.name, "timo9378/sora-to-ki");
+        assert_eq!(e.repo.name, "example-user/sora-to-ki");
         assert_eq!(e.payload.size, Some(2));
         assert_eq!(e.payload.commits.len(), 2, "缺 sha 的那筆要被丟掉");
         assert_eq!(e.payload.commits[0].sha, "c1");
@@ -1864,12 +1871,12 @@ mod tests {
     async fn github_user_returns_only_the_declared_fields() {
         let server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/github/users/timo9378"))
+            .and(path("/github/users/example-user"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
-                "login": "timo9378",
+                "login": "example-user",
                 "name": "Koi",
                 "avatar_url": "https://avatars.githubusercontent.com/u/1",
-                "html_url": "https://github.com/timo9378",
+                "html_url": "https://github.com/example-user",
                 "public_repos": 42,
                 // 上游還會給幾十個欄位，這裡放一個代表：不該出現在回應裡
                 "gravatar_id": "should-not-be-forwarded"
@@ -1878,9 +1885,9 @@ mod tests {
             .await;
 
         let st = state_with_mock(&server).await;
-        let v = body_of(github_user(axum::extract::State(st), axum::extract::Path("timo9378".into())).await)
+        let v = body_of(github_user(axum::extract::State(st), axum::extract::Path("example-user".into())).await)
             .await;
-        assert_eq!(v["login"], "timo9378");
+        assert_eq!(v["login"], "example-user");
         assert_eq!(v["public_repos"], 42);
         assert!(v["error"].is_null());
         assert!(v.get("gravatar_id").is_none(), "上游多給的欄位不該原樣轉發出去");
@@ -2201,7 +2208,7 @@ mod tests {
         // 這四欄是 render 一列的必需品，缺了留著只會是一列空白
         let full = json!({
             "id": "1", "type": "PushEvent", "created_at": "2026-08-02T00:00:00Z",
-            "repo": { "name": "timo9378/web" },
+            "repo": { "name": "example-user/web" },
         });
         assert!(github_event_from(&full).is_some());
         for missing in ["id", "type", "created_at"] {
@@ -2218,7 +2225,7 @@ mod tests {
     fn github_event_from_的_commits_缺_sha_就跳過該筆() {
         let ev = json!({
             "id": "1", "type": "PushEvent", "created_at": "2026-08-02T00:00:00Z",
-            "repo": { "name": "timo9378/web" },
+            "repo": { "name": "example-user/web" },
             "payload": {
                 "before": "aaa", "head": "bbb", "size": 2,
                 "commits": [
@@ -2230,7 +2237,7 @@ mod tests {
         });
         let e = github_event_from(&ev).expect("完整事件");
         assert_eq!(e.kind, "PushEvent");
-        assert_eq!(e.repo.name, "timo9378/web");
+        assert_eq!(e.repo.name, "example-user/web");
         assert_eq!(e.payload.before.as_deref(), Some("aaa"));
         assert_eq!(e.payload.size, Some(2));
         assert_eq!(e.payload.commits.len(), 2, "缺 sha 的那筆要跳過");
@@ -2256,9 +2263,9 @@ mod tests {
     async fn github_repos_丟掉缺必要欄位的列並補齊選填欄位() {
         let server = MockServer::start().await;
         Mock::given(method("GET"))
-            .and(path("/github/users/timo9378/repos"))
+            .and(path("/github/users/example-user/repos"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!([
-                { "id": 1, "name": "web", "html_url": "https://github.com/timo9378/web",
+                { "id": 1, "name": "web", "html_url": "https://github.com/example-user/web",
                   "description": null, "language": "Rust", "stargazers_count": 7 },
                 { "id": 2, "name": "沒有網址的" },                 // 缺 html_url → 不收
                 { "name": "沒有 id 的", "html_url": "https://x/" }, // 缺 id → 不收
@@ -2270,7 +2277,7 @@ mod tests {
         let v = body_of(
             github_repos(
                 axum::extract::State(st),
-                axum::extract::Path("timo9378".into()),
+                axum::extract::Path("example-user".into()),
                 axum::extract::Query(ReposQuery { limit: None }),
             )
             .await,
@@ -2386,6 +2393,39 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
         assert!(body_of(resp).await["works"].as_array().unwrap().is_empty());
         assert_eq!(server.received_requests().await.unwrap().len(), 0, "沒東西要查就不該打 GitHub");
+    }
+
+    // 清單是空的時候 github_works 早退，上面的解析跑不到；這條直接餵 GraphQL 的回應。
+    // 這三件事將來誰往 WORK_REPOS 加一行就靠它守：null 跳過、私有不給連結、語言順序與 bytes。
+    #[tokio::test]
+    async fn works_from_graphql_的解析() {
+        let data = json!({
+            "r0": {
+                "nameWithOwner": "o/private", "url": "https://github.com/o/private",
+                "isPrivate": true, "createdAt": "2025-03-21T00:00:00Z", "pushedAt": "2025-03-21T00:00:00Z",
+                "stargazerCount": 0,
+                "languages": { "edges": [ { "size": 21623, "node": { "name": "Python" } } ] },
+                "defaultBranchRef": { "target": { "history": { "totalCount": 1 } } }
+            },
+            "r1": {
+                "nameWithOwner": "o/site", "url": "https://github.com/o/site",
+                "isPrivate": false, "createdAt": "2025-03-31T00:00:00Z", "pushedAt": "2026-10-23T00:00:00Z",
+                "stargazerCount": 2,
+                "languages": { "edges": [
+                    { "size": 2368532, "node": { "name": "TypeScript" } },
+                    { "size": 1381627, "node": { "name": "Rust" } }
+                ] },
+                "defaultBranchRef": { "target": { "history": { "totalCount": 732 } } }
+            },
+            "r2": null
+        });
+        let works = works_from_graphql(&data, &[("o", "private"), ("o", "site"), ("o", "gone")]);
+        assert_eq!(works.len(), 2, "null 的那件不列");
+        assert!(works[0].url.is_none(), "私有 repo 不給連結");
+        assert_eq!(works[1].url.as_deref(), Some("https://github.com/o/site"));
+        assert_eq!(works[1].commits, 732);
+        assert_eq!(works[1].languages[0].name, "TypeScript");
+        assert_eq!(works[1].languages[1].bytes, 1381627);
     }
 
     #[tokio::test]
@@ -2549,13 +2589,13 @@ mod tests {
             .and(path("/github/users/u/events/public"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!([{
                 "id": "1", "type": "PushEvent", "created_at": "2026-08-02T00:00:00Z",
-                "repo": { "name": "timo9378/web" },
+                "repo": { "name": "example-user/web" },
                 "payload": { "commits": [], "before": "aaa", "head": "bbb", "size": 0 },
             }])))
             .mount(&server)
             .await;
         Mock::given(method("GET"))
-            .and(path("/github/repos/timo9378/web/compare/aaa...bbb"))
+            .and(path("/github/repos/example-user/web/compare/aaa...bbb"))
             .respond_with(ResponseTemplate::new(200).set_body_json(json!({
                 "commits": [
                     { "sha": "c1", "commit": { "message": "第一個 commit", "author": { "name": "Koi" } } },

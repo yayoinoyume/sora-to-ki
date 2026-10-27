@@ -207,7 +207,7 @@ mod tests {
         assert_eq!(d.security_url(), "http://glitchtip:8000/api/2/security/?sentry_key=abc123");
 
         // 沒有 port 時不要留下一個空的 ":"；寫了預設 port 也一樣省略
-        for raw in ["https://k@glitchtip.koimsurai.com/1", "https://k@glitchtip.koimsurai.com:443/1"] {
+        for raw in ["https://k@glitchtip.example.com/1", "https://k@glitchtip.example.com:443/1"] {
             let d = Dsn::parse(raw).expect("無 port");
             assert_eq!(d.envelope_url(), "https://glitchtip.example.com/api/1/envelope/?sentry_key=k");
             assert_eq!(d.security_url(), "https://glitchtip.example.com/api/1/security/?sentry_key=k");

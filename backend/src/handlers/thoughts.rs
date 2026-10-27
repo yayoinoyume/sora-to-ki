@@ -746,7 +746,7 @@ pub async fn thoughts_rss(State(state): State<AppState>) -> Response {
         );
     }
     let xml = format!(
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel><title>碎念 · Koimsurai</title><link>https://koimsurai.com/thinking</link><description>想到什麼寫什麼</description>{items}</channel></rss>"
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rss version=\"2.0\"><channel><title>碎念 · Koimsurai</title><link>https://example.com/thinking</link><description>想到什麼寫什麼</description>{items}</channel></rss>"
     );
     ([(axum::http::header::CONTENT_TYPE, "application/rss+xml; charset=utf-8")], xml).into_response()
 }

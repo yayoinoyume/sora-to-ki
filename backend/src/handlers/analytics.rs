@@ -9,7 +9,7 @@
 //! 設定（`.env.backend`）：
 //!   - `PLAUSIBLE_API_KEY`：Plausible 的 Account Settings → API Keys 建一把 Stats API key。
 //!     沒設的話端點回 `configured: false`，後台顯示怎麼設，不算錯誤。
-//!   - `PLAUSIBLE_SITE_ID`：選填，預設 `koimsurai.com`（Plausible 裡的站台名稱）。
+//!   - `PLAUSIBLE_SITE_ID`：選填，預設 `example.com`（Plausible 裡的站台名稱）。
 //!
 //! 一頁要的東西拆成六個查詢平行打（總數、走勢、熱門頁面、來源、國家、裝置），
 //! 外加 v1 的即時人數。Stats API v2 一個查詢只能有一組 dimensions，所以沒辦法併成一個。

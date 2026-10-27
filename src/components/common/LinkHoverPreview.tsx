@@ -182,9 +182,7 @@ export function LinkHoverPreview({
                         }}
                       />
                     )}
-                    <span className="lhp-site">
-                      {data?.site_name ?? new URL(href, SITE_URL).hostname}
-                    </span>
+                    <span className="lhp-site">{data?.site_name ?? new URL(href, SITE_URL).hostname}</span>
                   </div>
                 )}
                 <div className="lhp-body">

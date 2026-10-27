@@ -530,7 +530,8 @@
     "legendRings": "环：其他语言",
     "legendMoons": "卫星：GitHub 星星",
     "legendHover": "滑过：展开成立体的星",
-    "empty": "还没有作品。在 data/works.ts 的 WORKS 里新增一个 repo 就会出现在这里。"
+    "empty": "还没有作品。在 data/works.ts 的 WORKS 里新增一个 repo 就会出现在这里。",
+    "emptyLine": "还没有作品"
   },
   "collection": {
     "title": "收藏",

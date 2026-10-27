@@ -98,7 +98,11 @@ export default function HomeOrbit() {
       line: thought ? clip(thought.content, 24) : '',
       n: thought ? t('home.orbit.momentsCount', { date: short(thought.created_at) }) : '',
     },
-    works: { line: `${WORKS.slice(0, 3).join('、')}⋯`, n: t('home.orbit.worksCount', { count: WORKS.length }) },
+    // 沒有作品時這一行原本會空成一條、只剩「 0 件」；寫一句提示，讓那行還是一行話
+    works: {
+      line: WORKS.length ? `${WORKS.slice(0, 3).join('、')}⋯` : t('works.emptyLine'),
+      n: WORKS.length ? t('home.orbit.worksCount', { count: WORKS.length }) : '',
+    },
     collection: {
       line: watch
         ? t('home.orbit.collectionLine', {

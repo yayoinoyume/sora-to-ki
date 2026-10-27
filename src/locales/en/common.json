@@ -530,7 +530,8 @@
     "legendRings": "Rings: other languages",
     "legendMoons": "Moons: GitHub stars",
     "legendHover": "Hover: unfolds into the 3D body",
-    "empty": "No works yet. Add a repo to WORKS in data/works.ts and it shows up here."
+    "empty": "No works yet. Add a repo to WORKS in data/works.ts and it shows up here.",
+    "emptyLine": "No works yet"
   },
   "collection": {
     "title": "Collection",

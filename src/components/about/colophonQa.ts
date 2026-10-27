@@ -87,8 +87,7 @@ export const COLOPHON_QA = {
     a2_tail: '.',
     q3: '3. About the photo wall and AI usage?',
     a3: 'The photo gallery uses a Masonry layout, with EXIF extracted via automation scripts. I later added an AI CLIP Tagger for tag suggestions, and on upload each image gets a',
-    a3_mid:
-      'as a blur-sm placeholder. I lean on AI tools for these tedious automation flows.',
+    a3_mid: 'as a blur-sm placeholder. I lean on AI tools for these tedious automation flows.',
     q4: '4. Any easter eggs hidden here?',
     a4: 'Nope. No easter eggs implemented — what you see is what you get.',
     q5: '5. Who is this site for?',
@@ -124,8 +123,7 @@ export const COLOPHON_QA = {
     a2_tail: ' でコンテナ化されています。',
     q3: '3. 写真ウォールと AI の使い方は？',
     a3: 'サイト内のアルバムは Masonry レイアウトで、EXIF は自動化スクリプトで抽出しています。後から AI CLIP Tagger を追加してタグ付けを補助しており、画像アップロード時には',
-    a3_mid:
-      'がぼかしのプレースホルダーとして生成されます。こういう細かい自動化には AI を使っています。',
+    a3_mid: 'がぼかしのプレースホルダーとして生成されます。こういう細かい自動化には AI を使っています。',
     q4: '4. ここにイースターエッグはありますか？',
     a4: 'ありません。仕込んでいないので、見えているそのままです。',
     q5: '5. このサイトの主な対象は？',
@@ -160,8 +158,7 @@ export const COLOPHON_QA = {
     a2_tail: ' 로 컨테이너화되어 있습니다.',
     q3: '3. 사진 월과 AI 활용은?',
     a3: '사진첩은 Masonry 레이아웃이고, EXIF는 자동화 스크립트로 추출합니다. 이후 AI CLIP Tagger를 추가해 태그 작업을 보조하며, 이미지 업로드 시 자동으로',
-    a3_mid:
-      '를 흐림 플레이스홀더로 생성합니다. 이런 자질구레한 자동화에는 AI 도구를 적극적으로 사용해요.',
+    a3_mid: '를 흐림 플레이스홀더로 생성합니다. 이런 자질구레한 자동화에는 AI 도구를 적극적으로 사용해요.',
     q4: '4. 이스터에그가 있나요?',
     a4: '없습니다. 이스터에그는 만들지 않았고, 보이는 그대로입니다.',
     q5: '5. 이 사이트의 주된 대상은?',

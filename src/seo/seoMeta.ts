@@ -200,8 +200,9 @@ export function articleJsonLd(
 
 /**
  * 首頁的 WebSite + Person。
- * WebSite 讓 Google 有機會給 sitelinks；Person 是知識面板／作者實體的訊號——站上本來就有完整的
- * 個人資訊與外部帳號，宣告出來才連得起來。這兩個實體全站唯一，只掛首頁。
+ * WebSite 讓 Google 有機會給 sitelinks；Person 是知識面板／作者實體的訊號。
+ * 兩個實體全站唯一，只掛首頁。
+ * 沒有 `sameAs`：那是宣告站長在其他平台的身分，模板裡不預設任何帳號；有自己的就補進來。
  */
 export function siteJsonLd(locale: Locale = DEFAULT_LOCALE): { type: string; children: string } {
   const home = `${BASE_URL}${localePathname(locale)}`;
@@ -221,7 +222,6 @@ export function siteJsonLd(locale: Locale = DEFAULT_LOCALE): { type: string; chi
         '@id': `${BASE_URL}/#person`,
         name: SITE_NAME,
         url: BASE_URL,
-        sameAs: [],
       },
     ],
   });

@@ -672,8 +672,10 @@ export function createSpiral(bodies: Body[]) {
   /** 第 i 件的符號上，第一顆衛星現在在哪（沒有衛星就是星球中心）：最新那一件的琥珀點 */
   const moonOf = (i: number, w: number, h: number, t: number): [number, number] => {
     const [x, y] = placer(w, h, t)(i * STEP);
-    const b = bodies[i];
-    if (!b.moons.length) return [x, y];
+    // 一件作品都沒有時 i 會是 -1（newest = n - 1）：沒有衛星可落，就回到螺旋上的點。
+    // 型別上 bodies[i] 一定是 Body（沒開 noUncheckedIndexedAccess），但執行時可能是 undefined
+    const b = bodies[i] as Body | undefined;
+    if (!b?.moons.length) return [x, y];
     const rc = glyphRadius(b, Math.min(w, h));
     const [px, py] = rotWith(b.tilt, b.roll)(...moonAt(b.moons[0], t, GLYPH_PACE), 0);
     return [x + px * rc, y - py * rc];
@@ -732,8 +734,7 @@ export function createSpiral(bodies: Body[]) {
     // 琥珀點是筆尖：從起點沿著航線往外畫，最後落在最新那一件，變成它的衛星
     // 落地之後光暈與亮線慢慢退掉，不是一到就不見
     const pen = grow < 1 ? 1 : 1 - settle;
-    // 沒作品時 newest 是 -1，moonOf 會去讀 bodies[-1]；一件都沒有就沒有筆尖可言
-    if (newest >= 0 && grow > 0 && pen > 0) {
+    if (grow > 0 && pen > 0) {
       const tail = Math.max(0, reach - PEN_TAIL);
       for (let k = 1; k <= 30; k++) {
         const [x0, y0] = P(tail + ((k - 1) / 30) * (reach - tail));

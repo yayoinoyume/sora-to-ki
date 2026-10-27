@@ -6,10 +6,9 @@ import { Heart, MessageCircle } from 'lucide-react';
 import { useThoughtReaction } from '@/hooks/useThoughtReaction';
 import { LocaleLink } from '@/i18n/locale-link';
 import { dotDate, parseServerDate } from '@/lib/serverDate';
+import { SITE_NAME } from '@/lib/site';
 import { isThoughtVerb, thoughtCard } from '@/lib/thoughtRef';
 import type { Thought } from '@/types/thought';
-
-const MOMENT_AUTHOR = 'Koimsurai';
 
 /** 附的連結或作品：左邊一條點線；作品多一張小海報（歌是方的） */
 function Embed({ th }: { th: Thought }) {
@@ -60,7 +59,7 @@ export default function MomentPost({ th, detail = false }: { th: Thought; detail
   return (
     <>
       <div className="mo-post-head">
-        <b>{MOMENT_AUTHOR}</b>
+        <b>{SITE_NAME}</b>
         {isThoughtVerb(th.verb) && <span className="mo-verb">{t(`thinking.verb.${th.verb}`)}</span>}
         {detail ? (
           <span className="mo-time">{time}</span>

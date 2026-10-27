@@ -23,10 +23,10 @@ import {
 } from './friendsSky';
 import './Friends.css';
 import { sameTitle } from '@/lib/pageTitle';
-import { SITE_URL } from '@/lib/site';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 const CONTACT = 'service@koimsurai.com';
-const SITE = { name: '宙と木', url: SITE_URL, rss: `${SITE_URL}/rss.xml` };
+const SITE = { name: SITE_NAME, url: SITE_URL, rss: `${SITE_URL}/rss.xml` };
 const ART = '/illustrations/docking.webp';
 
 /** 滑鼠離一顆星多近才算滑到它（CSS 像素） */

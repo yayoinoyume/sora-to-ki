@@ -176,7 +176,7 @@ fn build_html(card: &Card) -> String {
     let sans = format!("'Noto Sans CJK {}'", card.cjk);
     let brand = if card.brand {
         format!(
-            r#"<span style="font-family:{serif}; font-size:30px; font-weight:700; color:#f1ece3;">宙と木</span>"#
+            r#"<span style="font-family:{serif}; font-size:30px; font-weight:700; color:#f1ece3;">Example Site</span>"#
         )
     } else {
         String::new()
@@ -219,7 +219,7 @@ fn post_card_html(title: &str, category: Option<&str>, date: &str, locale: &str)
 
 fn page_card_html(page: &Page, locale: &str) -> String {
     let home = page.name.is_empty();
-    let title = if home { "宙と木".to_string() } else { text(locale, page.name) };
+    let title = if home { "Example Site".to_string() } else { text(locale, page.name) };
     let sub = text(locale, page.sub);
     build_html(&Card {
         kicker: page.caps,

@@ -2,7 +2,7 @@
 import type { PostDetailResponse as PostData } from '@koimsurai/api-types';
 
 import { DEFAULT_LOCALE, type Locale, localePathname } from '@/lib/locales';
-import { SITE_URL } from '@/lib/site';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 // 文章頁的完整 SEO meta，放在路由 head() —— 那是唯一會進 SSR HTML 的地方。
 //
@@ -16,7 +16,6 @@ import { SITE_URL } from '@/lib/site';
 //  文章頁的 BlogPosting JSON-LD 也搬進 head().scripts。react-helmet-async 依賴已移除。）
 
 const BASE_URL = SITE_URL;
-const SITE_NAME = '宙と木 · Koimsurai';
 
 // 對齊 SEOHead 的既有對應表
 export const LOCALE_TO_OG: Record<string, string> = {
@@ -87,7 +86,7 @@ export function pageMeta(
   const url = `${BASE_URL}${canonicalPath}`;
   const image = ogImageUrl(og, locale);
   // 對齊 SEOHead 既有的標題格式
-  const fullTitle = title ? `${title} - 宙と木` : SITE_NAME;
+  const fullTitle = title ? `${title} - ${SITE_NAME}` : SITE_NAME;
 
   return [
     { title: fullTitle },
@@ -121,7 +120,7 @@ export function articleMeta(post: PostData, canonicalPath: string, locale: strin
   const modifiedIso = toIso(post.updated_at);
 
   return [
-    { title: `${post.title} - 宙と木` },
+    { title: `${post.title} - ${SITE_NAME}` },
     { name: 'description', content: description },
 
     { property: 'og:type', content: 'article' },
@@ -172,8 +171,8 @@ export function articleJsonLd(
     image,
     // 五語站台一定要標：只靠 <html lang> 與 hreflang 推斷，Google 不見得會把各版本正確歸語言。
     inLanguage: locale,
-    author: { '@type': 'Person', name: post.author ?? 'Koimsurai', url: BASE_URL },
-    publisher: { '@type': 'Person', name: 'Koimsurai', url: BASE_URL },
+    author: { '@type': 'Person', name: post.author ?? SITE_NAME, url: BASE_URL },
+    publisher: { '@type': 'Person', name: SITE_NAME, url: BASE_URL },
     ...(published ? { datePublished: published } : {}),
     dateModified: toIso(post.updated_at) ?? published,
     ...(post.tags.length > 0 ? { keywords: post.tags.join(', ') } : {}),
@@ -220,7 +219,7 @@ export function siteJsonLd(locale: Locale = DEFAULT_LOCALE): { type: string; chi
       {
         '@type': 'Person',
         '@id': `${BASE_URL}/#person`,
-        name: 'Koimsurai',
+        name: SITE_NAME,
         url: BASE_URL,
         sameAs: ['https://github.com/timo9378'],
       },

@@ -32,9 +32,9 @@ export default defineEventHandler(async (event) => {
     // 後端不通 → 仍回一份只有站點區塊的 llms.txt，不要回 500。
   }
 
-  let md = '# 宙と木 · Koimsurai\n\n';
+  let md = '# Example Site\n\n';
   md +=
-    '> Koimsurai（timo9378）的個人網站與技術部落格。以開發、除錯、自架服務、AI 應用的長篇實作紀錄為主，' +
+    '> Example Site（example-user）的個人網站與技術部落格。以開發、除錯、自架服務、AI 應用的長篇實作紀錄為主，' +
     '多為繁體中文（部分另有 English / 日本語 / 한국어 / 简体中文）。\n\n';
 
   md += '## 主要頁面\n\n';

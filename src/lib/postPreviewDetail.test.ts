@@ -17,7 +17,7 @@ const snap = (over: Partial<PostPreviewSnapshot> = {}): PostPreviewSnapshot => (
   created_at: '2026-10-26 01:00:00',
   updated_at: null,
   view_count: 0,
-  author: 'Koimsurai',
+  author: 'Example Site',
   texts: {
     'zh-TW': { title: '標題', content: '## 一\n內文', excerpt: '第一句。第二句。' },
     en: { title: 'Title', content: '## One', excerpt: 'First. Second.' },

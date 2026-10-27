@@ -17,6 +17,7 @@ import { adminBooksQueryOptions, adminCollectionQueryOptions, adminStatsQueryOpt
 import { thoughtsListQueryOptions } from '@/data/thinkingData';
 import { apiUrl } from '@/lib/api';
 import { authHeaders, jsonAuthHeaders } from '@/lib/authToken';
+import { SITE_NAME } from '@/lib/site';
 import {
   THOUGHT_VERBS,
   defaultVerb,
@@ -366,7 +367,7 @@ export default function ThoughtsManager() {
             <SectionHead id="th-preview-h">前台會長這樣</SectionHead>
             <div className="adm-th-preview">
               <span className="adm-th-preview-head">
-                <span>Koimsurai</span>
+                <span>{SITE_NAME}</span>
                 {verb && <span className="adm-th-verb-text">{VERB_LABEL[verb]}</span>}
                 <span className="adm-meta">{formatWhen(editing?.created_at ?? today, 'MM.dd')}</span>
               </span>

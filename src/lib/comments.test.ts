@@ -110,7 +110,7 @@ describe('avatarColor', () => {
 
   it('回傳的一定是色票裡的其中一個', () => {
     const palette = ['#7f5af0', '#2cb67d', '#e53170', '#ff8906', '#3da9fc', '#ef4444', '#8b5cf6', '#06b6d4'];
-    for (const name of ['a', '路人', 'Koimsurai', '🎉', '', 'zzzzzzzzzzzz']) {
+    for (const name of ['a', '路人', 'example-user', '🎉', '', 'zzzzzzzzzzzz']) {
       expect(palette, `${name} 算出界了`).toContain(avatarColor(name));
     }
   });
@@ -122,7 +122,7 @@ describe('avatarColor', () => {
   // Stryker 指出來的：雜湊的算式改掉、色票裡的某一格清空，都沒有測試會紅。
   // 這代表「所有人的頭像顏色一夜之間全變了」不會有任何東西擋——釘幾個已知的對應。
   it('已知名字的配色不會無聲改變', () => {
-    expect(avatarColor('Koimsurai')).toBe(avatarColor('Koimsurai'));
+    expect(avatarColor('example-user')).toBe(avatarColor('example-user'));
     expect(new Set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map(avatarColor)).size).toBeGreaterThanOrEqual(6);
     // 色票每一格都要是合法的十六進位色（有一格被清空的話這條會紅）
     for (const n of Array.from({ length: 40 }, (_, i) => `n${i}`)) {

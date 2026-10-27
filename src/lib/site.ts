@@ -4,3 +4,6 @@
  */
 export const SITE_URL = 'https://example.com';
 export const SITE_HOST = 'example.com';
+
+/** 站名。标题、og:site_name、JSON-LD 的 publisher 都从这里取。 */
+export const SITE_NAME = 'Example Site';

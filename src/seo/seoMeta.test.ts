@@ -9,6 +9,7 @@
 import { describe, expect, it } from 'vite-plus/test';
 
 import { articleJsonLd, articleMeta, blogListJsonLd, LOCALE_TO_OG, pageMeta, siteJsonLd } from './seoMeta';
+import { SITE_NAME } from '@/lib/site';
 
 type Post = Parameters<typeof articleMeta>[0];
 
@@ -18,7 +19,7 @@ const post = (over: Record<string, unknown> = {}): Post =>
     id: 42,
     title: '測試文章',
     excerpt: '摘要',
-    author: 'Koimsurai',
+    author: 'Example Site',
     category: '技術',
     tags: ['rust', 'typescript'],
     created_at: '2026-08-01 03:04:05',
@@ -83,8 +84,8 @@ describe('og:locale 的對應', () => {
 
 describe('pageMeta', () => {
   it('有標題時加站名後綴，沒有標題時用站名本身', () => {
-    expect(pageMeta('關於', 'd', '/about', 'zh-TW')[0].title).toBe('關於 - 宙と木');
-    expect(pageMeta(null, 'd', '/', 'zh-TW')[0].title).toBe('宙と木 · Koimsurai');
+    expect(pageMeta('關於', 'd', '/about', 'zh-TW')[0].title).toBe(`關於 - ${SITE_NAME}`);
+    expect(pageMeta(null, 'd', '/', 'zh-TW')[0].title).toBe(SITE_NAME);
   });
 
   // og:url / twitter:url 是爬蟲用來去重的鍵，指錯就會被判成別頁的複製品
@@ -106,7 +107,7 @@ describe('pageMeta', () => {
 describe('articleMeta', () => {
   it('og:title 用純標題，<title> 才加站名後綴', () => {
     const m = articleMeta(post(), '/blog/42', 'zh-TW');
-    expect(m[0].title).toBe('測試文章 - 宙と木');
+    expect(m[0].title).toBe(`測試文章 - ${SITE_NAME}`);
     expect(pick(m, 'og:title')).toBe('測試文章');
   });
 
@@ -193,7 +194,7 @@ describe('articleJsonLd', () => {
 
   it('沒有作者時退回站主名稱，不會變成 null', () => {
     const bp = graph(articleJsonLd(post({ author: undefined }), '/blog/42'))[0];
-    expect((bp.author as Record<string, unknown>).name).toBe('Koimsurai');
+    expect((bp.author as Record<string, unknown>).name).toBe(SITE_NAME);
   });
 });
 

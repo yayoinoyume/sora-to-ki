@@ -330,11 +330,11 @@ export default function Colophon() {
     type: (
       <ul className="cl-fonts">
         <li>
-          <b className="is-serif">宙と木</b>
+          <b className="is-serif">示例站点</b>
           <span>{t('colophon.fontSerif')}</span>
         </li>
         <li>
-          <b className="is-latin">Koimsurai</b>
+          <b className="is-latin">Example Site</b>
           <span>{t('colophon.fontLatin')}</span>
         </li>
         <li>

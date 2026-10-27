@@ -199,7 +199,7 @@ export function seed(dbPath) {
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, view_count, likes,
        created_at, source_language, title_en, content_en, excerpt_en, allow_comments)
-     VALUES (1, ?, ?, ?, '技術', 'published', 'Koimsurai', 42, 7, ?, 'zh-TW', ?, ?, ?, 1)`,
+     VALUES (1, ?, ?, ?, '技術', 'published', 'Example Site', 42, 7, ?, 'zh-TW', ?, ?, ?, 1)`,
     '第一篇測試文章',
     '# 標題\n\n這是內文，長度要夠讓詳情頁真的有東西。\n\n- 一\n- 二\n',
     '這是摘要',
@@ -210,7 +210,7 @@ export function seed(dbPath) {
   );
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, created_at, allow_comments)
-     VALUES (2, '第二篇測試文章', '第二篇的內文。', '第二篇摘要', '生活', 'published', 'Koimsurai', ?, 1)`,
+     VALUES (2, '第二篇測試文章', '第二篇的內文。', '第二篇摘要', '生活', 'published', 'Example Site', ?, 1)`,
     T(1),
   );
   run(
@@ -228,7 +228,7 @@ export function seed(dbPath) {
   // 這個檔難讀。SECTIONS 調大調小就等於調頁面高度。
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, created_at, allow_comments)
-     VALUES (4, ?, ?, ?, '技術', 'published', 'Koimsurai', ?, 1)`,
+     VALUES (4, ?, ?, ?, '技術', 'published', 'Example Site', ?, 1)`,
     'CLS 量測用的長文',
     longArticle(),
     '這篇存在的唯一理由是讓 CLS 測試有夠長的頁面可以捲',
@@ -241,7 +241,7 @@ export function seed(dbPath) {
   // 排在清單最後就不會動到別的測試對「第一張卡是哪篇」的假設。
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, created_at, allow_comments)
-     VALUES (5, ?, ?, ?, '技術', 'published', 'Koimsurai', ?, 1)`,
+     VALUES (5, ?, ?, ?, '技術', 'published', 'Example Site', ?, 1)`,
     '有程式碼與圖片的文章',
     // 圖片指向站上真的存在的資產——隨便編一個路徑會讓 smoke 的「不該有 404」紅掉
     //
@@ -263,7 +263,7 @@ export function seed(dbPath) {
   // 是釘住「MDX 真的有被編譯」——那條降級沒有任何東西會告訴你它發生了。
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, created_at, format, allow_comments)
-     VALUES (6, ?, ?, ?, '技術', 'published', 'Koimsurai', ?, 'mdx', 1)`,
+     VALUES (6, ?, ?, ?, '技術', 'published', 'Example Site', ?, 'mdx', 1)`,
     'MDX 區塊測試文',
     // 最後兩段：行內的 `flowchart LR` 不能被當成圖（CodeBlock 曾經用一個永遠是 undefined 的 inline
     // 判斷，行內程式碼開頭是圖表關鍵字就被拿去畫，段落中間冒出解析失敗）；沒標語言的圍籬照樣靠關鍵字認成圖。
@@ -279,7 +279,7 @@ export function seed(dbPath) {
   // 用到每一個已註冊 block 的文章（理由見 allBlocksArticle 的說明）。
   run(
     `INSERT INTO posts (id, title, content, excerpt, category, status, author, created_at, format, allow_comments)
-     VALUES (7, ?, ?, ?, '技術', 'published', 'Koimsurai', ?, 'mdx', 1)`,
+     VALUES (7, ?, ?, ?, '技術', 'published', 'Example Site', ?, 'mdx', 1)`,
     '每個 MDX block 都在這裡',
     allBlocksArticle(),
     '把所有 MDX block 放在同一頁，用來確認沒有任何一個安靜地退回純文字',
@@ -290,7 +290,7 @@ export function seed(dbPath) {
   // 預載時曾經無窮迴圈、把整個頁面卡死（見 routes/blog/$id.tsx）。日期給得最舊，理由同第 5、6 篇。
   run(
     `INSERT INTO posts (id, slug, title, content, excerpt, category, status, author, created_at, allow_comments)
-     VALUES (8, 'slugged-post', '有 slug 的文章', '這篇的網址是 slug。', '有 slug', '生活', 'published', 'Koimsurai', ?, 1)`,
+     VALUES (8, 'slugged-post', '有 slug 的文章', '這篇的網址是 slug。', '有 slug', '生活', 'published', 'Example Site', ?, 1)`,
     T(13),
   );
   run('INSERT INTO post_tags (post_id, tag_id) VALUES (1, 1), (1, 2), (2, 3)');

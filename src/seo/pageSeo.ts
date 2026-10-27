@@ -7,7 +7,7 @@ import { lookup } from '@/lib/tableLookup';
 //
 // 為什麼要有這張表：這些頁的 title/description 原本只寫在元件裡的 <SEOHead>（已退休），而 SEOHead 走
 // react-helmet-async —— hydrate 後才掛標籤，爬蟲不執行 JS 就看不到。結果是 SSR HTML 裡
-// **每一頁的 <title> 都是同一個 "宙と木 · Koimsurai"、且完全沒有 meta description**，
+// **每一頁的 <title> 都是同一個 "Example Site"、且完全沒有 meta description**，
 // Google 無從分辨頁面、也沒有描述文字可讀。head() 是唯一會進 SSR 的地方，但它不能用 React
 // hook（取不到 useTranslation），所以改由這張表 + createI18n(locale).t() 在 head() 內同步取值。
 //
@@ -24,7 +24,7 @@ interface SeoEntry {
 }
 
 const PAGE_SEO: Record<string, SeoEntry> = {
-  // 首頁（basePath = ''）：title 留 null → 站台預設名（宙と木 · Koimsurai），描述用 hero 標語。
+  // 首頁（basePath = ''）：title 留 null → 站台預設名（Example Site），描述用 hero 標語。
   // 原本首頁 head() 只出 links → SSR 完全沒有 og/description（Hero 的 <SEOHead> 是 helmet、爬蟲看不到）。
   '': { descKey: 'hero.description', og: 'home' },
   // 有 i18n 翻譯的

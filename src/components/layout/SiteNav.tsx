@@ -13,6 +13,7 @@ import { FaGithub, FaGoogle } from 'react-icons/fa';
 import { LocaleLink } from '@/i18n/locale-link';
 import { LOCALE_LABELS, stripLocalePrefix } from '@/i18n/start-i18n';
 import { SUPPORTED_LOCALES, LOCALE_PREFIX, type Locale } from '@/lib/locales';
+import { SITE_NAME } from '@/lib/site';
 import { useAuth } from '@/contexts/auth';
 import { openCommandPalette } from '@/store/commandPaletteStore';
 import { ABOUT_SECTIONS, MAIN_SECTIONS, MORE_SECTIONS, type SiteSection } from '@/data/siteSections';
@@ -278,7 +279,7 @@ export default function SiteNav() {
     >
       <div className="snav-bar">
         <LocaleLink to="/" className="snav-name" aria-label={t('siteNav.home')}>
-          Koimsurai
+          {SITE_NAME}
         </LocaleLink>
 
         <nav className="snav-links" aria-label={t('nav.menu')}>

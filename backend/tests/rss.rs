@@ -46,9 +46,10 @@ async fn seed_rss(pool: &sqlx::SqlitePool) {
         "INSERT INTO posts (id, slug, title, content, excerpt, category, status, author, created_at, updated_at) \
          VALUES (20, 'has-slug', '有 slug 的文章', '內文', '這是摘要', '技術', 'published', 'Koi', \
                  '2026-01-20 03:00:00', '2026-01-21 03:00:00')",
-        // 沒有 slug → 連結退回 id
-        "INSERT INTO posts (id, title, content, excerpt, status, created_at, updated_at) \
-         VALUES (21, '沒有 slug 的文章', '內文', '摘要', 'published', '2026-01-19 03:00:00', '2026-01-19 03:00:00')",
+        // 沒有 slug → 連結退回 id；也沒給作者（空字串）→ 要看程式吐不吐得出預設值
+        // （不能靠資料表的 DEFAULT：那道 0001_init.sql 裡的預設值改不得，sqlx 會比對 checksum）
+        "INSERT INTO posts (id, title, content, excerpt, status, author, created_at, updated_at) \
+         VALUES (21, '沒有 slug 的文章', '內文', '摘要', 'published', '', '2026-01-19 03:00:00', '2026-01-19 03:00:00')",
         // 標題與摘要含需要轉義的字元
         "INSERT INTO posts (id, slug, title, content, excerpt, status, created_at, updated_at) \
          VALUES (22, 'xml-esc', 'A & B <tag> \"quoted\" it''s', '內文', '摘要 & <b>粗體</b>', 'published', \
@@ -229,7 +230,7 @@ async fn 沒有作者時用預設值() {
     seed_rss(&pool).await;
     let xml = rss(&app, "").await;
     let item = xml.split("<item>").find(|s| s.contains("沒有 slug 的文章")).unwrap();
-    assert!(item.contains("<author>Koimsurai</author>"), "空作者要有預設值，不是空元素");
+    assert!(item.contains("<author>Example Site</author>"), "空作者要有預設值，不是空元素");
     let with_author = xml.split("<item>").find(|s| s.contains("有 slug 的文章")).unwrap();
     assert!(with_author.contains("<author>Koi</author>"), "有作者就用它的");
 }

@@ -16,6 +16,7 @@ import { localeFromPathname } from '@/i18n/start-i18n';
 import { LocaleProvider } from '@/i18n/LocaleProvider';
 import { SUPPORTED_LOCALES } from '../lib/locales';
 import { LOCALE_TO_OG } from '@/seo/seoMeta';
+import { SITE_NAME } from '@/lib/site';
 import AppShell from '@/components/layout/AppShell';
 import NotFound from '@/components/layout/NotFound';
 import { localeWrap } from '@/i18n/localePage';
@@ -25,7 +26,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: '宙と木 · Koimsurai' },
+      { title: SITE_NAME },
       { name: 'theme-color', content: '#0a0a0c' },
     ],
     // PWA:manifest 過去從沒被掛上 → 瀏覽器根本看不到它,站台不可安裝。
@@ -33,7 +34,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: 'manifest', href: '/site.webmanifest' },
       // feed 自動探索：瀏覽器擴充、聚合器、部分 AI 爬蟲都靠這一行才找得到。
       // 指向既有的 /rss（後端 handlers/rss.rs）——/rss.xml 只是 301 過去的別名。
-      { rel: 'alternate', type: 'application/rss+xml', title: 'Koimsurai 手記', href: '/rss' },
+      { rel: 'alternate', type: 'application/rss+xml', title: `${SITE_NAME} 手記`, href: '/rss' },
       // 圖示由 scripts/gen-icons.mjs 從 scripts/icons/ 的 SVG 產生。
       // 分頁列（沒有底板、跟著主題換色）與 Google 搜尋（有底板）是兩支檔案，圖案一樣，機制寫在 gen-icons.mjs 檔頭：
       // Google 那邊靠 robots.txt 只對 Googlebot-Image 擋掉前兩者；分頁列這邊 **SVG 要排最後**

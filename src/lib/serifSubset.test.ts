@@ -24,14 +24,14 @@ describe('按頁裁字的網址', () => {
   });
 
   it('網址上的鍵是 c 的雜湊，伺服器拿它比對', () => {
-    const url = subsetUrl(600, cps('宙と木'));
+    const url = subsetUrl(600, cps('示例站点'));
     const [, weight, key] = /\/fonts\/serif\/(\d+)\/([0-9a-f]{8})\.woff2\?c=/.exec(url) ?? [];
     expect(weight).toBe('600');
     expect(key).toBe(keyOf(cOf(url)));
   });
 
   it('解得回原本的字集', () => {
-    const text = 'Koimsurai 宙と木，2026.10.23「手記」';
+    const text = 'Example Site 示例站点，2026.10.23「手記」';
     expect(decodeCodepoints(cOf(subsetUrl(400, cps(text))))).toEqual([...new Set(cps(text))].sort((a, b) => a - b));
   });
 });

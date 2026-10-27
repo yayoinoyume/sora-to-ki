@@ -902,7 +902,7 @@ export function makeTools(api: ApiClient): Tool[] {
     {
       name: 'koimsurai_create_thought',
       description:
-        '發一則碎念（短想法 feed）。content 必填；refUrl 給連結會自動抓 OG 卡片。verb 是前台「Koimsurai 看了／讀了…」的動詞（存 key，五個語系各自翻）。',
+        '發一則碎念（短想法 feed）。content 必填；refUrl 給連結會自動抓 OG 卡片。verb 是前台「站長看了／讀了…」的動詞（存 key，五個語系各自翻）。',
       inputSchema: {
         type: 'object',
         properties: {

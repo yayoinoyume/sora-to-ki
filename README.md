@@ -76,25 +76,14 @@
 
 ## 📸 畫面
 
-| 首頁：繞著土星的衛星 | 手記：一圈一圈的星軌 |
-|:---:|:---:|
-| [![首頁](.github/screenshots/home.jpg)](https://example.com) | [![手記](.github/screenshots/notes.jpg)](https://example.com/blog) |
-| **文章** | **照片：從深空傳回來的照片** |
-| [![文章](.github/screenshots/post.jpg)](https://example.com/blog) | [![照片](.github/screenshots/photos.jpg)](https://example.com/photos) |
-| **作品：往外長的螺旋航線** | **收藏：從地球發出的訊號** |
-| [![作品](.github/screenshots/works.jpg)](https://example.com/portfolio) | [![收藏](.github/screenshots/collection.jpg)](https://example.com/watch) |
-| **朋友：繞著同一個中心的星** | **航行日誌：從地表升空** |
-| [![朋友](.github/screenshots/friends.jpg)](https://example.com/friends) | [![航行日誌](.github/screenshots/log.jpg)](https://example.com/history) |
-| **設備：太空船的工程圖** | **此站點** |
-| [![設備](.github/screenshots/setup.jpg)](https://example.com/setup) | [![此站點](.github/screenshots/colophon.jpg)](https://example.com/about-site) |
+裡面的示範截圖是原作者站上的，模板不含這些圖（`public/illustrations/` 的太空插畫是通用素材，保留）。
+換成自己的站之後，把截圖放進 `.github/screenshots/` 再照這個格式補回來：
 
-### 後台
-
-| 此刻 | 手記 |
+```markdown
+| 首頁 | 手記 |
 |:---:|:---:|
-| ![後台：此刻](.github/screenshots/admin-dashboard.jpg) | ![後台：手記](.github/screenshots/admin-posts.jpg) |
-| **碎念**：右邊是同步進來的紀錄，按「寫」帶進左邊 | **留言**：左邊清單、右邊那一則，鍵盤 j／k／a／s／r |
-| ![後台：碎念](.github/screenshots/admin-thoughts.jpg) | ![後台：留言](.github/screenshots/admin-comments.jpg) |
+| ![首頁](.github/screenshots/home.jpg) | ![手記](.github/screenshots/notes.jpg) |
+```
 
 ## 🚀 從模板開始
 

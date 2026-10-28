@@ -77,25 +77,15 @@ Articles can also be read in a sans, a handwritten-style or a modern sans face, 
 
 ## 📸 Screenshots
 
-| Home: moons around Saturn | Notes: rings of star trails |
-|:---:|:---:|
-| [![Home](.github/screenshots/home.jpg)](https://example.com) | [![Notes](.github/screenshots/notes.jpg)](https://example.com/en/blog) |
-| **Article** | **Photos: pictures downlinked from deep space** |
-| [![Article](.github/screenshots/post.jpg)](https://example.com/en/blog) | [![Photos](.github/screenshots/photos.jpg)](https://example.com/en/photos) |
-| **Works: a spiral course outward** | **Collection: signals sent from Earth** |
-| [![Works](.github/screenshots/works.jpg)](https://example.com/en/portfolio) | [![Collection](.github/screenshots/collection.jpg)](https://example.com/en/watch) |
-| **Friends: stars around one center** | **Log: a launch from the ground** |
-| [![Friends](.github/screenshots/friends.jpg)](https://example.com/en/friends) | [![Log](.github/screenshots/log.jpg)](https://example.com/en/history) |
-| **Setup: a spacecraft's blueprints** | **Colophon** |
-| [![Setup](.github/screenshots/setup.jpg)](https://example.com/en/setup) | [![Colophon](.github/screenshots/colophon.jpg)](https://example.com/en/about-site) |
+The screenshots in this repo's history belong to the original author; the template ships none
+(`public/illustrations/` keeps the generic space art). Once your own site is up, drop shots into
+`.github/screenshots/` and add a table like this:
 
-### Admin
-
-| Now | Notes |
+```markdown
+| Home | Notes |
 |:---:|:---:|
-| ![Admin: Now](.github/screenshots/admin-dashboard.jpg) | ![Admin: Notes](.github/screenshots/admin-posts.jpg) |
-| **Moments**: synced records on the right; "Write" pulls one into the composer | **Comments**: list on the left, the selected one on the right; keyboard j / k / a / s / r |
-| ![Admin: Moments](.github/screenshots/admin-thoughts.jpg) | ![Admin: Comments](.github/screenshots/admin-comments.jpg) |
+| ![Home](.github/screenshots/home.jpg) | ![Notes](.github/screenshots/notes.jpg) |
+```
 
 ## 🚀 Starting from the template
 

@@ -856,8 +856,10 @@ pub async fn heartbeat(
 /// app（見 simkl.rs 檔頭），那支呼叫從此必定失敗——但它仍然掛在這條公開路徑上，
 /// 每 25 秒就讓一位訪客付一次連線成本。實測正式站：
 ///
-///     /api/watch/now    513, 2, 1, 1, 2, 1 ms   ← 第一次是那支死呼叫
-///     /api/watch/stats  2, 1, 1, 1 ms           ← 同樣是公開讀，沒有上游
+/// ```text
+/// /api/watch/now    513, 2, 1, 1, 2, 1 ms    ← 第一次是那支已移除的呼叫
+/// /api/watch/stats  2, 1, 1, 1 ms            ← 同樣是公開讀，沒有上游
+/// ```
 ///
 /// 整段移除之後這裡只剩讀記憶體。
 #[utoipa::path(get, path = "/api/watch/now", tag = "watch",

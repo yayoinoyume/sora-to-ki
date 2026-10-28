@@ -289,7 +289,7 @@ const localeVariants = (page: string): string[] => [`/${page}`, ...LOCALE_PREFIX
 // 圖表全空）。在 routeRules 加 `headers: { 'cache-control': ... }` 沒有用——SWR 會把整個回應連同
 // 自己算出的 header 存進快取、命中時重放，實測會覆蓋掉這裡設的值。
 //
-// 所以改在 nginx 處理（/etc/nginx/sites-available/koimsurai）：HTML 降到 max-age=60，
+// 所以改在 nginx 處理（/etc/nginx/sites-available/<站點>）：HTML 降到 max-age=60，
 // /assets/ 獨立一個 location 保住 immutable。改那邊時記得 nginx 的 add_header 不繼承，
 // 安全標頭要在該 block 內補齊。
 const swrRules = (paths: string[], seconds: number) => Object.fromEntries(paths.map((p) => [p, { swr: seconds }]));

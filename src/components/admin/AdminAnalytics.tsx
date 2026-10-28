@@ -286,7 +286,7 @@ function Setup() {
         </li>
         <li>
           把 key 加進伺服器的 <code>.env.backend</code>：<code>PLAUSIBLE_API_KEY=…</code>
-          （Plausible 裡的站台名稱不是 <code>koimsurai.com</code> 的話，再加一行 <code>PLAUSIBLE_SITE_ID=…</code>）
+          （Plausible 裡的站台名稱不是 <code>example.com</code> 的話，再加一行 <code>PLAUSIBLE_SITE_ID=…</code>）
         </li>
         <li>
           重啟後端：<code>docker compose up -d backend-rs</code>

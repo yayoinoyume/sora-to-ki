@@ -5,7 +5,7 @@
  *
  *   1. `tests/e2e/stack.mjs` 的代理層（模擬 nginx）→ 165 條 e2e 會踩到違規
  *   2. `scripts/check-security-headers.ts` → 打正式站比對，CI 每次跑
- *   3. nginx `location /`（/etc/nginx/sites-available/koimsurai）→ 真正送出去的那份
+ *   3. nginx `location /`（/etc/nginx/sites-available/<站點>）→ 真正送出去的那份
  *
  * 第 3 點是手抄的（nginx 讀不到 JS）。抄錯不會沒人發現：第 2 點會紅。
  *

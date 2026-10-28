@@ -41,7 +41,7 @@ rand = "0.10"
 parking_lot = "0.12"
 # 上傳圖片的 thumbhash 編成 base64url
 base64 = "0.23"
-# 自家 bahamut SDK（https://crates.io/crates/anigamer；本地開發要改 SDK 時可暫換 path dep）
+# 巴哈姆特動畫瘋 SDK（https://crates.io/crates/anigamer；要改 SDK 時可暫換 path dep）
 anigamer = "0.1.1"   # 0.1.1 起有 ClientOptions::base_urls，sync worker 才測得到
 # 錯誤追蹤 → 自架 GlitchTip（Sentry SDK 相容）。SENTRY_DSN 沒設就整個關閉。
 #

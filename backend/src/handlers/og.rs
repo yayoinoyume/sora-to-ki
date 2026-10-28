@@ -683,10 +683,9 @@ mod tests {
                 println!("{} → {} bytes", path.display(), png.len());
             }
             if wanted("post") {
-                let title =
-                    "用 Frigate + Home Assistant 自製 Furbo 寵物保母：本機 AI 寫貓咪日記，但分不出我的兩隻貓";
+                let title = "例子：一個夠長的標題，用來看換行與省略號在這張卡片上的表現";
                 let png = render(
-                    &post_card_html(title, Some("位元築夢"), "2026-10-13", loc),
+                    &post_card_html(title, Some("範例分類"), "2026-10-13", loc),
                     loc,
                     &Notes::new(&sky, 5),
                 )

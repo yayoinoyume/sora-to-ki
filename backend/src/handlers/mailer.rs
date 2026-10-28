@@ -429,11 +429,8 @@ mod tests {
 
     #[test]
     fn 友鏈回信_站長的字照原樣分段_而且會跳脫() {
-        let (html, text) = render_friend_reply(
-            "https://example.com",
-            "Ink<Codes>",
-            "收下了！\n已經加上去。\n\n<b>謝謝</b>",
-        );
+        let (html, text) =
+            render_friend_reply("https://example.com", "Ink<Codes>", "收下了！\n已經加上去。\n\n<b>謝謝</b>");
         // 空一行是分段、單一個換行是段內換行
         assert!(html.contains("收下了！<br>已經加上去。</p>"), "{html}");
         // 站長打的字與對方的站名都不能被當成 HTML

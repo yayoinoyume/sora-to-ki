@@ -395,7 +395,7 @@ pub async fn github_works(State(state): State<AppState>) -> Response {
         let msg = v.pointer("/errors/0/message").and_then(|m| m.as_str()).unwrap_or(GH_PARSE_ERR);
         return fail(msg.to_string());
     };
-    let works = works_from_graphql(&data, WORK_REPOS);
+    let works = works_from_graphql(data, WORK_REPOS);
     Json(WorksResponse { works, error: None }).into_response()
 }
 
@@ -1885,8 +1885,9 @@ mod tests {
             .await;
 
         let st = state_with_mock(&server).await;
-        let v = body_of(github_user(axum::extract::State(st), axum::extract::Path("example-user".into())).await)
-            .await;
+        let v =
+            body_of(github_user(axum::extract::State(st), axum::extract::Path("example-user".into())).await)
+                .await;
         assert_eq!(v["login"], "example-user");
         assert_eq!(v["public_repos"], 42);
         assert!(v["error"].is_null());
@@ -2391,7 +2392,7 @@ mod tests {
         let st = state_with_mock(&server).await;
         let resp = github_works(axum::extract::State(st)).await;
         assert_eq!(resp.status(), StatusCode::OK);
-        assert!(body_of(resp).await["works"].as_array().unwrap().is_empty());
+        assert_eq!(body_of(resp).await["works"].as_array().unwrap().len(), 0);
         assert_eq!(server.received_requests().await.unwrap().len(), 0, "沒東西要查就不該打 GitHub");
     }
 

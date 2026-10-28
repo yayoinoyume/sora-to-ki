@@ -1,9 +1,12 @@
 //! 作品的螺旋航線（`src/components/about/worksSky.ts` 逐行移植）：中心是起點，越新的作品越外圈，
 //! 每件作品是一顆線畫的小星球——大小是程式碼量、地貌線是主要語言、環是其他語言、衛星是 GitHub 星星。
 //!
-//! 作品清單與數字照 `src/data/works.ts` 的 `WORKS`（取它的 `fallback`，那是 2026-10-23 從 GitHub
-//! 量的真實數字）。分享圖不讀 GitHub：前端的 live 數字跟這份差一點，長出來的星也只差一點，
-//! 而換一組數字快取就得重算。**作品增減或重量數字時兩邊一起改**，不然分享圖上的星跟作品頁的對不上。
+//! 作品清單與數字照 `src/data/works.ts` 的 `WORKS`（取它的 `fallback`）。分享圖不讀 GitHub：
+//! 前端的 live 數字跟這份差一點，長出來的星也只差一點，而換一組數字快取就得重算。
+//! **作品增減或重量數字時兩邊一起改**，不然分享圖上的星跟作品頁的對不上。
+//!
+//! ⚠ 模板預設的兩邊都是空的（見 `src/data/works.ts`），下面是三件純占位的星，只是讓分享圖
+//! 不要是一條空航線。換上自己的作品時，把這份一起換成真的數字。
 //!
 //! 畫的是作品頁進場跑完、停下來的那一刻：航線畫好了，琥珀點落在最新那一件，變成它的衛星。
 //! 動態：琥珀衛星繞著它的星球轉；轉了大半圈後淡回白色，琥珀點從中心的起點重新出發，
@@ -48,66 +51,27 @@ struct WorkStats {
 }
 
 /// 清單的順序就是螺旋的順序（第一個是中心的起點）
-const WORKS: [WorkStats; 7] = [
+const WORKS: [WorkStats; 3] = [
     WorkStats {
-        name: "VoltiCar",
-        commits: 1,
-        stars: 0,
-        pushed_days_ago: 581.0,
-        languages: &[("Python", 21_623.0), ("Shell", 2_478.0)],
+        name: "example-a",
+        commits: 120,
+        stars: 8,
+        pushed_days_ago: 30.0,
+        languages: &[("TypeScript", 180_000.0), ("CSS", 40_000.0)],
     },
     WorkStats {
-        name: "sora-to-ki",
-        commits: 732,
-        stars: 2,
-        pushed_days_ago: 0.0,
-        languages: &[
-            ("TypeScript", 2_368_532.0),
-            ("Rust", 1_381_627.0),
-            ("CSS", 579_299.0),
-            ("JavaScript", 95_194.0),
-        ],
+        name: "example-b",
+        commits: 240,
+        stars: 15,
+        pushed_days_ago: 12.0,
+        languages: &[("Rust", 320_000.0), ("TypeScript", 95_000.0)],
     },
     WorkStats {
-        name: "flow2code",
-        commits: 70,
+        name: "example-c",
+        commits: 80,
         stars: 4,
-        pushed_days_ago: 133.0,
-        languages: &[("TypeScript", 977_846.0), ("JavaScript", 77_185.0)],
-    },
-    WorkStats {
-        name: "session-to-obsidian",
-        commits: 13,
-        stars: 2,
-        pushed_days_ago: 10.0,
-        languages: &[("Python", 69_873.0)],
-    },
-    WorkStats {
-        name: "anigamer-rs",
-        commits: 3,
-        stars: 0,
-        pushed_days_ago: 80.0,
-        languages: &[("Rust", 43_438.0)],
-    },
-    WorkStats {
-        name: "nuntius",
-        commits: 31,
-        stars: 3,
-        pushed_days_ago: 7.0,
-        languages: &[("Python", 301_901.0)],
-    },
-    WorkStats {
-        name: "tessera",
-        commits: 88,
-        stars: 48,
-        pushed_days_ago: 0.0,
-        languages: &[
-            ("Rust", 3_757_802.0),
-            ("TypeScript", 1_745_467.0),
-            ("JavaScript", 38_282.0),
-            ("CSS", 25_658.0),
-            ("Python", 18_382.0),
-        ],
+        pushed_days_ago: 3.0,
+        languages: &[("Python", 150_000.0)],
     },
 ];
 
@@ -798,9 +762,9 @@ mod tests {
     /// 期望值是用 node 跑 worksSky.ts 的同一段程式得到的
     #[test]
     fn 雜湊與亂數跟前端一致() {
-        assert!((hash("tessera") - 0.940_413_207_500_337_9).abs() < 1e-12);
-        let mut r = seeded(hash("tessera"));
-        for want in [0.750_667_979_707_941_4, 0.610_227_716_388_180_9, 0.349_577_418_761_327_86] {
+        assert!((hash("example-a") - 0.743_191_353_916_933_6).abs() < 1e-12);
+        let mut r = seeded(hash("example-a"));
+        for want in [0.931_491_649_476_811_3, 0.884_283_896_069_973_7, 0.929_532_503_476_366_4] {
             let got = r();
             assert!((got - want).abs() < 1e-12, "{got} ≠ {want}");
         }
@@ -808,33 +772,19 @@ mod tests {
 
     /// 每一件長出來的星要跟前端 `bodiesOf` 的一樣：傾角與滾轉是亂數抽到最後才抽的，
     /// 地貌、環、衛星哪一步多抽或少抽一個亂數，這兩個值就會不一樣；地貌線再加總比一次。
-    /// 期望值同樣是 node 跑 worksSky.ts（餵 works.ts 的 fallback）得到的
+    /// 期望值同樣是 node 跑 worksSky.ts（餵本檔 WORKS 的三件占位）得到的
     #[test]
     fn 長出來的星跟前端一致() {
         // (tilt, roll, span, 地貌線的點 x + 2y + 3z 加總)
         let want = [
+            (0.582_728_640_269_488_1, 0.201_058_161_584_660_42, 3.346, -163.471_852_584_124_06),
             (
-                0.364_777_263_009_455_07,
-                -0.176_854_797_312_989_84,
-                1.549_824_281_150_159_7,
-                -1.778_376_357_460_008_9,
+                0.169_912_748_469_505_46,
+                0.134_390_483_144_670_72,
+                3.403_172_690_763_052_6,
+                398.396_676_641_818_1,
             ),
-            (
-                0.515_324_433_671_776_3,
-                -0.118_372_810_631_990_43,
-                3.144_696_598_060_141_6,
-                -128.372_868_256_097_63,
-            ),
-            (
-                0.574_988_263_961_859_1,
-                -0.021_656_332_165_002_82,
-                2.815_356_164_889_941_7,
-                18.060_579_498_054_576,
-            ),
-            (0.3, 1.35, 1.87, 204.900_695_554_490_14),
-            (0.379_187_147_098_127_73, -0.161_828_820_733_353_5, 1.0, 277.142_257_231_908_96),
-            (0.172_741_027_898_155_15, -0.041_228_424_757_719_04, 1.87, 70.791_483_742_461_34),
-            (0.536_457_744_520_157_6, 0.215_761_576_266_959_3, 3.493_209_190_013_58, 161.517_891_354_315_42),
+            (0.198_930_663_755_163_55, -0.146_475_364_593_789, 2.29, -4.986_755_823_691_817_5),
         ];
         for (b, (tilt, roll, span, marks)) in bodies().iter().zip(want) {
             let sum: f64 = b.marks.iter().flatten().map(|p| p[0] + p[1] * 2.0 + p[2] * 3.0).sum();

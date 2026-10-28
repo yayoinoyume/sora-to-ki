@@ -17,8 +17,8 @@
 
 - **🚀 已上線（2026-07-14）**：`nginx /api/ → Rust:3002`。指紋確認（接管端點無 X-Powered-By、
   未接管經 proxy 有）、/uploads//rss 完好、線上 body byte-identical、瀏覽器煙測 0 error。
-  rollback：`sites-available/koimsurai.bak-enabled-20260714` 還原 + reload。
-  ⚠️ 坑：`sites-enabled/koimsurai` 曾是**實體檔非 symlink**（與 available 漂移），已收斂回 symlink。
+  rollback：`sites-available/<站點>.bak-enabled` 還原 + reload。
+  ⚠️ 坑：`sites-enabled/<站點>` 曾是**實體檔非 symlink**（與 available 漂移），已收斂回 symlink。
   ⚠️ 更正：enabled 版有 `location = /rss → Express`——線上 RSS 一直是活的（先前「前端 404」判斷
   是直打 13588 所測，經 nginx 不同）。`/rss` 為 app-level 路由，退役 Express 前要遷。
 - **切換方式**：把 nginx `location /api/` 的 `proxy_pass` 從 `:3001` 改成 `:3002`，reload。
@@ -181,7 +181,7 @@
 >   （`admin/stats` #109 已接管——visitors 用 `Math.random` 除該欄外 byte-identical；`sync/collection` #110 已接管。）
 >   ⚠️ **`/sitemap.xml` `/rss` 不在 strangler 範圍**：nginx `location /` → 前端(13588)、只有 `/api/` → 後端。
 >   Express 的 `app.get('/sitemap.xml'|'/rss')` 是 app-level（非 `/api/`），前端服（sitemap）或前端 404（`/rss`
->   現況 = 前端沒這條路由 → 線上 `koimsurai.com/rss` 是 **404**，pre-existing 前端 bug，跟後端遷移無關）。
+>   現況 = 前端沒這條路由 → 線上 `example.com/rss` 是 **404**，pre-existing 前端 bug，跟後端遷移無關）。
 >   碎念 RSS 走 `/api/thoughts/rss`（已接管 #108）。
 
 > **第三方輪要點**：
@@ -370,9 +370,9 @@
 最終 DB 狀態（post17/thought5/comment17/post_reactions）express==rust。createComment 亦以此 harness 全過。
 
 **harness 踩雷（接力必看）**：
-- ⚠️ **別用 `pkill -f 'target/debug/koimsurai-web-backend'`**——pattern 字串會出現在正在跑的 bash
+- ⚠️ **別用 `pkill -f 'target/debug/<bin>'`**——pattern 字串會出現在正在跑的 bash
   指令列裡，pkill -f 會匹配並殺掉**腳本自己的 shell**（自殺→無輸出、exit 1）。改用
-  `for pid in $(pgrep -f koimsurai-web-backend); do [ "$pid" != "$$" ] && kill -9 $pid; done`。
+  `for pid in $(pgrep -f <bin>); do [ "$pid" != "$$" ] && kill -9 $pid; done`。
 - 背景 Rust 用 Bash tool 的 `run_in_background`（`&`+`kill %1` 只殺當前 shell 的 job、跨 Bash call
   的孤兒殺不到→撞 3002 bind 失敗→測到舊 fixture）。每次測試前確認 3002 free、reap 孤兒。
 - seed fixture：docker cp 帶 `-wal`/`-shm` 後先 `PRAGMA wal_checkpoint(TRUNCATE)` 再改，避免 table locked。
@@ -623,5 +623,5 @@ Express 端一律不修（將拋棄）。前端相容性：PostEditor 恆送全�
 - ⚠️ **bahamut session 死**（NO_LOGIN；7/11 的 deleted Set-Cookie 是真註銷，守門保住的 jar 已無效）
   ——待使用者瀏覽器擴充重推 cookie（`POST /admin/bahamut/cookie` 就緒、收到即同步）。
 - **Rollback**：`docker compose --profile legacy up -d backend` + nginx 備份檔還原。
-- **現況**：koimsurai.com 全站（/api、/rss、SSR）由 Rust 服務；Express 容器停用保留定義；
+- **現況**：全站（/api、/rss、SSR）由 Rust 服務；Express 容器停用保留定義；
   純靜態（/uploads、/nas-images）nginx 直 serve。

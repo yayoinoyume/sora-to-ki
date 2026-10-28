@@ -26,7 +26,7 @@ export interface ProcessedImage {
  */
 export async function processImage(
   inputPath: string,
-  outputDir = '/mnt/hdd16tb_01/nas-storage/gallery', // Default to NAS path
+  outputDir = './data/gallery-out', // Default to NAS path
   config: BuilderConfig,
 ): Promise<ProcessedImage> {
   const fileName = path.basename(inputPath, path.extname(inputPath));

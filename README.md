@@ -1,22 +1,23 @@
 <div align="center">
 
-<img src="public/favicon.svg" width="72" alt="宙と木 logo" />
+<img src="public/favicon.svg" width="72" alt="Example Site logo" />
 
-# 宙と木 · Koimsurai
+# Example Site
 
 **此處無他，唯有黑夜、白墨與微光。**
 
-一個人的網站：寫技術手記、發碎念、放照片與書單，也把看的、聽的、寫的程式串在同一片天空裡。
+一個可以直接拿去用的個人網站模板：技術手記、碎念、照片、書單、作品與收藏，
+全部擺在同一片夜空裡。作者相關的內容已清空成空狀態，換成自己的資料就能上線。
 
 **繁體中文** · [English](README.en.md)
 
-[**koimsurai.com**](https://koimsurai.com) · [手記](https://koimsurai.com/blog) · [此站點](https://koimsurai.com/about-site) · [航行日誌](https://koimsurai.com/history) · [RSS](https://koimsurai.com/rss)
+[**example.com**](https://example.com) · [手記](https://example.com/blog) · [此站點](https://example.com/about-site) · [航行日誌](https://example.com/history) · [RSS](https://example.com/rss)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/timo9378/sora-to-ki/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/timo9378/sora-to-ki/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/example-user/sora-to-ki/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/example-user/sora-to-ki/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
-[![frontend cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=frontend&label=frontend%20cov&logo=codecov&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=frontend)
-[![e2e cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=e2e&label=e2e%20cov&logo=playwright&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=e2e)
-[![backend cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=backend&label=backend%20cov&logo=rust&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=backend)
+[![frontend cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=frontend&label=frontend%20cov&logo=codecov&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=frontend)
+[![e2e cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=e2e&label=e2e%20cov&logo=playwright&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=e2e)
+[![backend cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=backend&label=backend%20cov&logo=rust&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=backend)
 
 [![React 19](https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TanStack Start](https://img.shields.io/badge/TanStack_Start-EF4444?logo=react&logoColor=white)](https://tanstack.com/start)
@@ -28,13 +29,12 @@
 
 ---
 
-從 2025 年 4 月開始寫，一路改到現在。前端是 **React 19 + TanStack Start（SSR + ISR）**，後端是 **Rust（axum + sqlx + SQLite）**，全部跑在家裡的一台伺服器上，用 Docker Compose 部署。
+前端是 **React 19 + TanStack Start（SSR + ISR）**，後端是 **Rust（axum + sqlx + SQLite）**，用 Docker Compose 部署。第三方整合（GitHub / Steam / Spotify / WakaTime / Simkl / TMDb）全部是可選的：沒填環境變數就自動降級成空狀態，不會讓站點起不來。
 
-> **想看舊站？** 2026 年 10 月整站翻新成現在的「宙と木」。翻新前的最後一版留在 tag [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final)（`git checkout v1-final`），也還跑在 <https://archive.koimsurai.com>（唯讀）。
 
 ## 🌌 設計
 
-整個站只有一個概念：**每一頁都是同一片夜空裡的一種東西**，用首頁那顆點線土星的點和線變出來。完整的說明（還能一步一步看土星怎麼畫出來）在站上的 [此站點](https://koimsurai.com/about-site)。
+整個站只有一個概念：**每一頁都是同一片夜空裡的一種東西**，用首頁那顆點線土星的點和線變出來。完整的說明（還能一步一步看土星怎麼畫出來）在站上的 [此站點](https://example.com/about-site)。
 
 ### 只有三樣材料
 
@@ -78,15 +78,15 @@
 
 | 首頁：繞著土星的衛星 | 手記：一圈一圈的星軌 |
 |:---:|:---:|
-| [![首頁](.github/screenshots/home.jpg)](https://koimsurai.com) | [![手記](.github/screenshots/notes.jpg)](https://koimsurai.com/blog) |
+| [![首頁](.github/screenshots/home.jpg)](https://example.com) | [![手記](.github/screenshots/notes.jpg)](https://example.com/blog) |
 | **文章** | **照片：從深空傳回來的照片** |
-| [![文章](.github/screenshots/post.jpg)](https://koimsurai.com/blog) | [![照片](.github/screenshots/photos.jpg)](https://koimsurai.com/photos) |
+| [![文章](.github/screenshots/post.jpg)](https://example.com/blog) | [![照片](.github/screenshots/photos.jpg)](https://example.com/photos) |
 | **作品：往外長的螺旋航線** | **收藏：從地球發出的訊號** |
-| [![作品](.github/screenshots/works.jpg)](https://koimsurai.com/portfolio) | [![收藏](.github/screenshots/collection.jpg)](https://koimsurai.com/watch) |
+| [![作品](.github/screenshots/works.jpg)](https://example.com/portfolio) | [![收藏](.github/screenshots/collection.jpg)](https://example.com/watch) |
 | **朋友：繞著同一個中心的星** | **航行日誌：從地表升空** |
-| [![朋友](.github/screenshots/friends.jpg)](https://koimsurai.com/friends) | [![航行日誌](.github/screenshots/log.jpg)](https://koimsurai.com/history) |
+| [![朋友](.github/screenshots/friends.jpg)](https://example.com/friends) | [![航行日誌](.github/screenshots/log.jpg)](https://example.com/history) |
 | **設備：太空船的工程圖** | **此站點** |
-| [![設備](.github/screenshots/setup.jpg)](https://koimsurai.com/setup) | [![此站點](.github/screenshots/colophon.jpg)](https://koimsurai.com/about-site) |
+| [![設備](.github/screenshots/setup.jpg)](https://example.com/setup) | [![此站點](.github/screenshots/colophon.jpg)](https://example.com/about-site) |
 
 ### 後台
 
@@ -96,24 +96,18 @@
 | **碎念**：右邊是同步進來的紀錄，按「寫」帶進左邊 | **留言**：左邊清單、右邊那一則，鍵盤 j／k／a／s／r |
 | ![後台：碎念](.github/screenshots/admin-thoughts.jpg) | ![後台：留言](.github/screenshots/admin-comments.jpg) |
 
-## 🚀 2026-10 的大遷移
+## 🚀 從模板開始
 
-這次不是換皮，是把整個站照上面的三條規則重新做一遍。舊版的樣子在 [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final)。
+複製 `.env.example` 成 `.env`，填 `JWT_SECRET`、`ADMIN_USERNAME`、`ADMIN_PASSWORD`、
+`SITE_URL` 與 `OWNER_EMAIL`，然後：
 
-**前台**
+```bash
+docker compose up -d --build
+```
 
-- 配色從品牌紫、洋紅、Happy Hues 那套收回到三樣材料；連結滑過變綠發光那條拿掉
-- 每一頁各畫各的天空（`src/components/*/*Sky.ts`，2D canvas），共用首頁那顆土星的點與線；換頁時用轉場把兩片天空接起來
-- 拿掉游標尾巴、流星、UFO 與首訪的高速穿越開場：裝飾一多，「一個畫面只有一個訊號」就不成立
-- 字換成思源宋體並按頁裁字；每一頁有自己的動態分享圖
+作品、經歷、設備、成長軌跡、此站點的 Q&A 都是空陣列，頁面會顯示空狀態而不是別人的資料。
+要填的時候看對應的 `src/data/*.ts` 與 `src/components/about/*Gear.ts`，檔案開頭都有註解說明格式。
 
-**後台**
-
-- 換成跟前台同一套材料，側欄照前台的分區分成「此刻、寫、收、回、站」
-- 內容撐滿側欄右邊的寬度（清單類的頁面收成一欄置中）；換頁時舊畫面淡出、新的那頁淡入上浮，切分頁也一樣
-- 新功能：排程發佈、回收桶、碎念附作品、友鏈申請審核、照片與收藏的前台顯示設定（見下面「站台本身」）
-
-**更早的一次遷移**：2026-07 後端從 Express 整套搬到 Rust，120 多個端點逐一對拍、確認回應一模一樣才切換。過程記錄在 [`backend/STRANGLER.md`](backend/STRANGLER.md)。
 
 ## ✨ 有什麼
 
@@ -129,7 +123,7 @@
 
 ### 收藏與生活紀錄
 
-- **在看什麼**：動畫瘋觀看紀錄自動同步（[anigamer](https://github.com/timo9378/anigamer-rs)，自己寫的 SDK），電影與影集透過 Simkl 和 TMDb 同步
+- **在看什麼**：動畫瘋觀看紀錄自動同步，電影與影集透過 Simkl 和 TMDb 同步
 - **音樂**：Spotify 正在播放、最近播放、最愛曲風
 - **書櫃**：ISBN 查詢走國家圖書館的資料
 - **照片**：EXIF 資訊、CLIP 自動標籤、可縮放的全螢幕檢視；標題、標籤、精選與隱藏在後台改，NAS 重新同步不會蓋掉
@@ -192,7 +186,7 @@ flowchart LR
 需要 **Node.js ≥ 26**、**pnpm 12**、**Rust stable**（edition 2024），或者只要 Docker。
 
 ```bash
-git clone https://github.com/timo9378/sora-to-ki.git
+git clone https://github.com/example-user/sora-to-ki.git
 cd sora-to-ki
 pnpm install
 ```
@@ -288,13 +282,12 @@ cargo clippy --all-targets -- -D warnings
 - 程式碼採 **AGPL-3.0**：如果你改過之後**架成網站對外提供**，也要以相同授權公開修改後的原始碼
 - 站上的**文章、照片、碎念、頭像與 logo 都不在授權範圍內**（見下方），fork 之後請換成你自己的
 - 很多內容綁定我的帳號：動態頁的 Steam／GitHub／WakaTime、動畫瘋同步、首頁與關於頁的自我介紹、設備頁的硬體清單。這些都要改成你自己的，或者直接拿掉
-- 想要翻新前的版本，從 tag [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final) 開始
-- 有問題或發現 bug 都歡迎開 [issue](https://github.com/timo9378/sora-to-ki/issues)
+- 有問題或發現 bug 都歡迎開 [issue](https://github.com/example-user/sora-to-ki/issues)
 
 ## 📄 授權
 
 - **程式碼**：[GNU Affero General Public License v3.0](LICENSE)
-- **內容**：文章、照片、碎念、書評、頭像與 logo 等站點內容 © Koimsurai，**保留所有權利**，未經同意請勿轉載或重製
+- **內容**：換站之後站上的文章、照片與其他內容，版權歸該站所有者；模板本身不含任何既有內容
 
 ## 🙏 致謝
 
@@ -308,7 +301,6 @@ cargo clippy --all-targets -- -D warnings
 
 ## 🌌 更多
 
-- 此站點（設計的完整說明）：<https://koimsurai.com/about-site>
-- 站點走過的路：<https://koimsurai.com/history>
-- 舊站（v1，唯讀）：<https://archive.koimsurai.com>
-- 交換友鏈（頁面上的表單直接申請）：<https://koimsurai.com/friends>
+- 此站點（設計的完整說明）：<https://example.com/about-site>
+- 站點走過的路：<https://example.com/history>
+- 交換友鏈（頁面上的表單直接申請）：<https://example.com/friends>

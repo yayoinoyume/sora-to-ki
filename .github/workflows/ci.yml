@@ -664,7 +664,7 @@ jobs:
           node -e "
             const { spawn } = require('node:child_process');
             const { seed } = require('./tests/e2e/seed.mjs');
-            const db = '/tmp/koimsurai-fuzz.db';
+            const db = '/tmp/fuzz.db';
             const p = spawn('./target/debug/koimsurai-web-backend', [], {
               env: { ...process.env, DATABASE_URL: 'sqlite://' + db + '?mode=rwc',
                      BIND_ADDR: '127.0.0.1:13999', JWT_SECRET: 'fuzz',

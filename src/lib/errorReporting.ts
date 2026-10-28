@@ -11,7 +11,7 @@
 //   2. CSP 的 connect-src 維持 'self'——不必為此多開一個來源
 //   3. 擋廣告外掛不會誤殺。uBlock 那類用通用規則比對 `/envelope/`、`/api/N/store/`
 //      這種路徑，而被擋時是**靜默的**：這裡以為送出去了，你以為沒出錯
-//   4. glitchtip.koimsurai.com 不必對公網開 ingest 端點
+//   4. 上報服務（GlitchTip / Sentry）不必對公網開 ingest 端點
 //
 // ## VITE_SENTRY_DSN 裡那把 key 是假的
 //

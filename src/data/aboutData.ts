@@ -14,4 +14,3 @@ export const WORK_BY_LANG: Record<string, { title: string; role: string }[]> = {
   ja: [],
   ko: [],
 };
-

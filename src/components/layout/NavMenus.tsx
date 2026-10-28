@@ -25,7 +25,7 @@ import { thoughtLine } from '@/lib/thoughtRef';
 export type MenuKey = 'notes' | 'moments' | 'works' | 'collection' | 'about' | 'more';
 
 const GITHUB = 'https://github.com/example-user';
-const CONTACT = 'service@koimsurai.com';
+const CONTACT = 'no-reply@example.com';
 
 const short = (iso: string) => dotDate(parseServerDate(iso), true);
 

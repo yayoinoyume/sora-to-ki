@@ -12,7 +12,7 @@
     "build": "vp build --config vite.config.start.ts",
     "build:all": "pnpm run build:photos && pnpm run build",
     "build:gallery": "pnpm tsx scripts/builder/index.ts",
-    "build:photos": "tsx scripts/builder/index.ts && node ../ai-tagger/clip_tagger.js",
+    "build:photos": "tsx scripts/builder/index.ts",
     "check:headers": "tsx scripts/check-security-headers.ts",
     "check:links": "tsx scripts/check-links.ts",
     "check:a11y": "tsx scripts/check-a11y-prod.ts",

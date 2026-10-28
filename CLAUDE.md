@@ -1,4 +1,4 @@
-# koimsurai / sora-to-ki — 給 AI 助手的工作守則
+# sora-to-ki — 給 AI 助手的工作守則
 
 依領域拆出的守則放在 `.claude/rules/`，讀寫對應檔案時才會載入：
 

@@ -25,7 +25,7 @@ import './Friends.css';
 import { sameTitle } from '@/lib/pageTitle';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
 
-const CONTACT = 'service@koimsurai.com';
+const CONTACT = 'no-reply@example.com';
 const SITE = { name: SITE_NAME, url: SITE_URL, rss: `${SITE_URL}/rss.xml` };
 const ART = '/illustrations/docking.webp';
 

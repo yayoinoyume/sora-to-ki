@@ -27,14 +27,11 @@ export const GEAR: GearCategory[] = [
   { id: 'peripherals', name: 'Peripherals', items: [] },
 ];
 
-
 /** 老家那台：零件拼起來的備用機，只列規格不放圖 */
 export const BASE_II_SPECS: { label: string; value: string }[] = [];
-
 
 /**
  * 其他連網家電：智慧家庭的一部分，但不是「挑過的設備」，所以只列名字與類型、不放產品圖。
  * 類型走 setup.appliances.types.*。
  */
 export const APPLIANCES: { name: string; typeKey: string }[] = [];
-

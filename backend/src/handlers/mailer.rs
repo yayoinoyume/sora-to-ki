@@ -25,7 +25,7 @@ fn env_or(key: &str, default: &str) -> String {
     std::env::var(key).ok().filter(|s| !s.is_empty()).unwrap_or_else(|| default.to_string())
 }
 fn newsletter_from() -> String {
-    env_or("NEWSLETTER_FROM", "Example Site <hello@koimsurai.com>")
+    env_or("NEWSLETTER_FROM", "Example Site <no-reply@example.com>")
 }
 /// 對方按「回覆」時寄到哪裡（見檔頭：寄件位址本身收不了信）
 fn reply_to() -> Option<String> {

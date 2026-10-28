@@ -142,7 +142,7 @@ function devApiProxy(): Plugin {
           .catch(next);
       });
       // 相簿的圖：正式環境是 nginx 直接從這個目錄給（location /nas-images/），dev 照做一份唯讀的
-      const gallery = path.resolve(process.env.NAS_GALLERY_DIR ?? '/mnt/hdd16tb_01/nas-storage/gallery');
+      const gallery = path.resolve(process.env.NAS_GALLERY_DIR ?? './data/gallery-out');
       server.middlewares.use('/nas-images', (req, res, next) => {
         const file = path.resolve(gallery, `.${decodeURIComponent((req.url ?? '').split('?')[0])}`);
         if (!file.startsWith(`${gallery}${path.sep}`) || !fs.existsSync(file)) {

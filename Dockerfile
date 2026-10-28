@@ -9,7 +9,7 @@
 #   - sharp + fonts-noto-cjk(~18MB 字型 + 原生模組)
 #     → OG 圖改由後端 resvg 產(/api/og/:id.png);預設 OG 圖與 PWA icons 已預先生成進 public/,
 #       不必每次 build 重跑 SVG→PNG。
-#   - prerender 相關(host 綁 127.0.0.1 的 hack、build 期打 koimsurai.com 撈文章)
+#   - prerender 相關(host 綁 127.0.0.1 的 hack、build 期打線上站撈文章)
 #     → 改走 ISR(nitro routeRules swr)。實測 prerender 產物不會被 nitro 註冊成靜態資產,
 #       生出來也沒人送,純浪費。
 # 舊版見 git 歷史(serve.mjs / serve.cjs)。
@@ -73,9 +73,10 @@ RUN pnpm exec sentry-cli sourcemaps inject .output/public/assets
 #    位址用**公開網址**：build 容器不在 observability 網路上，連不到 glitchtip:8000。
 #    ⚠️ 沒帶 secret 時整步跳過（例如 CI 只想驗 build 過不過）。有帶就必須成功——
 #      刻意讓它會擋下部署，因為靜靜跳過等於錯誤追蹤白裝，而那不會有人發現。
-ARG SENTRY_URL=https://glitchtip.koimsurai.com
-ARG SENTRY_ORG=koimsurai
-ARG SENTRY_PROJECT=koimsurai-frontend
+# 自架 GlitchTip 或 Sentry 的位址；留空则 source map 上傳那步跳过
+ARG SENTRY_URL=
+ARG SENTRY_ORG=example-org
+ARG SENTRY_PROJECT=example-frontend
 RUN --mount=type=secret,id=sentry_token \
     if [ -s /run/secrets/sentry_token ]; then \
       SENTRY_AUTH_TOKEN="$(cat /run/secrets/sentry_token)" \

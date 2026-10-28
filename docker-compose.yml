@@ -8,9 +8,9 @@ volumes:
   backend-db-data: # DB 檔的 docker volume（backend-rs + db-backup 共用）
 
 networks:
-  # 錯誤上報用（見 ~/Server/glitchtip/）。刻意走內網而不是公網 DSN：
-  # 公網那條要繞出去經 nginx 再回來，而 nginx 掛掉正是最需要收到錯誤的時候。
-  # 建立方式：docker network create observability
+  # 錯誤上報用的外部網路（自架 GlitchTip 之類）。要用就先建：
+  #   docker network create observability
+  # 沒建的話把 backend-rs 下面的 `- observability` 一起註解掉，否則 compose 會報錯。
   observability:
     external: true
 
@@ -44,35 +44,10 @@ services:
       - REVALIDATE_SECRET=${REVALIDATE_SECRET:-}
     ports:
       # 【修改點】明確指定只綁定到 127.0.0.1
-      - "127.0.0.1:13588:13579"
+      - "127.0.0.1:8080:13579"
     restart: unless-stopped # 設定容器重啟策略
     healthcheck:
       # slim image 沒有 curl/wget → 用 node 內建 fetch 打首頁
-      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:13579/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
-    depends_on:
-      backend-rs:
-        condition: service_healthy
-
-  # 舊站（2026-10 翻新前的最後一版），掛在 archive.koimsurai.com。
-  # 映像是翻新前凍結的 web-frontend:v1-final（git tag v1-final，要重建就 checkout 那個 tag 再 build）；
-  # 沒有 build 區塊，`docker compose up -d --build` 不會重建它。
-  # 唯讀由 nginx 那層做（API 只放 GET、擋登入、後台導回主站），這裡只是把舊的前端跑起來。
-  # SITE_URL 刻意寫主站：canonical 指回主站，搜尋引擎不會把舊站當成重複內容。
-  frontend-archive:
-    image: web-frontend:v1-final
-    container_name: personal-website-archive
-    environment:
-      - TZ=Asia/Taipei
-      - BACKEND_URL=http://backend-rs:3002
-      - SITE_URL=https://example.com
-    ports:
-      - "127.0.0.1:13589:13579"
-    restart: unless-stopped
-    healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:13579/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 5s
@@ -124,9 +99,9 @@ services:
       - ENABLE_TW_ISBN_SYNC=1
     volumes:
       - backend-db-data:/usr/src/app/db
-      - /mnt/hdd16tb_01/Blog/uploads:/usr/src/app/storage/uploads
-      - /mnt/hdd16tb_01/nas-storage/Blog_Source:/usr/src/app/storage/Blog_Source:ro
-      - /mnt/hdd16tb_01/nas-storage/gallery:/usr/src/app/storage/gallery
+      - ./data/uploads:/usr/src/app/storage/uploads
+      - ./data/Blog_Source:/usr/src/app/storage/Blog_Source:ro
+      - ./data/gallery:/usr/src/app/storage/gallery
     env_file:
       - ./.env.backend
     ports:
@@ -155,6 +130,6 @@ services:
     volumes:
       - backend-db-data:/db # 與 backend-rs 共用（WAL 支援多程序讀）
       - ./scripts/backup-db.sh:/backup-db.sh:ro
-      - /mnt/hdd16tb_01/Blog/db-backups:/backups
+      - ./data/db-backups:/backups
     entrypoint: ["/bin/sh", "-c", "apk add --no-cache sqlite >/dev/null && exec /bin/sh /backup-db.sh"]
     restart: unless-stopped

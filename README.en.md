@@ -1,22 +1,24 @@
 <div align="center">
 
-<img src="public/favicon.svg" width="72" alt="宙と木 logo" />
+<img src="public/favicon.svg" width="72" alt="Example Site logo" />
 
-# 宙と木 · Koimsurai
+# Example Site
 
 **Nothing else here: only the night, white ink, and a faint light.**
 
-A one-person site: technical notes, short moments, photos and a reading list, with what I watch, listen to and code strung together in one sky.
+A personal-site template you can take as-is: technical notes, short moments, photos and a reading list,
+works and collections, all strung together in one sky. Everything author-specific has been emptied into
+empty states — put your own data in and it is ready to ship.
 
 [繁體中文](README.md) · **English**
 
-[**koimsurai.com**](https://koimsurai.com) · [Notes](https://koimsurai.com/en/blog) · [Colophon](https://koimsurai.com/en/about-site) · [Log](https://koimsurai.com/en/history) · [RSS](https://koimsurai.com/rss)
+[**example.com**](https://example.com) · [Notes](https://example.com/en/blog) · [Colophon](https://example.com/en/about-site) · [Log](https://example.com/en/history) · [RSS](https://example.com/rss)
 
-[![CI](https://img.shields.io/github/actions/workflow/status/timo9378/sora-to-ki/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/timo9378/sora-to-ki/actions/workflows/ci.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/example-user/sora-to-ki/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white)](https://github.com/example-user/sora-to-ki/actions/workflows/ci.yml)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
-[![frontend cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=frontend&label=frontend%20cov&logo=codecov&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=frontend)
-[![e2e cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=e2e&label=e2e%20cov&logo=playwright&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=e2e)
-[![backend cov](https://img.shields.io/codecov/c/github/timo9378/sora-to-ki/main?flag=backend&label=backend%20cov&logo=rust&logoColor=white)](https://app.codecov.io/gh/timo9378/sora-to-ki?flags%5B0%5D=backend)
+[![frontend cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=frontend&label=frontend%20cov&logo=codecov&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=frontend)
+[![e2e cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=e2e&label=e2e%20cov&logo=playwright&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=e2e)
+[![backend cov](https://img.shields.io/codecov/c/github/example-user/sora-to-ki/main?flag=backend&label=backend%20cov&logo=rust&logoColor=white)](https://app.codecov.io/gh/example-user/sora-to-ki?flags%5B0%5D=backend)
 
 [![React 19](https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB)](https://react.dev/)
 [![TanStack Start](https://img.shields.io/badge/TanStack_Start-EF4444?logo=react&logoColor=white)](https://tanstack.com/start)
@@ -28,13 +30,12 @@ A one-person site: technical notes, short moments, photos and a reading list, wi
 
 ---
 
-Started in April 2025 and still evolving. The frontend is **React 19 + TanStack Start (SSR + ISR)**, the backend is **Rust (axum + sqlx + SQLite)**, and everything runs on a server at home, deployed with Docker Compose.
+The frontend is **React 19 + TanStack Start (SSR + ISR)**, the backend is **Rust (axum + sqlx + SQLite)**, deployed with Docker Compose. Every third-party integration (GitHub / Steam / Spotify / WakaTime / Simkl / TMDb) is optional: leave its env vars empty and that block degrades to an empty state instead of breaking the site.
 
-> **Looking for the old site?** In October 2026 the whole site was rebuilt as the current 宙と木. The last version before that lives at the tag [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final) (`git checkout v1-final`) and is still running, read-only, at <https://archive.koimsurai.com>.
 
 ## 🌌 Design
 
-The whole site rests on one idea: **every page is one kind of thing in the same night sky**, all made from the dots and lines of the dotted Saturn on the home page. The full explanation, where you can also watch Saturn being drawn step by step, is the site's [Colophon](https://koimsurai.com/en/about-site).
+The whole site rests on one idea: **every page is one kind of thing in the same night sky**, all made from the dots and lines of the dotted Saturn on the home page. The full explanation, where you can also watch Saturn being drawn step by step, is the site's [Colophon](https://example.com/en/about-site).
 
 ### Only three materials
 
@@ -78,15 +79,15 @@ Articles can also be read in a sans, a handwritten-style or a modern sans face, 
 
 | Home: moons around Saturn | Notes: rings of star trails |
 |:---:|:---:|
-| [![Home](.github/screenshots/home.jpg)](https://koimsurai.com) | [![Notes](.github/screenshots/notes.jpg)](https://koimsurai.com/en/blog) |
+| [![Home](.github/screenshots/home.jpg)](https://example.com) | [![Notes](.github/screenshots/notes.jpg)](https://example.com/en/blog) |
 | **Article** | **Photos: pictures downlinked from deep space** |
-| [![Article](.github/screenshots/post.jpg)](https://koimsurai.com/en/blog) | [![Photos](.github/screenshots/photos.jpg)](https://koimsurai.com/en/photos) |
+| [![Article](.github/screenshots/post.jpg)](https://example.com/en/blog) | [![Photos](.github/screenshots/photos.jpg)](https://example.com/en/photos) |
 | **Works: a spiral course outward** | **Collection: signals sent from Earth** |
-| [![Works](.github/screenshots/works.jpg)](https://koimsurai.com/en/portfolio) | [![Collection](.github/screenshots/collection.jpg)](https://koimsurai.com/en/watch) |
+| [![Works](.github/screenshots/works.jpg)](https://example.com/en/portfolio) | [![Collection](.github/screenshots/collection.jpg)](https://example.com/en/watch) |
 | **Friends: stars around one center** | **Log: a launch from the ground** |
-| [![Friends](.github/screenshots/friends.jpg)](https://koimsurai.com/en/friends) | [![Log](.github/screenshots/log.jpg)](https://koimsurai.com/en/history) |
+| [![Friends](.github/screenshots/friends.jpg)](https://example.com/en/friends) | [![Log](.github/screenshots/log.jpg)](https://example.com/en/history) |
 | **Setup: a spacecraft's blueprints** | **Colophon** |
-| [![Setup](.github/screenshots/setup.jpg)](https://koimsurai.com/en/setup) | [![Colophon](.github/screenshots/colophon.jpg)](https://koimsurai.com/en/about-site) |
+| [![Setup](.github/screenshots/setup.jpg)](https://example.com/en/setup) | [![Colophon](.github/screenshots/colophon.jpg)](https://example.com/en/about-site) |
 
 ### Admin
 
@@ -96,24 +97,19 @@ Articles can also be read in a sans, a handwritten-style or a modern sans face, 
 | **Moments**: synced records on the right; "Write" pulls one into the composer | **Comments**: list on the left, the selected one on the right; keyboard j / k / a / s / r |
 | ![Admin: Moments](.github/screenshots/admin-thoughts.jpg) | ![Admin: Comments](.github/screenshots/admin-comments.jpg) |
 
-## 🚀 The October 2026 rebuild
+## 🚀 Starting from the template
 
-This wasn't a reskin: the whole site was rebuilt to the three rules above. The previous look is preserved at [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final).
+Copy `.env.example` to `.env`, fill in `JWT_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`,
+`SITE_URL` and `OWNER_EMAIL`, then:
 
-**Public site**
+```bash
+docker compose up -d --build
+```
 
-- The palette went from brand purple, magenta and the Happy Hues set back to the three materials; the green glow on link hover is gone
-- Every page draws its own sky (`src/components/*/*Sky.ts`, 2D canvas) from the same dots and lines as the home page's Saturn, and page transitions stitch one sky into the next
-- The cursor trail, meteors, UFO and the warp-speed first-visit intro were removed: with that much decoration, "one signal per screen" can't hold
-- Type moved to Source Han Serif, subset per page, and every page got its own generated share image
+Works, experience, gear, journey and the colophon Q&A are all empty arrays — those pages
+render an empty state instead of someone else's data. To fill them, look at the matching
+`src/data/*.ts` and `src/components/about/*Gear.ts`; each file explains its shape at the top.
 
-**Admin**
-
-- Rebuilt in the same materials, with the sidebar grouped like the site: Now, Write, Keep, Reply, Station
-- Content fills the full width to the right of the sidebar (list pages stay one centred column); changing pages fades the old one out while the new one fades and rises in, and switching tabs does the same
-- New features: scheduled publishing, a trash, moments with attached works, link-exchange review, and public-visibility settings for photos and the collection (see "The site itself" below)
-
-**An earlier migration**: in July 2026 the backend moved from Express to Rust in one go. All 120+ endpoints were diffed against the old ones, and the switch happened only once every response matched. The process is written up in [`backend/STRANGLER.md`](backend/STRANGLER.md) (in Chinese).
 
 ## ✨ Features
 
@@ -129,7 +125,7 @@ This wasn't a reskin: the whole site was rebuilt to the three rules above. The p
 
 ### Collection and life log
 
-- **Watching**: Bahamut Anime Crazy history synced automatically ([anigamer](https://github.com/timo9378/anigamer-rs), my own SDK); films and series synced through Simkl and TMDb
+- **Watching**: Bahamut Anime Crazy history synced automatically; films and series synced through Simkl and TMDb
 - **Music**: Spotify now playing, recently played and favourite genres
 - **Bookshelf**: ISBN lookups use Taiwan's National Central Library data
 - **Photos**: EXIF details, CLIP auto-tagging and a zoomable full-screen viewer; titles, tags, featured and hidden flags are edited in the admin and survive a NAS re-sync
@@ -192,7 +188,7 @@ Every PR has to pass these before it can merge (the full list is in [`.github/wo
 You need **Node.js ≥ 26**, **pnpm 12** and **Rust stable** (edition 2024), or just Docker.
 
 ```bash
-git clone https://github.com/timo9378/sora-to-ki.git
+git clone https://github.com/example-user/sora-to-ki.git
 cd sora-to-ki
 pnpm install
 ```
@@ -288,13 +284,12 @@ Feel free to borrow any of the code or fork it to run your own site. A few thing
 - The code is **AGPL-3.0**: if you modify it and **run it as a public website**, you have to publish your modified source under the same licence
 - The site's **articles, photos, moments, avatar and logo are not covered by the licence** (see below); replace them with your own after forking
 - A lot of content is tied to my accounts: Steam / GitHub / WakaTime on the activity page, the Bahamut sync, the introductions on the home and about pages, and the hardware list on the setup page. Change these to your own or remove them
-- If you want the pre-rebuild version, start from the tag [`v1-final`](https://github.com/timo9378/sora-to-ki/tree/v1-final)
-- Questions and bug reports are welcome as [issues](https://github.com/timo9378/sora-to-ki/issues)
+- Questions and bug reports are welcome as [issues](https://github.com/example-user/sora-to-ki/issues)
 
 ## 📄 License
 
 - **Code**: [GNU Affero General Public License v3.0](LICENSE)
-- **Content**: articles, photos, moments, book reviews, the avatar, the logo and other site content © Koimsurai, **all rights reserved**; please don't republish or reproduce them without permission
+- **Content**: articles, photos, moments, book reviews, the avatar, the logo and other site content © Example Site, **all rights reserved**; please don't republish or reproduce them without permission
 
 ## 🙏 Thanks
 
@@ -308,7 +303,7 @@ and the [Vite+](https://viteplus.dev/) and oxc toolchain.
 
 ## 🌌 More
 
-- Colophon (the full design write-up): <https://koimsurai.com/en/about-site>
-- The road the site has taken: <https://koimsurai.com/en/history>
-- The old site (v1, read-only): <https://archive.koimsurai.com>
-- Link exchange (apply with the form on the page): <https://koimsurai.com/en/friends>
+- Colophon (the full design write-up): <https://example.com/en/about-site>
+- The road the site has taken: <https://example.com/en/history>
+- The old site (v1, read-only): <https://example.com>
+- Link exchange (apply with the form on the page): <https://example.com/en/friends>

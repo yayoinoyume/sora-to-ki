@@ -14,7 +14,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 
 const SITE = process.env.SITE_URL ?? 'https://example.com';
-const UPLOAD_ROOT = process.env.UPLOAD_ROOT ?? '/mnt/hdd16tb_01/Blog/uploads';
+const UPLOAD_ROOT = process.env.UPLOAD_ROOT ?? './data/uploads';
 /** 文章內容的欄位（原文 + 四個語系），回填要一起做，否則譯文版照樣位移 */
 const COLS = ['content', 'content_en', 'content_ja', 'content_ko', 'content_zh_cn'];
 

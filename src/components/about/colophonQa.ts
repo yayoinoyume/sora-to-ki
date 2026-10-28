@@ -23,8 +23,7 @@ export const COLOPHON_QA = {
     q4: '4. 這裡有藏彩蛋嗎？',
     a4: '沒有。沒有實作彩蛋，這裡所見即所得。',
     q5: '5. 這個網站的主要受眾是誰？',
-    a5_p1:
-      '寫給自己看的部分居多：筆記、做過的東西、一些想法。沒有特別去社群上宣傳。',
+    a5_p1: '寫給自己看的部分居多：筆記、做過的東西、一些想法。沒有特別去社群上宣傳。',
     a5_p2_pre: '所以，如果你剛好逛到這裡，覺得這個站點的設計或技術棧還合你的胃口，非常歡迎交換友鏈。也歡迎直接在',
     a5_p2_link: '留言',
     a5_p2_post: '留個足跡。',
@@ -50,8 +49,7 @@ export const COLOPHON_QA = {
     q4: '4. 这里有藏彩蛋吗？',
     a4: '没有。没有实作彩蛋，这里所见即所得。',
     q5: '5. 这个网站的主要受众是谁？',
-    a5_p1:
-      '写给自己看的部分居多：笔记、做过的东西、一些想法。没有特别去社群上宣传。',
+    a5_p1: '写给自己看的部分居多：笔记、做过的东西、一些想法。没有特别去社群上宣传。',
     a5_p2_pre: '所以，如果你刚好逛到这里，觉得这个站点的设计或技术栈还合你的胃口，非常欢迎交换友链。也欢迎直接在',
     a5_p2_link: '留言',
     a5_p2_post: '留个足迹。',
@@ -60,7 +58,7 @@ export const COLOPHON_QA = {
     intro: 'A personal corner for jotting down tech and life.',
     qaHeading: 'FAQ',
     q1: '1. Why did you build this site?',
-    a1: 'A place for my own notes, work and everyday stuff — and a chance to try things I never get to touch in someone else\'s project.',
+    a1: "A place for my own notes, work and everyday stuff — and a chance to try things I never get to touch in someone else's project.",
     q2: "2. What's the tech stack?",
     a2_pre: 'The frontend uses ',
     a2_mid1: ' with ',
@@ -77,8 +75,7 @@ export const COLOPHON_QA = {
     q4: '4. Any easter eggs hidden here?',
     a4: 'Nope. No easter eggs implemented — what you see is what you get.',
     q5: '5. Who is this site for?',
-    a5_p1:
-      'Mostly written for myself: notes, things I built, a few thoughts. No real promotion on social.',
+    a5_p1: 'Mostly written for myself: notes, things I built, a few thoughts. No real promotion on social.',
     a5_p2_pre:
       'So if you happened to wander in and the design or stack feels right, link exchanges are very welcome. Feel free to leave a footprint on the',
     a5_p2_link: 'messages',
@@ -106,8 +103,7 @@ export const COLOPHON_QA = {
     q4: '4. ここにイースターエッグはありますか？',
     a4: 'ありません。仕込んでいないので、見えているそのままです。',
     q5: '5. このサイトの主な対象は？',
-    a5_p1:
-      '自分で読むためのものが中心です：ノート、作ったもの、いくつかの考え。SNS での宣伝は特にしていません。',
+    a5_p1: '自分で読むためのものが中心です：ノート、作ったもの、いくつかの考え。SNS での宣伝は特にしていません。',
     a5_p2_pre: 'ですので、たまたま辿りついてデザインや技術スタックが気に入ったら、相互リンク大歓迎です。',
     a5_p2_link: 'メッセージ',
     a5_p2_post: 'ページから足あとを残してくれても嬉しいです。',
@@ -134,8 +130,7 @@ export const COLOPHON_QA = {
     q4: '4. 이스터에그가 있나요?',
     a4: '없습니다. 이스터에그는 만들지 않았고, 보이는 그대로입니다.',
     q5: '5. 이 사이트의 주된 대상은?',
-    a5_p1:
-      '내가 읽으려고 쓰는 게 대부분이에요: 노트, 만든 것들, 몇 가지 생각. SNS 홍보는 따로 하지 않았어요.',
+    a5_p1: '내가 읽으려고 쓰는 게 대부분이에요: 노트, 만든 것들, 몇 가지 생각. SNS 홍보는 따로 하지 않았어요.',
     a5_p2_pre: '그러니 우연히 들렀다가 디자인이나 스택이 마음에 들면, 상호 링크 환영합니다.',
     a5_p2_link: '메시지',
     a5_p2_post: '페이지에 발자국을 남겨도 좋아요.',

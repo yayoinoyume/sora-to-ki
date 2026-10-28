@@ -59,7 +59,7 @@ const DRIFT_MS = 700;
 const DIVE_MS = 2000;
 /** 俯衝到一半之後，地標名字、圖例才淡進來（毫秒） */
 const BLOOM_MS = 900;
-/** 退場：鏡頭收回地球要多久、波前從台灣擴出去要多久（毫秒）；點發射出去的速度（px/ms） */
+/** 退場：鏡頭收回地球要多久、波前從地表那個點擴出去要多久（毫秒）；點發射出去的速度（px/ms） */
 const EXIT_MS = 620;
 const LAUNCH_MS = 900;
 const LAUNCH_SPEED = 1.1;
@@ -223,7 +223,7 @@ export default function Collection() {
     bloom: 1,
   });
 
-  // 換頁轉場的琥珀點落在台灣；離開時鏡頭收回地球，點從台灣帶著一道波前發射出去
+  // 換頁轉場的琥珀點落在地表那個點；離開時鏡頭收回地球，點從那裡帶著一道波前發射出去
   usePageTransition({
     leave: () => {
       const cv = canvasRef.current;
@@ -231,7 +231,7 @@ export default function Collection() {
       const r = cv.getBoundingClientRect();
       const at = performance.now();
       exitRef.current = { at, from: sRef.current };
-      // 收完那一刻（鏡頭回到地球旁邊）琥珀點在哪、往哪飛：從地心往台灣指出去
+      // 收完那一刻（鏡頭回到地球旁邊）琥珀點在哪、往哪飛：從地心往那個點指出去
       const end: SkyFrame = {
         w: window.innerWidth,
         h: window.innerHeight,
@@ -265,7 +265,7 @@ export default function Collection() {
       return { x: r.left + e.x, y: r.top + e.y };
     },
     // 點飛進來時切進外圈一道訊號圈（以地球為圓心的扁圓），沿著它繞、一路往內收，落在地球上；
-    // 鏡頭接著俯衝回地球，台灣那顆琥珀點就從落地的那一點長出來。飛過的路就是一道訊號
+    // 鏡頭接著俯衝回地球，那顆琥珀點就從落地的那一點長出來。飛過的路就是一道訊號
     arrive: ({ pos, vel }) => {
       const cv = canvasRef.current;
       if (!cv) return null;
@@ -412,7 +412,7 @@ export default function Collection() {
         const p3 = p2 * p;
         s = (2 * p3 - 3 * p2 + 1) * m.landS - (p3 - 2 * p2 + p) * m.landV * DIVE_MS + (3 * p2 - 2 * p3) * scrolled;
       }
-      // 退場：鏡頭收回地球，快收完時波前從台灣發出去
+      // 退場：鏡頭收回地球，快收完時波前從那個點發出去
       const exit = exitRef.current;
       let launch: number | undefined;
       if (exit) {

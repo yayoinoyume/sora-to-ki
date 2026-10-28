@@ -2,7 +2,7 @@
 // 沿著一個垂直於地面的平面爬升：往遠方是時間（從站點誕生到今天），離地高度是累積的 GitHub 貢獻。
 // 改版是軌跡上的節點；每天的貢獻是地上沿著地面軌跡排開的燈（一天一盞、一週七排），近大遠小。
 // 火箭的角度照重力轉向：離地時垂直，之後慢慢往下壓，平滑地變，不跟著每天的資料抖。
-// 地表照真實的地理畫：發射台在台灣，往右是東、往遠方是北；陸地用首頁土星那種刻線畫，看得出台灣、福建沿海、九州與琉球。
+// 地表照真實的地理畫：發射台在某個經緯度（見下面的 PAD_LAT / PAD_LON），往右是東、往遠方是北；陸地用首頁土星那種刻線畫，看得出那個點周邊的海岸線。
 // 這裡只畫點、線與插圖，字（里程碑的名字、遙測讀數、提示）是疊在上面的 DOM。
 
 import LAND_DATA from '@/data/landAroundTaiwan.json';
@@ -119,15 +119,15 @@ function silhouette(cam: Camera, radius: number, w: number, h: number) {
   return run.length > best.length ? run : best;
 }
 
-/** 發射台在台灣（跟收藏頁地球上的琥珀點同一個地方）；往右是東、往遠方是北 */
+/** 發射台的經緯度（跟收藏頁地球上的琥珀點同一個地方；換站的人改這兩行就能換位置）；往右是東、往遠方是北 */
 const PAD_LAT = 23.7;
 const PAD_LON = 121;
-/** 地表一個世界單位是幾度：放大到台灣周邊，發射台底下是看得清楚的一整座島 */
+/** 地表一個世界單位是幾度：放大到發射台周邊，腳下是看得清楚的一整座島 */
 const DEG_PER_UNIT = 0.008;
 /** 地表最近畫到哪（橫向位置）：再近就到鏡頭底下了 */
 const NEAR_Z = 900;
 
-/** 台灣周邊的陸地（data/landAroundTaiwan.json）：Natural Earth 50m land（公有領域）的多邊形，
+/** 發射台周邊的陸地（data/landAroundTaiwan.json）：Natural Earth 50m land（公有領域）的多邊形，
  *  用 Sutherland–Hodgman 裁到畫面看得到的這一塊（北緯 14–43、東經 113–134），再以 0.03° 做 Douglas–Peucker 簡化。
  *  一塊陸地是幾個環（第一個是外圈，其餘是湖），每個環是一串 [經度×100, 緯度×100, …]。這裡換成地表座標（θ、橫向位置） */
 const LAND: [number, number][][][] = LAND_DATA.map((poly) =>

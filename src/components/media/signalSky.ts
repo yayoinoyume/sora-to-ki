@@ -20,7 +20,7 @@ const OBLIQUITY = 23.44 * DEG;
 const NEAREST = 0.2;
 /** 地球半徑（光秒） */
 const EARTH_LS = 0.02127;
-/** 琥珀點在地球上的哪裡：台灣（緯度、經度） */
+/** 琥珀點在地球上的哪裡（緯度、經度）：換站的人改這裡就能換位置 */
 const HOME_LAT = 23.7;
 const HOME_LON = 121;
 /** 地球用幾個點畫 */
@@ -69,7 +69,7 @@ export interface SkyFrame {
   bloom: number;
   /** 畫不畫琥珀點（換頁轉場的點還在飛、或正要發射出去時由轉場畫） */
   dot?: boolean;
-  /** 離開這頁時從台灣發出去的那道波前：0 到 1 */
+  /** 離開這頁時從那個點發出去的那道波前：0 到 1 */
   launch?: number;
 }
 
@@ -408,7 +408,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
     lat: Math.asin(1 - (2 * (i + 0.5)) / GLOBE_DOTS) / DEG,
     lon: ((i * 137.508) % 360) - 180,
   }));
-  // 鏡頭一開始轉到台灣朝向畫面（稍微偏一點，看得出是球）
+  // 鏡頭一開始轉到那個點朝向畫面（稍微偏一點，看得出是球）
   const home0 = surface(HOME_LAT, HOME_LON, (now0 - J2000) / DAY_MS);
   const psi0 = Math.PI / 2 - Math.atan2(home0.y, home0.x) - 0.35;
 
@@ -505,7 +505,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
     return { x: v.ex + (F * x) / into, y: v.ey + (F * (y * v.sinE - d.z * v.cosE)) / into };
   };
 
-  /** 琥珀點：台灣在畫面上的位置（地球縮成一點時就是地球） */
+  /** 琥珀點在畫面上的位置（地球縮成一點時就是地球） */
   const homeDot = (v: View, now: number) => {
     const p = surface(HOME_LAT, HOME_LON, (now - J2000) / DAY_MS);
     return project(v, { x: p.x * EARTH_LS, y: p.y * EARTH_LS, z: p.z * EARTH_LS });
@@ -1043,7 +1043,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
       }
     }
 
-    // ── 琥珀點：台灣（地球縮成一點時就是地球） ──
+    // ── 琥珀點（地球縮成一點時就是地球） ──
     const dot = homeDot(v, f.now);
     if (f.dot !== false) {
       glow(ctx, dot.x, dot.y, 16, AMBER, 0.5);
@@ -1054,7 +1054,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
     }
     marks.push({ key: 'earth', x: v.ex + rE * 0.8, y: v.ey - rE * 0.8, a: clamp01(1 - f.s * 10) * fadeIn, dist: 0 });
 
-    // ── 離開：從台灣發出去的一道波前 ──
+    // ── 離開：從那個點發出去的一道波前 ──
     if (f.launch !== undefined) drawLaunch(ctx, dot.x, dot.y, f.launch, v.diag);
 
     return { points, marks, inView };
@@ -1064,7 +1064,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
     draw,
     /** 琥珀點在畫面上的位置（換頁轉場的點落在這裡、離開時從這裡發射） */
     earth: (f: SkyFrame) => homeDot(view(f), f.now),
-    /** 地球中心在畫面上的位置（發射的方向從這裡往台灣指出去） */
+    /** 地球中心在畫面上的位置（發射的方向從這裡往那個點指出去） */
     center: (f: SkyFrame) => {
       const v = view(f);
       return { x: v.ex, y: v.ey };
@@ -1083,7 +1083,7 @@ export function createSignalSky(signals: Signal[], now0: number) {
 const LAUNCH_SQUASH = Math.sin(1.12);
 
 /**
- * 離開這頁時從台灣發出去的波前：三圈，一圈比一圈晚一點。k 是 0 到 1 的進度；
+ * 離開這頁時從那個點發出去的波前：三圈，一圈比一圈晚一點。k 是 0 到 1 的進度；
  * 頁面自己畫前半段，頁面藏起來之後由轉場（Departure.residue）接著畫完
  */
 export function drawLaunch(ctx: CanvasRenderingContext2D, x: number, y: number, k: number, diag: number) {

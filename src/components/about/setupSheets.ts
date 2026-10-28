@@ -8,11 +8,11 @@ export const partArt = (id: string) => `/illustrations/setup/${id}.webp`;
 
 /** 多邊形（[x, y] 的陣列） */
 type Poly = [number, number][];
-/** [中心 x, 中心 y, 寬, 高, 畫成什麼形狀]：老家那台的草圖上，用虛線畫出零件的形狀（透視） */
+/** [中心 x, 中心 y, 寬, 高, 畫成什麼形狀]：備用機的草圖上，用虛線畫出零件的形狀（透視） */
 export type Box = [number, number, number, number, ShapeKind];
 export type ShapeKind = 'chip' | 'ram' | 'board' | 'gpu' | 'psu' | 'hdd' | 'case';
 
-/** 老家那台的草圖上（相對插圖的比例） */
+/** 備用機的草圖上（相對插圖的比例） */
 export const MEMORY_AT: Record<string, Box> = {
   cpu: [0.42, 0.2, 0.06, 0.07, 'chip'],
   gpu: [0.4, 0.39, 0.2, 0.05, 'gpu'],
@@ -252,10 +252,10 @@ export type Sheet =
   | { no: number; key: string; title: string; kind: 'net' }
   | { no: number; key: string; title: string; kind: 'smart' };
 
-/** 老家那張放最前面，編號是 0：跟作品頁的 VoltiCar 一樣，是起點 */
+/** 備用機那張放最前面，編號是 0：它是這條航線的起點 */
 export const SHEETS: Sheet[] = [
-  { no: 0, key: 'base-ii', title: 'BASE II', kind: 'memory' },
-  { no: 1, key: 'main-rig', title: 'THE WHITE BUILD', kind: 'drawing', drawing: WHITE_BUILD },
+  { no: 0, key: 'base-ii', title: 'BACKUP RIG', kind: 'memory' },
+  { no: 1, key: 'main-rig', title: 'MAIN RIG', kind: 'drawing', drawing: WHITE_BUILD },
   { no: 2, key: 'server', title: 'HOME SERVER', kind: 'drawing', drawing: HOME_SERVER, telemetry: true },
   { no: 3, key: 'network', title: 'NETWORK', kind: 'net' },
   { no: 4, key: 'smart-home', title: 'SMART HOME', kind: 'smart' },
@@ -270,7 +270,7 @@ export const SHEETS: Sheet[] = [
   },
 ];
 
-/** 老家那台的開機自檢：規格一行一行打出來，每一行對應草圖上的一塊 */
+/** 備用機的開機自檢：規格一行一行打出來，每一行對應草圖上的一塊 */
 export const POST_LINES = BASE_II_SPECS.map((s) => ({
   ...s,
   region:

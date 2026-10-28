@@ -316,7 +316,7 @@
         "short": "Peripherals"
       },
       "base-ii": {
-        "short": "Hometown"
+        "short": "Backup rig"
       }
     },
     "roles": {
@@ -360,8 +360,8 @@
     },
     "sheet": {
       "tabs": "Sheets",
-      "memoryTitle": "The one back home",
-      "memoryText": "The backup base when I'm back home. There are no photos of it; this is roughly how I remember it.",
+      "memoryTitle": "The backup rig",
+      "memoryText": "A backup machine with no photos: its specs are typed out line by line, and hovering a line lights up that spot on the sketch.",
       "fromMemory": "FROM MEMORY",
       "root": "Every automation starts here",
       "drag": "← drag sideways to see the whole sheet →",

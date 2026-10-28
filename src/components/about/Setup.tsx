@@ -1,7 +1,7 @@
 // 設備：六張工程圖，每一個分類一張（about/setupSheets）。兩台主機與桌面是工程概念設計圖：
 // 爆炸軸測的線稿當底稿，編號圈、引線、尺寸線、零件表與標題欄是程式疊上去的；
 // 滑過編號或零件表的一列，底稿上那個零件就染成琥珀色。
-// SHEET 0 是老家那台：沒有照片，機殼是憑記憶畫的點狀草圖（點會微微晃），規格像開機自檢一行一行打出來。
+// SHEET 0 是備用機：沒有照片，機殼是點狀草圖（點會微微晃），規格像開機自檢一行一行打出來。
 // 網路是配線圖，智慧家庭是訊號流程圖。
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,11 +39,11 @@ import { sameTitle } from '@/lib/pageTitle';
 
 /** 換頁轉場的點落在圖紙左上角之後，點格從那個角鋪開要多久（毫秒） */
 const REVEAL_MS = 900;
-/** 老家那張的草圖多久畫一次（毫秒）：點只是微微晃，30fps 就夠 */
+/** 備用機那張的草圖多久畫一次（毫秒）：點只是微微晃，30fps 就夠 */
 const SKETCH_FRAME_MS = 33;
 /** 開機自檢一行打出來的間隔（毫秒） */
 const POST_STEP_MS = 380;
-/** 老家那台的插圖（約 2012 年的桌機），原圖的寬高比 */
+/** 備用機的插圖，原圖的寬高比 */
 const HOME_PC = { src: '/illustrations/home-pc-2012.webp', ratio: 886 / 713 };
 /** 工程概念設計圖描出來要多久（毫秒）：底稿先描、引線再長出去、尺寸線最後拉開 */
 const DRAWING_MS = 1600;
@@ -85,7 +85,7 @@ export default function Setup() {
   const [current, setCurrent] = useState(1);
   const sheet = SHEETS[current];
   const drawing = sheet.kind === 'drawing' ? sheet.drawing : null;
-  /** 滑過的零件（工程概念設計圖是零件 id，老家那張是草圖上的一塊） */
+  /** 滑過的零件（設計圖是零件 id，備用機那張是草圖上的一塊） */
   const [hover, setHover] = useState<string | null>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLCanvasElement>(null);
@@ -163,7 +163,7 @@ export default function Setup() {
     if (shown) introRef.current = performance.now();
   }, [shown, current]);
 
-  // 老家那台的草圖：插圖取樣成點（大小變了才重取）
+  // 備用機的草圖：插圖取樣成點（大小變了才重取）
   const [homePc, setHomePc] = useState<HTMLImageElement | null>(null);
   useEffect(() => {
     if (sheet.kind !== 'memory' || homePc) return;
@@ -183,7 +183,7 @@ export default function Setup() {
     [homePc, sketchRect],
   );
 
-  // 圖紙上的線：設計圖的引線與尺寸線、滑過時亮起來的那一塊、配線圖與流程圖的線、老家的草圖（會微微晃，所以一直畫）
+  // 圖紙上的線：設計圖的引線與尺寸線、滑過時亮起來的那一塊、配線圖與流程圖的線、備用機的草圖（會微微晃，所以一直畫）
   useEffect(() => {
     const cv = fxRef.current;
     const ctx = cv?.getContext('2d');
@@ -233,7 +233,7 @@ export default function Setup() {
         if (at) drawHiddenPart(ctx, sketchRect, at, null);
       }
     };
-    // 一直在動的三張：老家的草圖在晃、配線圖與流程圖的線上有訊號在跑；設計圖只在描出來的那段動
+    // 一直在動的三張：備用機的草圖在晃、配線圖與流程圖的線上有訊號在跑；設計圖只在描出來的那段動
     const moving = sheet.kind === 'memory' || sheet.kind === 'net' || sheet.kind === 'smart';
     let raf = 0;
     let last = 0;
@@ -395,11 +395,11 @@ export default function Setup() {
           {sheet.kind === 'memory' && (
             <>
               <div className="su-callout su-memory-intro">
-                <span className="su-tag">BASE II</span>
+                <span className="su-tag">BACKUP RIG</span>
                 <b>{t('setup.sheet.memoryTitle')}</b>
                 <span>{t('setup.sheet.memoryText')}</span>
               </div>
-              {/* 老家那台：規格像開機自檢一樣一行一行打出來，滑過哪一行，草圖上那個位置就亮 */}
+              {/* 備用機：規格像開機自檢一樣一行一行打出來，滑過哪一行，草圖上那個位置就亮 */}
               <div key={current} className="su-post" style={{ '--step': `${POST_STEP_MS}ms` } as React.CSSProperties}>
                 <div className="su-post-head">EXAMPLE BIOS · POWER-ON SELF TEST</div>
                 {POST_LINES.map((ln, i) => (

@@ -27,7 +27,7 @@ export const GEAR: GearCategory[] = [
   { id: 'peripherals', name: 'Peripherals', items: [] },
 ];
 
-/** 老家那台：零件拼起來的備用機，只列規格不放圖 */
+/** 備用機：零件拼起來的機器，只列規格不放圖 */
 export const BASE_II_SPECS: { label: string; value: string }[] = [];
 
 /**

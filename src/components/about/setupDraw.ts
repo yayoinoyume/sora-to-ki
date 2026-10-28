@@ -1,5 +1,5 @@
 // 設備頁（about/Setup）圖紙上用畫布畫的東西：底下的點格與四角的對位記號、工程概念設計圖的引線與尺寸線、
-// 滑過零件時亮起來的那一塊、網路配線圖與智慧家庭流程圖的線、老家那台憑記憶畫的點狀草圖。只有畫圖，不碰 React。
+// 滑過零件時亮起來的那一塊、網路配線圖與智慧家庭流程圖的線、備用機的點狀草圖。只有畫圖，不碰 React。
 import type { Box, Callout, Dim, ShapeKind } from './setupSheets';
 
 const TAU = Math.PI * 2;
@@ -262,7 +262,7 @@ export function drawDrawing(
   }
 }
 
-/** 看不到裡面的機殼（或老家那台的草圖）：虛線透視出零件的形狀，再拉一條引線 */
+/** 看不到裡面的機殼（或備用機的草圖）：虛線透視出零件的形狀，再拉一條引線 */
 export function drawHiddenPart(
   ctx: CanvasRenderingContext2D,
   rect: Rect,

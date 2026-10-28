@@ -260,6 +260,9 @@ export default function Setup() {
     if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
   }, [current, size.w]);
 
+  /** 模板預設沒有任何設備：整頁只給一句話，不要畫作者那幾張底稿 */
+  const hasGear = GEAR.some((c) => c.items.length > 0);
+
   const pick = (i: number) => {
     setHover(null);
     setCurrent(i);
@@ -285,250 +288,261 @@ export default function Setup() {
         <p>{t('setup.subtitle')}</p>
       </header>
 
-      <fieldset className="su-tabs">
-        <legend className="sr-only">{t('setup.sheet.tabs')}</legend>
-        {SHEETS.map((s, i) => (
-          <button key={s.key} type="button" aria-pressed={i === current} onClick={() => pick(i)}>
-            SHEET {s.no} · {s.kind === 'memory' ? t('setup.cat.base-ii.short') : s.title}
-          </button>
-        ))}
-      </fieldset>
+      {hasGear && (
+        <fieldset className="su-tabs">
+          <legend className="sr-only">{t('setup.sheet.tabs')}</legend>
+          {SHEETS.map((s, i) => (
+            <button key={s.key} type="button" aria-pressed={i === current} onClick={() => pick(i)}>
+              SHEET {s.no} · {s.kind === 'memory' ? t('setup.cat.base-ii.short') : s.title}
+            </button>
+          ))}
+        </fieldset>
+      )}
 
-      <div className="su-scroll" ref={scrollRef}>
-        <div
-          ref={sheetRef}
-          className={['su-sheet', hover ? 'has-on' : '', shown ? 'is-shown' : ''].filter(Boolean).join(' ')}
-          data-kind={sheet.kind}
-        >
-          <canvas ref={gridRef} className="su-grid" aria-hidden="true" />
+      {!hasGear ? (
+        <p className="su-empty">{t('setup.gearEmpty')}</p>
+      ) : (
+        <div className="su-scroll" ref={scrollRef}>
+          <div
+            ref={sheetRef}
+            className={['su-sheet', hover ? 'has-on' : '', shown ? 'is-shown' : ''].filter(Boolean).join(' ')}
+            data-kind={sheet.kind}
+          >
+            <canvas ref={gridRef} className="su-grid" aria-hidden="true" />
 
-          {sheet.kind === 'drawing' && (
-            <>
-              <figure
-                key={sheet.key}
-                className="su-art"
-                style={{
-                  left: `${sheet.drawing.x * 100}%`,
-                  top: `${sheet.drawing.y * 100}%`,
-                  width: `${sheet.drawing.w * 100}%`,
-                }}
-              >
-                <img ref={artRef} src={sheet.drawing.src} alt="" decoding="async" />
-              </figure>
-
-              {/* 編號圈：位置是底稿寬高的比例，換成圖紙的比例（圖紙高是寬的 0.75） */}
-              {sheet.drawing.parts.map((p, i) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  className="su-balloon"
-                  aria-label={itemOf(p.id)?.name}
+            {sheet.kind === 'drawing' && (
+              <>
+                <figure
+                  key={sheet.key}
+                  className="su-art"
                   style={{
-                    left: `${(sheet.drawing.x + p.balloon[0] * sheet.drawing.w) * 100}%`,
-                    top: `${(sheet.drawing.y + (p.balloon[1] * sheet.drawing.w * sheet.drawing.ratio) / 0.75) * 100}%`,
-                    animationDelay: `${(i * 60 + 500).toFixed(0)}ms`,
+                    left: `${sheet.drawing.x * 100}%`,
+                    top: `${sheet.drawing.y * 100}%`,
+                    width: `${sheet.drawing.w * 100}%`,
                   }}
-                  {...hoverProps(p.id)}
                 >
-                  {i + 1}
-                </button>
-              ))}
+                  <img ref={artRef} src={sheet.drawing.src} alt="" decoding="async" />
+                </figure>
 
-              {/* 零件表：圖紙右上；滑過一列，底稿上那個零件亮起來 */}
-              <div key={`bom-${sheet.key}`} className="su-bom">
-                <div className="su-bom-head" aria-hidden="true">
-                  <span>NO</span>
-                  <span>PART</span>
-                  <span>SUBSYS</span>
-                </div>
-                <ol>
-                  {sheet.drawing.parts.map((p, i) => {
-                    const it = itemOf(p.id);
-                    const tag = PART_TAG[p.id] as (typeof PART_TAG)[string] | undefined;
-                    return it ? (
-                      <li key={p.id}>
-                        <button type="button" className="su-bom-row" {...hoverProps(p.id)}>
-                          <span className="su-bom-no">{String(i + 1).padStart(2, '0')}</span>
-                          <span className="su-bom-part">
-                            <b>{it.name}</b>
-                            <span>{it.spec}</span>
-                          </span>
-                          {tag && (
-                            <span className="su-bom-tag">
-                              <em>{tag[0]}</em>
-                              {tag[1]}
-                            </span>
-                          )}
-                        </button>
-                      </li>
-                    ) : null;
-                  })}
-                </ol>
-                {sheet.others && (
-                  <div className="su-others">
-                    <span className="su-tag">OTHERS</span>
-                    {sheet.others.map((id) => {
-                      const it = itemOf(id);
+                {/* 編號圈：位置是底稿寬高的比例，換成圖紙的比例（圖紙高是寬的 0.75） */}
+                {sheet.drawing.parts.map((p, i) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className="su-balloon"
+                    aria-label={itemOf(p.id)?.name}
+                    style={{
+                      left: `${(sheet.drawing.x + p.balloon[0] * sheet.drawing.w) * 100}%`,
+                      top: `${(sheet.drawing.y + (p.balloon[1] * sheet.drawing.w * sheet.drawing.ratio) / 0.75) * 100}%`,
+                      animationDelay: `${(i * 60 + 500).toFixed(0)}ms`,
+                    }}
+                    {...hoverProps(p.id)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                {/* 零件表：圖紙右上；滑過一列，底稿上那個零件亮起來 */}
+                <div key={`bom-${sheet.key}`} className="su-bom">
+                  <div className="su-bom-head" aria-hidden="true">
+                    <span>NO</span>
+                    <span>PART</span>
+                    <span>SUBSYS</span>
+                  </div>
+                  <ol>
+                    {sheet.drawing.parts.map((p, i) => {
+                      const it = itemOf(p.id);
+                      const tag = PART_TAG[p.id] as (typeof PART_TAG)[string] | undefined;
                       return it ? (
-                        <span key={id}>
-                          <b>{it.name}</b> · {it.spec}
-                        </span>
+                        <li key={p.id}>
+                          <button type="button" className="su-bom-row" {...hoverProps(p.id)}>
+                            <span className="su-bom-no">{String(i + 1).padStart(2, '0')}</span>
+                            <span className="su-bom-part">
+                              <b>{it.name}</b>
+                              <span>{it.spec}</span>
+                            </span>
+                            {tag && (
+                              <span className="su-bom-tag">
+                                <em>{tag[0]}</em>
+                                {tag[1]}
+                              </span>
+                            )}
+                          </button>
+                        </li>
                       ) : null;
                     })}
-                  </div>
-                )}
-              </div>
-
-              <dl className="su-legend" aria-label={t('setup.sheet.subsystemTitle')}>
-                {SUBSYSTEMS.filter((s) => sheet.drawing.parts.some((p) => PART_TAG[p.id]?.[0] === s)).map((s) => (
-                  <div key={s}>
-                    <dt>{s}</dt>
-                    <dd>{t(`setup.sheet.subsystem.${SUBSYSTEM_KEY[s]}`)}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              {sheet.telemetry && <TelemetryPanel />}
-            </>
-          )}
-
-          {sheet.kind === 'memory' && (
-            <>
-              <div className="su-callout su-memory-intro">
-                <span className="su-tag">BACKUP RIG</span>
-                <b>{t('setup.sheet.memoryTitle')}</b>
-                <span>{t('setup.sheet.memoryText')}</span>
-              </div>
-              {/* 備用機：規格像開機自檢一樣一行一行打出來，滑過哪一行，草圖上那個位置就亮 */}
-              <div key={current} className="su-post" style={{ '--step': `${POST_STEP_MS}ms` } as React.CSSProperties}>
-                <div className="su-post-head">EXAMPLE BIOS · POWER-ON SELF TEST</div>
-                {POST_LINES.map((ln, i) => (
-                  <div
-                    key={ln.label}
-                    className={hover === ln.region ? 'su-post-line is-on' : 'su-post-line'}
-                    style={{ '--i': i } as React.CSSProperties}
-                    onPointerEnter={() => setHover(ln.region)}
-                    onPointerLeave={() => setHover(null)}
-                  >
-                    <span>{ln.label}</span>
-                    <b>{ln.value}</b>
-                    <em>OK</em>
-                  </div>
-                ))}
-                <div className="su-post-foot" style={{ '--i': POST_LINES.length } as React.CSSProperties}>
-                  PRESS F1 TO CONTINUE_
+                  </ol>
+                  {sheet.others && (
+                    <div className="su-others">
+                      <span className="su-tag">OTHERS</span>
+                      {sheet.others.map((id) => {
+                        const it = itemOf(id);
+                        return it ? (
+                          <span key={id}>
+                            <b>{it.name}</b> · {it.spec}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  )}
                 </div>
-              </div>
-            </>
-          )}
 
-          {sheet.kind === 'net' && (
-            <>
-              <span className="su-callout su-at" style={{ left: '46%', top: '3%' }}>
-                <span>{topo('internet')}</span>
-              </span>
-              <figure className="su-node" style={{ left: '46%', top: '10%', width: '7%' }}>
-                <img src={partArt('router')} alt="" decoding="async" />
-              </figure>
-              <span className="su-callout su-at is-right" style={{ left: '50.5%', top: '10%' }}>
-                <span className="su-tag">
-                  <em>COMM</em> · ROUTER
+                <dl className="su-legend" aria-label={t('setup.sheet.subsystemTitle')}>
+                  {SUBSYSTEMS.filter((s) => sheet.drawing.parts.some((p) => PART_TAG[p.id]?.[0] === s)).map((s) => (
+                    <div key={s}>
+                      <dt>{s}</dt>
+                      <dd>{t(`setup.sheet.subsystem.${SUBSYSTEM_KEY[s]}`)}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                {sheet.telemetry && <TelemetryPanel />}
+              </>
+            )}
+
+            {sheet.kind === 'memory' && (
+              <>
+                <div className="su-callout su-memory-intro">
+                  <span className="su-tag">BACKUP RIG</span>
+                  <b>{t('setup.sheet.memoryTitle')}</b>
+                  <span>{t('setup.sheet.memoryText')}</span>
+                </div>
+                {/* 備用機：規格像開機自檢一樣一行一行打出來，滑過哪一行，草圖上那個位置就亮 */}
+                <div key={current} className="su-post" style={{ '--step': `${POST_STEP_MS}ms` } as React.CSSProperties}>
+                  <div className="su-post-head">EXAMPLE BIOS · POWER-ON SELF TEST</div>
+                  {POST_LINES.map((ln, i) => (
+                    <div
+                      key={ln.label}
+                      className={hover === ln.region ? 'su-post-line is-on' : 'su-post-line'}
+                      style={{ '--i': i } as React.CSSProperties}
+                      onPointerEnter={() => setHover(ln.region)}
+                      onPointerLeave={() => setHover(null)}
+                    >
+                      <span>{ln.label}</span>
+                      <b>{ln.value}</b>
+                      <em>OK</em>
+                    </div>
+                  ))}
+                  <div className="su-post-foot" style={{ '--i': POST_LINES.length } as React.CSSProperties}>
+                    PRESS F1 TO CONTINUE_
+                  </div>
+                </div>
+              </>
+            )}
+
+            {sheet.kind === 'net' && (
+              <>
+                <span className="su-callout su-at" style={{ left: '46%', top: '3%' }}>
+                  <span>{topo('internet')}</span>
                 </span>
-                <b>{itemOf('router')?.name}</b>
-                <span>{itemOf('router')?.spec}</span>
-              </span>
-              {NET.buses.map((b) => (
-                <span key={b.label} className="su-callout su-at is-above" style={{ left: `${b.x * 100}%`, top: '30%' }}>
-                  <span className="su-tag">{topo(b.sub)}</span>
-                  <b>{topo(b.label)}</b>
-                </span>
-              ))}
-              {NET.nodes.map((n) => (
-                <figure
-                  key={n.id ?? n.name}
-                  className="su-node"
-                  style={{ left: `${n.x * 100}%`, top: `${n.y * 100}%`, ...plotDelay(n.x, n.y) }}
-                >
-                  {n.id && n.w && (
-                    <img src={partArt(n.id)} alt="" decoding="async" style={{ width: `${n.w * 100}cqw` }} />
-                  )}
-                  <figcaption className="su-callout">
-                    <b>{topo(n.name ?? itemOf(n.id ?? '')?.name ?? '')}</b>
-                    {n.sub && <span>{topo(n.sub)}</span>}
-                  </figcaption>
-                  {n.end && (
-                    <span className="su-callout su-end">
-                      <span className="su-tag">{n.end[1]}</span>
-                      <b>{topo(n.end[0])}</b>
-                    </span>
-                  )}
+                <figure className="su-node" style={{ left: '46%', top: '10%', width: '7%' }}>
+                  <img src={partArt('router')} alt="" decoding="async" />
                 </figure>
-              ))}
-            </>
-          )}
-
-          {sheet.kind === 'smart' && (
-            <>
-              <span className="su-callout su-at" style={{ left: '12%', top: '50%' }}>
-                <span className="su-tag">MISSION CONTROL</span>
-                <b>Home Assistant</b>
-                <span>{t('setup.sheet.root')}</span>
-              </span>
-              {/* 線上跑的兩種訊號：琥珀色往外的是指令（上行），白色往回的是感測器回報（下行） */}
-              <div className="su-links" aria-hidden="true">
-                <span className="is-up">{t('setup.sheet.uplink')}</span>
-                <span className="is-down">{t('setup.sheet.downlink')}</span>
-              </div>
-              {SMART.hubs.map((hb) => (
-                <div key={hb.id}>
-                  <figure
-                    className="su-node is-row"
-                    style={{ left: '42%', top: `${hb.y * 100}%`, ...plotDelay(0.42, hb.y) }}
+                <span className="su-callout su-at is-right" style={{ left: '50.5%', top: '10%' }}>
+                  <span className="su-tag">
+                    <em>COMM</em> · ROUTER
+                  </span>
+                  <b>{itemOf('router')?.name}</b>
+                  <span>{itemOf('router')?.spec}</span>
+                </span>
+                {NET.buses.map((b) => (
+                  <span
+                    key={b.label}
+                    className="su-callout su-at is-above"
+                    style={{ left: `${b.x * 100}%`, top: '30%' }}
                   >
-                    <img src={partArt(hb.id)} alt="" decoding="async" style={{ width: `${hb.w * 100}cqw` }} />
+                    <span className="su-tag">{topo(b.sub)}</span>
+                    <b>{topo(b.label)}</b>
+                  </span>
+                ))}
+                {NET.nodes.map((n) => (
+                  <figure
+                    key={n.id ?? n.name}
+                    className="su-node"
+                    style={{ left: `${n.x * 100}%`, top: `${n.y * 100}%`, ...plotDelay(n.x, n.y) }}
+                  >
+                    {n.id && n.w && (
+                      <img src={partArt(n.id)} alt="" decoding="async" style={{ width: `${n.w * 100}cqw` }} />
+                    )}
                     <figcaption className="su-callout">
-                      <b>{itemOf(hb.id)?.name}</b>
+                      <b>{topo(n.name ?? itemOf(n.id ?? '')?.name ?? '')}</b>
+                      {n.sub && <span>{topo(n.sub)}</span>}
                     </figcaption>
+                    {n.end && (
+                      <span className="su-callout su-end">
+                        <span className="su-tag">{n.end[1]}</span>
+                        <b>{topo(n.end[0])}</b>
+                      </span>
+                    )}
                   </figure>
-                  <span className="su-callout su-at" style={{ left: '80%', top: `${hb.y * 100}%` }}>
-                    <span className="su-tag">{hb.via}</span>
-                    <b>{t(`setup.sheet.to.${hb.to}`)}</b>
+                ))}
+              </>
+            )}
+
+            {sheet.kind === 'smart' && (
+              <>
+                <span className="su-callout su-at" style={{ left: '12%', top: '50%' }}>
+                  <span className="su-tag">MISSION CONTROL</span>
+                  <b>Home Assistant</b>
+                  <span>{t('setup.sheet.root')}</span>
+                </span>
+                {/* 線上跑的兩種訊號：琥珀色往外的是指令（上行），白色往回的是感測器回報（下行） */}
+                <div className="su-links" aria-hidden="true">
+                  <span className="is-up">{t('setup.sheet.uplink')}</span>
+                  <span className="is-down">{t('setup.sheet.downlink')}</span>
+                </div>
+                {SMART.hubs.map((hb) => (
+                  <div key={hb.id}>
+                    <figure
+                      className="su-node is-row"
+                      style={{ left: '42%', top: `${hb.y * 100}%`, ...plotDelay(0.42, hb.y) }}
+                    >
+                      <img src={partArt(hb.id)} alt="" decoding="async" style={{ width: `${hb.w * 100}cqw` }} />
+                      <figcaption className="su-callout">
+                        <b>{itemOf(hb.id)?.name}</b>
+                      </figcaption>
+                    </figure>
+                    <span className="su-callout su-at" style={{ left: '80%', top: `${hb.y * 100}%` }}>
+                      <span className="su-tag">{hb.via}</span>
+                      <b>{t(`setup.sheet.to.${hb.to}`)}</b>
+                    </span>
+                  </div>
+                ))}
+                <div className="su-callout su-at su-appliances" style={{ left: '12%', top: '86%' }}>
+                  <span className="su-tag">OTHERS</span>
+                  <b>{t('setup.appliances.title')}</b>
+                  <span>
+                    {APPLIANCES.length
+                      ? APPLIANCES.map((a) => `${a.name} ${t(`setup.appliances.types.${a.typeKey}`)}`.trim()).join(
+                          ' · ',
+                        )
+                      : t('setup.appliances.empty')}
                   </span>
                 </div>
-              ))}
-              <div className="su-callout su-at su-appliances" style={{ left: '12%', top: '86%' }}>
-                <span className="su-tag">OTHERS</span>
-                <b>{t('setup.appliances.title')}</b>
-                <span>
-                  {APPLIANCES.length
-                    ? APPLIANCES.map((a) => `${a.name} ${t(`setup.appliances.types.${a.typeKey}`)}`.trim()).join(' · ')
-                    : t('setup.appliances.empty')}
-                </span>
-              </div>
-            </>
-          )}
+              </>
+            )}
 
-          <canvas ref={fxRef} className="su-fx" aria-hidden="true" />
+            <canvas ref={fxRef} className="su-fx" aria-hidden="true" />
 
-          <div className="su-titleblock" aria-hidden="true">
-            <span>SHEET</span>
-            <span>{sheet.no} OF 5</span>
-            <span>TITLE</span>
-            <span>{sheet.title}</span>
-            <span>DRAWN</span>
-            <span>{sheet.kind === 'memory' ? t('setup.sheet.fromMemory') : '2026.10'}</span>
-            <span>{sheet.kind === 'drawing' ? 'UNIT' : 'SCALE'}</span>
-            <span>{sheet.kind === 'drawing' ? 'mm · NTS' : 'NTS'}</span>
+            <div className="su-titleblock" aria-hidden="true">
+              <span>SHEET</span>
+              <span>{sheet.no} OF 5</span>
+              <span>TITLE</span>
+              <span>{sheet.title}</span>
+              <span>DRAWN</span>
+              <span>{sheet.kind === 'memory' ? t('setup.sheet.fromMemory') : '2026.10'}</span>
+              <span>{sheet.kind === 'drawing' ? 'UNIT' : 'SCALE'}</span>
+              <span>{sheet.kind === 'drawing' ? 'mm · NTS' : 'NTS'}</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       <p className="su-drag" aria-hidden="true">
         {t('setup.sheet.drag')}
       </p>
 
       {/* 圖紙上的零件給螢幕閱讀器與搜尋引擎的版本：全部設備的清單 */}
       <div className="sr-only">
-        {GEAR.every((c) => c.items.length === 0) && <p>{t('setup.gearEmpty')}</p>}
         {GEAR.map((c) => (
           <section key={c.id} aria-label={t(`setup.cat.${c.id}.short`)}>
             <h2>{t(`setup.cat.${c.id}.short`)}</h2>

@@ -101,7 +101,7 @@ Compiler 診斷（`purity` / `refs` / `immutability` / `preserve-manual-memoizat
 - **部署前先在旁邊的 port 跑一次 image**：e2e 與 CI 都不走 Dockerfile。server 產物的 minifier 可能把
   整千的數字寫成 `19e3`，而 `scripts/sync-nitro-asset-manifest.mjs`（Dockerfile 在 sentry inject 之後跑）
   的正規式只認 `\d+`，漏修的那支 size 會讓 nitro 切斷回應、整站白畫面。檢查方式：
-  `docker compose build frontend` → `docker run -p 127.0.0.1:14557:13579 -e BACKEND_URL=https://koimsurai.com web-frontend:latest`
+  `docker compose build frontend` → `docker run -p 127.0.0.1:14557:13579 -e BACKEND_URL=https://example.com web-frontend:latest`
   → 比對每支 `/assets/*` 的 `curl` 大小與檔案大小。
 
 **Radix 那條的形狀最值得記**：逐一驗證全綠、組合起來才壞，而且唯一抓得到它的是

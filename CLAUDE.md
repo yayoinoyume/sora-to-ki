@@ -94,7 +94,6 @@ docH / scrollY 就追得到源頭。
 | `gallery/` | 照片：Photos（地面站）、PhotoViewer、EXIF、圖片檢視 |
 | `media/` | 收藏：Collection（在看、在讀、在聽）、FavoritesEditor |
 | `account/` | 登入回呼、電子報退訂 |
-| `common/` | 跨領域共用：KoimLoader、LinkCard、SignatureSVG |
 | `ui/`、`animate-ui/` | shadcn 與 animate-ui 產生的檔案，**不要手動整理**（oxlint 與 knip 都有針對這兩個路徑的設定） |
 | `admin/`、`monaco-editor/` | 原本就分好的，維持原樣 |
 

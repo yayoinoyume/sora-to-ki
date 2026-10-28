@@ -89,16 +89,27 @@ The screenshots in this repo's history belong to the original author; the templa
 
 ## 🚀 Starting from the template
 
-Copy `.env.example` to `.env`, fill in `JWT_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`,
-`SITE_URL` and `OWNER_EMAIL`, then:
+```bash
+cp .env.example .env.backend      # this is the filename compose reads (see env_file in docker-compose.yml)
+```
+
+Fill in at least `JWT_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD` and `OWNER_EMAIL`
+(whoever signs in with that address gets the OWNER role), then:
 
 ```bash
 docker compose up -d --build
+# → http://localhost:8080
 ```
 
-Works, experience, gear, journey and the colophon Q&A are all empty arrays — those pages
-render an empty state instead of someone else's data. To fill them, look at the matching
-`src/data/*.ts` and `src/components/about/*Gear.ts`; each file explains its shape at the top.
+`SITE_URL`, `DATABASE_URL` and `BIND_ADDR` are pinned in compose for the containers, so editing
+them in `.env.backend` has no effect; they only matter when you run `cargo run` locally
+(see "Running frontend and backend separately" below).
+
+Works, experience, gear and journey are empty arrays — those pages render an empty state instead
+of someone else's data. To fill them, look at the matching `src/data/*.ts` and
+`src/components/about/*Gear.ts`; each file explains its shape at the top.
+The colophon Q&A keeps the site's own explanations (stack, photo wall, easter eggs, audience);
+the three entries about the name's origin are gone.
 
 
 ## ✨ Features
@@ -186,9 +197,9 @@ pnpm install
 ### Run everything with Docker (easiest)
 
 ```bash
-cp backend/.env.example .env.backend   # fill in JWT_SECRET
+cp .env.example .env.backend   # fill in JWT_SECRET
 docker compose up -d --build
-# → http://localhost:13588
+# → http://localhost:8080
 ```
 
 ### Run frontend and backend separately (for development)
@@ -273,7 +284,8 @@ Feel free to borrow any of the code or fork it to run your own site. A few thing
 
 - The code is **AGPL-3.0**: if you modify it and **run it as a public website**, you have to publish your modified source under the same licence
 - The site's **articles, photos, moments, avatar and logo are not covered by the licence** (see below); replace them with your own after forking
-- A lot of content is tied to my accounts: Steam / GitHub / WakaTime on the activity page, the Bahamut sync, the introductions on the home and about pages, and the hardware list on the setup page. Change these to your own or remove them
+- Third-party syncs (Steam / GitHub / WakaTime / Spotify / Simkl / Bahamut) need your own credentials; leave them empty and that block simply stays off
+- When you swap the site over, also change `SITE_URL` / `SITE_NAME` in `src/lib/site.ts`, `OWNER_EMAIL` in `.env`, and the copy in the five `src/locales/` bundles
 - Questions and bug reports are welcome as [issues](https://github.com/example-user/sora-to-ki/issues)
 
 ## 📄 License

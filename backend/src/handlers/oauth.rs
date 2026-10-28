@@ -19,7 +19,12 @@ use sqlx::Row;
 
 use crate::state::AppState;
 
-const OWNER_EMAIL: &str = "no-reply@example.com";
+/// 用這個信箱登入的人自動拿到 OWNER 角色。換站時填自己的，不填就沒有人是 OWNER。
+const DEFAULT_OWNER_EMAIL: &str = "no-reply@example.com";
+
+fn owner_email() -> String {
+    env_url("OWNER_EMAIL", DEFAULT_OWNER_EMAIL)
+}
 
 fn env_url(key: &str, default: &str) -> String {
     std::env::var(key).ok().filter(|s| !s.is_empty()).unwrap_or_else(|| default.to_string())
@@ -52,7 +57,7 @@ async fn upsert_oauth_user(
     email: &str,
     avatar_url: &str,
 ) -> Result<OauthUser, sqlx::Error> {
-    let auto_role = if !email.is_empty() && email.to_lowercase() == OWNER_EMAIL.to_lowercase() {
+    let auto_role = if !email.is_empty() && email.to_lowercase() == owner_email().to_lowercase() {
         "OWNER"
     } else {
         "USER"

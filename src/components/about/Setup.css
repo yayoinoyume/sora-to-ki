@@ -99,6 +99,15 @@
 }
 
 /* ── 圖紙 ── */
+/* 模板預設沒有設備（GEAR 全空）時，整張圖紙換成這句話 */
+.su-empty {
+  margin: var(--space-8) 0;
+  padding: var(--space-8) var(--space-4);
+  border: 1px dashed var(--rule);
+  text-align: center;
+  color: var(--paper-2);
+}
+
 /* 只有窄螢幕（圖紙比畫面寬）才左右拖；寬螢幕不開捲動，免得哪個說明稍微超出圖紙就冒出捲軸 */
 .su-scroll {
   overflow: visible;

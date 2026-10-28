@@ -87,15 +87,24 @@
 
 ## 🚀 從模板開始
 
-複製 `.env.example` 成 `.env`，填 `JWT_SECRET`、`ADMIN_USERNAME`、`ADMIN_PASSWORD`、
-`SITE_URL` 與 `OWNER_EMAIL`，然後：
+```bash
+cp .env.example .env.backend      # compose 讀的就是這個檔名（見 docker-compose.yml 的 env_file）
+```
+
+至少要填 `JWT_SECRET`、`ADMIN_USERNAME`、`ADMIN_PASSWORD` 與 `OWNER_EMAIL`
+（用這個信箱登入的人會拿到 OWNER 權限），然後：
 
 ```bash
 docker compose up -d --build
+# → http://localhost:8080
 ```
 
-作品、經歷、設備、成長軌跡、此站點的 Q&A 都是空陣列，頁面會顯示空狀態而不是別人的資料。
+`SITE_URL`、`DATABASE_URL`、`BIND_ADDR` 在 compose 裡已經寫死給容器用，改 `.env.backend`
+不影響它們；本機直接 `cargo run` 時才需要調（見下面「分開跑前後端」）。
+
+作品、經歷、設備、成長軌跡都是空陣列，頁面會顯示空狀態而不是別人的資料。
 要填的時候看對應的 `src/data/*.ts` 與 `src/components/about/*Gear.ts`，檔案開頭都有註解說明格式。
+此站點的 Q&A 保留站台本身的說明（技術棧、照片牆、彩蛋、受眾），站名由來那三則已刪除。
 
 
 ## ✨ 有什麼
@@ -183,9 +192,9 @@ pnpm install
 ### 用 Docker 跑整套（最簡單）
 
 ```bash
-cp backend/.env.example .env.backend   # 填上 JWT_SECRET
+cp .env.example .env.backend   # 填上 JWT_SECRET
 docker compose up -d --build
-# → http://localhost:13588
+# → http://localhost:8080
 ```
 
 ### 分開跑前後端（開發用）
@@ -270,7 +279,8 @@ cargo clippy --all-targets -- -D warnings
 
 - 程式碼採 **AGPL-3.0**：如果你改過之後**架成網站對外提供**，也要以相同授權公開修改後的原始碼
 - 站上的**文章、照片、碎念、頭像與 logo 都不在授權範圍內**（見下方），fork 之後請換成你自己的
-- 很多內容綁定我的帳號：動態頁的 Steam／GitHub／WakaTime、動畫瘋同步、首頁與關於頁的自我介紹、設備頁的硬體清單。這些都要改成你自己的，或者直接拿掉
+- 第三方同步（Steam／GitHub／WakaTime／Spotify／Simkl／巴哈姆特）要用就填自己的憑證；不填就整塊不啟用，不會報錯
+- 換掉站台時記得同時改 `src/lib/site.ts` 的 `SITE_URL`／`SITE_NAME`、`.env` 的 `OWNER_EMAIL`，以及 `src/locales/` 五個語系的文案
 - 有問題或發現 bug 都歡迎開 [issue](https://github.com/example-user/sora-to-ki/issues)
 
 ## 📄 授權

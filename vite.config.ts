@@ -368,7 +368,6 @@ export default defineConfig({
       {
         files: [
           'src/components/layout/NotFound.tsx',
-          'src/components/common/SignatureSVG.tsx',
         ],
         rules: { 'shadcn/no-raw-colors': 'off' },
       },

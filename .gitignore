@@ -94,11 +94,9 @@ blob-report/
 .hypothesis/
 
 # 工作用的計畫／筆記，不進版控
-# ⚠️ 這行只擋**新檔**。docs/ 下已被追蹤的 3 個檔案不受影響（gitignore 管不到已追蹤的），
-#    目前是 archive/Setup.md、changelog.txt、seo-baseline-2026-07-28.md。
-#    它們也不會再被推上去，除非有人改動它們。真要讓它們從 repo 消失得跑
-#    `git rm --cached -r docs/`，那會讓它們從 GitHub 上不見——所以沒有自動做。
 docs/
+# docker compose 的掛載目錄（首次啟動會自動建，不該進版控）
+/data/
 
 # Lighthouse CI 的報告輸出（每次 lhci autorun 重產）
 .lighthouseci/

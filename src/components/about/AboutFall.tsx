@@ -218,7 +218,7 @@ export default function AboutFall() {
       </header>
 
       <div id="journey">
-        {chapters.length === 0 && <p className="af-beat af-empty">{t('aboutFall.journeyEmpty')}</p>}
+        {chapters.length === 0 && <p className="af-beat">{t('aboutFall.journeyEmpty')}</p>}
         {chapters.map((c, i) => (
           <section key={c.id} className={`af-ch af-ch--${LAYOUTS[i % LAYOUTS.length]}`} aria-label={c.year}>
             <div className={c.now ? 'af-year is-word' : 'af-year'}>{c.year}</div>

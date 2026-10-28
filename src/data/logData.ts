@@ -11,7 +11,10 @@ import { apiUrl } from '@/lib/api';
 // 都是第三方的資料，拿不到就是 null（那一塊顯示「沒有收到」），不讓整頁進錯誤狀態。
 const GITHUB_USERNAME = 'example-user';
 const STALE = 10 * 60 * 1000;
-/** 從哪一天開始畫（站點誕生） */
+/**
+ * 從哪一天開始畫（站點誕生）。換站的人改成自己上線那天——
+ * 這同時決定要向 GitHub 抓幾年的貢獻資料。
+ */
 export const LOG_START = '2025-04-01';
 
 export interface DayCount {

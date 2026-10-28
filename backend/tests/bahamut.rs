@@ -49,7 +49,7 @@ fn prepare_env(tag: &str, cookie: Option<&str>) -> std::path::PathBuf {
     // ⚠ 不導開的話 cookie 檔會落在 **CWD**：`cookie_file_path("sqlite::memory:")`
     //   取不到 parent → dir 是空字串 → 寫成 ./.bahamut-cookie.json，
     //   也就是把測試產物丟進 repo。
-    let dir = std::env::temp_dir().join(format!("koimsurai-baha-{tag}-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("baha-test-{tag}-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&dir);
     std::fs::create_dir_all(&dir).unwrap();
     let file = dir.join("cookie.json");

@@ -701,7 +701,7 @@ export default function MonacoEditor({
     const monacoNs = getMonaco();
     if (!monacoNs) return;
     const action = editor.addAction({
-      id: 'koimsurai.insert-post-link',
+      id: 'editor.insert-post-link',
       label: '插入舊文章連結',
       keybindings: [monacoNs.KeyMod.CtrlCmd | monacoNs.KeyMod.Shift | monacoNs.KeyCode.KeyK],
       run: () => handleOpenPostLink(),

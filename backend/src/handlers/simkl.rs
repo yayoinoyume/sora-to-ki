@@ -52,7 +52,7 @@ fn access_token() -> String {
 /// 官方要求每個請求都帶 client_id / app-name / app-version 這三個 query 參數。
 fn with_required_params(path: &str) -> String {
     let sep = if path.contains('?') { '&' } else { '?' };
-    format!("{}{path}{sep}client_id={}&app-name=koimsurai&app-version=1.0", simkl_api(), client_id())
+    format!("{}{path}{sep}client_id={}&app-name=example-site&app-version=1.0", simkl_api(), client_id())
 }
 
 async fn simkl_get(state: &AppState, path: &str) -> Option<Value> {
@@ -380,7 +380,7 @@ mod tests {
         unsafe { std::env::set_var("SIMKL_CLIENT_ID", "TESTID") };
         let a = with_required_params("/sync/activities");
         assert!(a.contains("?client_id=TESTID"), "{a}");
-        assert!(a.contains("&app-name=koimsurai") && a.contains("&app-version="), "{a}");
+        assert!(a.contains("&app-name=example-site") && a.contains("&app-version="), "{a}");
         // 已經有 query string 時要用 & 接，不能再來一個 ?
         let b = with_required_params("/sync/all-items/?extended=full");
         assert!(b.contains("?extended=full&client_id=TESTID"), "{b}");

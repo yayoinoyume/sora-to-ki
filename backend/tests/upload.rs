@@ -16,7 +16,7 @@ use http_body_util::BodyExt;
 use serde_json::Value;
 use tower::ServiceExt;
 
-const BOUNDARY: &str = "----koimsuraitestboundary";
+const BOUNDARY: &str = "----uploadtestboundary";
 
 /// 組一個 multipart/form-data body。`filename` 是 client 宣告的原始檔名——
 /// 它同時是副檔名的來源，也是路徑穿越的攻擊面。
@@ -53,7 +53,7 @@ async fn post_upload(
 
 /// 每個測試自己的上傳根目錄。nextest 一個測試一個行程，所以 pid 就足以區分。
 fn temp_upload_dir(tag: &str) -> std::path::PathBuf {
-    let dir = std::env::temp_dir().join(format!("koimsurai-upload-{}-{}", std::process::id(), tag));
+    let dir = std::env::temp_dir().join(format!("upload-test-{}-{}", std::process::id(), tag));
     let _ = std::fs::remove_dir_all(&dir);
     unsafe { std::env::set_var("UPLOAD_BASE_DIR", &dir) };
     dir

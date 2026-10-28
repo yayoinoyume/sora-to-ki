@@ -218,6 +218,7 @@ export default function AboutFall() {
       </header>
 
       <div id="journey">
+        {chapters.length === 0 && <p className="af-beat af-empty">{t('aboutFall.journeyEmpty')}</p>}
         {chapters.map((c, i) => (
           <section key={c.id} className={`af-ch af-ch--${LAYOUTS[i % LAYOUTS.length]}`} aria-label={c.year}>
             <div className={c.now ? 'af-year is-word' : 'af-year'}>{c.year}</div>
@@ -251,6 +252,7 @@ export default function AboutFall() {
           <small>{t('aboutFall.surfaceSub')}</small>
         </h2>
         <ul className="af-skills">
+          {SKILL_GROUPS.length === 0 && <li className="af-empty">{t('aboutFall.skillsEmpty')}</li>}
           {SKILL_GROUPS.map((g) => (
             <li key={g.key}>
               <span>{t(`aboutFall.skill.${g.key}`)}</span>
@@ -270,6 +272,7 @@ export default function AboutFall() {
         <span className="af-lab">{t('aboutFall.layer1')}</span>
         <h2>{t('aboutFall.layer1Title')}</h2>
         <ul className="af-jobs">
+          {work.length === 0 && <li className="af-empty">{t('aboutFall.workEmpty')}</li>}
           {work.map((j, i) => (
             <li key={j.title}>
               <time>{period(WORK_PERIODS[i] ?? '')}</time>

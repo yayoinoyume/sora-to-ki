@@ -237,6 +237,13 @@
   list-style: none;
 }
 
+/* 清單是空的時候的一句話（模板預設清空，就不會只剩兩條空白橫線） */
+.af-skills .af-empty,
+.af-jobs .af-empty {
+  display: block;
+  color: var(--paper-2);
+}
+
 /* 一個領域一行：左邊領域名、右邊那一串（跟下面「做過的事」同一個左欄） */
 .af-skills {
   display: grid;

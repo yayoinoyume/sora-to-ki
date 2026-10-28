@@ -302,20 +302,3 @@
     font-size: var(--fs-24);
   }
 }
-
-/* ═══════════════════════
-   Custom Signature Embed
-   ═══════════════════════ */
-.blog-signature {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  width: 100%;
-  margin-left: auto;
-}
-
-.blog-signature svg {
-  width: 10rem;
-  max-width: 100%;
-}

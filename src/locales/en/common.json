@@ -294,6 +294,7 @@
     "kindTv": "TV / Anime"
   },
   "setup": {
+    "gearEmpty": "No gear listed yet.",
     "title": "My Setup",
     "description": "Example Site's gear: the main rig, the home server running this site, networking and smart home — plus a map of how it all connects.",
     "heroTitle": "Setup",
@@ -346,6 +347,7 @@
       "appliancesSub": "Dehumidifier · purifier · cam…"
     },
     "appliances": {
+      "empty": "No appliances listed yet.",
       "title": "Other connected appliances",
       "types": {
         "dehumidifier": "Dehumidifier",
@@ -494,6 +496,9 @@
     }
   },
   "aboutFall": {
+    "journeyEmpty": "No journey entries yet.",
+    "workEmpty": "No experience listed yet.",
+    "skillsEmpty": "No skills listed yet.",
     "kick": "About",
     "title": "Hold on.",
     "hint": "Scroll down",

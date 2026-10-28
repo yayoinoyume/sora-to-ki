@@ -294,6 +294,7 @@
     "kindTv": "剧集／动画"
   },
   "setup": {
+    "gearEmpty": "还没有填设备清单。",
     "title": "我的装备 · My Setup",
     "description": "Example Site 的设备清单：主力机、跑着这个网站的家用服务器、网络与智能家居，还有一张家里怎么连起来的拓扑图。",
     "heroTitle": "设备",
@@ -346,6 +347,7 @@
       "appliancesSub": "除湿机・空净・摄像头…"
     },
     "appliances": {
+      "empty": "还没有填家电。",
       "title": "其他联网家电",
       "types": {
         "dehumidifier": "除湿机",
@@ -494,6 +496,9 @@
     }
   },
   "aboutFall": {
+    "journeyEmpty": "还没有填成长轨迹。",
+    "workEmpty": "还没有填做过的事。",
+    "skillsEmpty": "还没有填技能清单。",
     "kick": "关于",
     "title": "坐稳了。",
     "hint": "往下滚",

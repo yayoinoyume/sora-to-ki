@@ -265,19 +265,8 @@ export const SHEETS: Sheet[] = [
     title: 'PERIPHERALS',
     kind: 'drawing',
     drawing: DESK,
-    // 底稿上沒畫的其他周邊：列在零件表底下
-    others: [
-      'g502-hero',
-      'mx-board-20s',
-      'mk882',
-      'alloy-fps',
-      'pixel-buds-pro2',
-      'cloud-ii',
-      'arctis-nova-7',
-      'quadcast',
-      'psa1-plus',
-      't100',
-    ],
+    // 底稿上沒畫的其他周邊：列在零件表底下（清單在 setupGear 的 GEAR）
+    others: [],
   },
 ];
 

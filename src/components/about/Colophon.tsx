@@ -301,9 +301,6 @@ export default function Colophon() {
         </>
       ),
     },
-    { q: stripNumber(qa.q6), a: <p>{qa.a6}</p> },
-    { q: stripNumber(qa.q7), a: <p>{qa.a7}</p> },
-    { q: stripNumber(qa.q8), a: <p>{qa.a8}</p> },
   ];
 
   const panel: Record<StarKey, ReactNode> = {

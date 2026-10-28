@@ -294,6 +294,7 @@
     "kindTv": "ドラマ／アニメ"
   },
   "setup": {
+    "gearEmpty": "機材はまだ登録されていません。",
     "title": "私のセットアップ · My Setup",
     "description": "Example Site の機材一覧：メインマシン、このサイトを動かす自宅サーバー、ネットワークとスマートホーム、そして家の接続図。",
     "heroTitle": "機材",
@@ -346,6 +347,7 @@
       "appliancesSub": "除湿機・空清・カメラ…"
     },
     "appliances": {
+      "empty": "家電はまだ登録されていません。",
       "title": "その他のネット家電",
       "types": {
         "dehumidifier": "除湿機",
@@ -494,6 +496,9 @@
     }
   },
   "aboutFall": {
+    "journeyEmpty": "歩みはまだ登録されていません。",
+    "workEmpty": "経歴はまだ登録されていません。",
+    "skillsEmpty": "スキルはまだ登録されていません。",
     "kick": "について",
     "title": "しっかりつかまって。",
     "hint": "下へスクロール",

@@ -294,6 +294,7 @@
     "kindTv": "影集／動畫"
   },
   "setup": {
+    "gearEmpty": "還沒有填設備清單。",
     "title": "我的配備 · My Setup",
     "description": "Example Site 的設備清單：主力機、跑著這個網站的家用伺服器、網路與智慧家庭，還有一張家裡怎麼連起來的拓撲圖。",
     "heroTitle": "設備",
@@ -346,6 +347,7 @@
       "appliancesSub": "除濕機・空濾・攝影機…"
     },
     "appliances": {
+      "empty": "還沒有填家電。",
       "title": "其他連網家電",
       "types": {
         "dehumidifier": "除濕機",
@@ -494,6 +496,9 @@
     }
   },
   "aboutFall": {
+    "journeyEmpty": "還沒有填成長軌跡。",
+    "workEmpty": "還沒有填做過的事。",
+    "skillsEmpty": "還沒有填技能清單。",
     "kick": "關於",
     "title": "坐穩了。",
     "hint": "往下捲",

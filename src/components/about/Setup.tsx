@@ -500,7 +500,9 @@ export default function Setup() {
                 <span className="su-tag">OTHERS</span>
                 <b>{t('setup.appliances.title')}</b>
                 <span>
-                  {APPLIANCES.map((a) => `${a.name} ${t(`setup.appliances.types.${a.typeKey}`)}`.trim()).join(' · ')}
+                  {APPLIANCES.length
+                    ? APPLIANCES.map((a) => `${a.name} ${t(`setup.appliances.types.${a.typeKey}`)}`.trim()).join(' · ')
+                    : t('setup.appliances.empty')}
                 </span>
               </div>
             </>
@@ -526,6 +528,7 @@ export default function Setup() {
 
       {/* 圖紙上的零件給螢幕閱讀器與搜尋引擎的版本：全部設備的清單 */}
       <div className="sr-only">
+        {GEAR.every((c) => c.items.length === 0) && <p>{t('setup.gearEmpty')}</p>}
         {GEAR.map((c) => (
           <section key={c.id} aria-label={t(`setup.cat.${c.id}.short`)}>
             <h2>{t(`setup.cat.${c.id}.short`)}</h2>

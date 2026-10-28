@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// koimsurai 後台 MCP server（stdio）。
+// 後台 MCP server（stdio）。
 // Claude Code / Desktop 會把這支當子程序啟動，透過 stdin/stdout 講 MCP；
 // 本 server 再以 admin JWT 打後端 127.0.0.1:3002 的 REST API。
 //

@@ -180,7 +180,7 @@ export function articleJsonLd(
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
   };
 
-  // 麵包屑：搜尋結果會顯示 koimsurai.com › Blog › 標題，取代裸網址，對點擊率有實際幫助。
+  // 麵包屑：搜尋結果會顯示 example.com › Blog › 標題，取代裸網址，對點擊率有實際幫助。
   //
   // ⚠ 不要加「分類」那一層。Google 規定 `item` 對**除了最後一項以外**的每個 ListItem 都必填，
   // 而分類目前沒有獨立可索引頁（/blog?category=… 的 canonical 指回 /blog），給不出正當網址。

@@ -253,7 +253,7 @@ function pureAnnotateAnimateIcons(): Plugin {
 //   *不會被 nitro 註冊成靜態資產* —— /assets/*.css 與 /favicon.ico 都 200,唯獨
 //   /blog/index.html、/en/index.html 一律 404,實際請求每次都重新 SSR(連打兩次 md5 不同)。
 //   等於 prerender 生出 111 個檔案卻沒有任何一個被送出過,純粹浪費 build 時間。
-// 拿掉它同時消滅:build 期打 https://koimsurai.com 撈文章清單(build 依賴線上站活著),
+// 拿掉它同時消滅:build 期打線上站撈文章清單(build 依賴線上站活著),
 // 以及為了 prerender 內部 crawler 而綁 server/preview host 的 hack。
 // ISR 已實測能給出同樣完整的 HTML(/blog 有文章標題與連結、/blog/$id 有內文與 meta)。
 

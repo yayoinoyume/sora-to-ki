@@ -179,7 +179,7 @@ test.describe('後台', () => {
           sources: [{ name: 'Direct / None', visitors: 50 }],
           countries: [{ name: 'TW', visitors: 70 }],
           devices: [{ name: 'Mobile', visitors: 30 }],
-          dashboard_url: 'https://plausible.example/koimsurai.com',
+          dashboard_url: 'https://plausible.example/example.com',
         },
       }),
     );

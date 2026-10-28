@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "koimsurai 後台 MCP server（stdio）——把 admin REST API 包成 MCP 工具給 Claude 用",
+  "description": "後台 MCP server（stdio）——把 admin REST API 包成 MCP 工具給 AI 用",
   "bin": {
     "koimsurai-mcp": "./dist/index.js"
   },

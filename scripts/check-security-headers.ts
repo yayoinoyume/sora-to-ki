@@ -147,7 +147,7 @@ async function main(): Promise<void> {
       '\n可能的原因：' +
         '\n  1. 該 location 裡有 add_header 但沒 include snippet——nginx 的繼承規則是' +
         '\n     「子層有任何一條 add_header，父層就全部不繼承」，不是逐條合併。' +
-        '\n     檢查有沒有 include /etc/nginx/snippets/koimsurai-security.conf。' +
+        '\n     檢查有沒有 include /etc/nginx/snippets/<站點>-security.conf。' +
         '\n  2. add_header 少了 `always`——那樣 4xx/5xx 不會帶標頭，上面的 404 探針會紅' +
         '\n     而真檔正常。真檔正常不代表沒問題：錯誤頁一樣需要這些標頭。',
     );

@@ -147,7 +147,7 @@ export const CSP_POLICY = Object.entries(DIRECTIVES)
 /**
  * 全站每個回應都該有的四條安全標頭 —— 同樣**這裡是唯一的來源**。
  *
- * 對應 nginx 的 `snippets/koimsurai-security.conf`，那個檔 include 在 **server 層**，
+ * 對應 nginx 的 `snippets/<站點>-security.conf`，那個檔 include 在 **server 層**，
  * 所以正式站的 HTML / assets / API 全部都帶著這四條（實測確認過）。
  *
  * ⚠ 放進這個檔（而不是各寫一份）的理由跟 CSP 一樣：`tests/e2e/stack.mjs` 的代理層

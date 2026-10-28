@@ -1,4 +1,4 @@
-# koimsurai monorepo — Cargo workspace（backend；anigamer 為獨立 repo 不收）
+# sora-to-ki monorepo — Cargo workspace（backend）
 [workspace]
 resolver = "2"
 members = ["backend"]

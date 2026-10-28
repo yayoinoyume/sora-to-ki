@@ -149,10 +149,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             那支站台專屬腳本（pa-XXXX.js）裡，所以這裡不需要、也蓋不掉 domain。
 
             ⚠️ endpoint 一定要覆蓋，這是整個同源設計的關鍵。腳本裡是：
-                  Object.assign(i={endpoint:"https://plausible.koimsurai.com/api/event",
-                                  domain:"koimsurai.com",…}, o, {domain:i.domain})
+                  Object.assign(i={endpoint:"https://plausible.example.com/api/event",
+                                  domain:"example.com",…}, o, {domain:i.domain})
                `o` 就是 init() 傳進來的物件、合併在預設之後 —— 所以 endpoint 蓋得掉，
-               domain 蓋不掉（最後又被寫回）。不覆蓋的話事件會往 plausible.koimsurai.com
+               domain 蓋不掉（最後又被寫回）。不覆蓋的話事件會往 Plausible 的網域
                送，那是跨源：撞 CSP 的 connect-src 'self'，也會被內容攔截器擋。
 
             ⚠️ 兩支 <script> 的順序無所謂，也不需要等載入 —— 這正是上面能用 async 的原因。
@@ -166,7 +166,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
                 腳本看到就整個不送（v3 的 track() 裡寫死的檢查）。所以在前台逛也不算。
               Plausible 的 Shields 也能擋 IP，但家用與手機網路的 IP 會換，靠不住。
 
-            對應的 nginx 在 /etc/nginx/sites-available/koimsurai：
+            對應的 nginx 在 /etc/nginx/sites-available/<站點>：
             location ^~ /s/js/ 與 location = /s/event。
             SPA 換頁不必額外處理：腳本自己 patch 了 history.pushState 並監聽 popstate。 */}
         {import.meta.env.VITE_PLAUSIBLE_SCRIPT ? (

@@ -69,7 +69,13 @@ async function scan(browser: Browser, path: string): Promise<Finding[]> {
   const context = await browser.newContext();
   const page = await context.newPage();
   try {
-    const resp = await page.goto(BASE + path, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    // 加一次性參數繞過 ISR 快取：2026-11-01 部署後，/setup 在後端還沒就緒時被 SSR 出
+    // 一個 200、0 byte 的空回應，vite.config.start.ts 的 swr 快取把它存了下來。那頁平常
+    // 沒人訪問，stale 的空回應就一直留著，巡檢撞上就報 document-title / html-has-lang
+    // 等四個假違規（2026-11-02 03:00 那次 CI 紅燈即此）。帶 query 的 URL 是獨立快取鍵，
+    // 一定走一次新鮮 SSR，量到的才是現在這版程式的畫面。
+    const url = `${BASE}${path}?a11y=${Date.now()}`;
+    const resp = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30_000 });
     if (!resp || resp.status() >= 400) {
       throw new Error(`${path} 回 ${resp?.status() ?? '無回應'}`);
     }

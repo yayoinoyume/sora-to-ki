@@ -18,13 +18,16 @@
 
 pub mod auth;
 pub mod error;
+pub mod geo;
 pub mod handlers;
 pub mod identity;
+pub mod integrations;
 pub mod net_guard;
 pub mod openapi;
 pub mod revalidate;
 pub mod router;
 pub mod state;
+pub mod ui_text;
 pub mod upstream_cache;
 pub mod util;
 pub mod worker;

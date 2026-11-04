@@ -1,4 +1,4 @@
-import type { SiteConfig } from '@koimsurai/api-types';
+import type { Signature, SiteConfig } from '@koimsurai/api-types';
 import { ABOUT_SECTIONS, MAIN_SECTIONS, MORE_SECTIONS } from '@/data/siteSections';
 
 // 站台設定的草稿：初次設定的精靈（admin/init）與後台的站台設定頁（SiteSettings）共用。
@@ -15,11 +15,17 @@ export interface Draft {
   disabled_pages: string[];
   /** 預設天體（lib/theme 的 THEMES）：只有站台設定頁改，初次設定的精靈不問 */
   theme: string;
+  /** 讀者能不能在頂欄自己換天體 */
+  theme_switch: boolean;
   /** 介紹文字：哪一頁 → 語系 → 字（站台設定頁的「介紹文字」那段） */
   page_descriptions: Record<string, Record<string, string>>;
   /** 發射台：站長在哪裡（航行日誌的火箭從這裡升空、收藏頁地球上的琥珀點） */
   launch_pad: { lat: number; lon: number };
+  /** 文末的手寫簽名；`steps` 是空的＝沒有（存的時候後端就拿掉） */
+  signature: Signature;
 }
+
+export const NO_SIGNATURE: Signature = { view_box: '', steps: [] };
 
 /** 沒設發射台時是台灣（後端 handlers/ground.rs 的 DEFAULT_PAD） */
 const DEFAULT_PAD = { lat: 23.7, lon: 121 };
@@ -62,11 +68,13 @@ export function draftOf(config: SiteConfig, defaultLocale = config.default_local
     github: config.github,
     disabled_pages: config.disabled_pages,
     theme: config.theme,
+    theme_switch: config.theme_switch,
     page_descriptions: config.page_descriptions,
     launch_pad: {
       lat: config.launch_pad.lat ?? DEFAULT_PAD.lat,
       lon: config.launch_pad.lon ?? DEFAULT_PAD.lon,
     },
+    signature: config.signature ?? NO_SIGNATURE,
   };
 }
 

@@ -15,7 +15,9 @@
     "confirmTitle": "Change the default language?",
     "confirmDesc": "The default language goes from {{from}} to {{to}}. Addresses without a prefix (like {{host}}/blog) will show {{to}}, so {{from}} links you've already shared will open in {{to}}; {{from}} moves under /{{fromPrefix}}/. Addresses starting with /{{toPrefix}}/ will redirect to the same page without the prefix. Search engines will take a while to catch up.",
     "confirmOk": "Change and save",
-    "cancel": "Not now"
+    "cancel": "Not now",
+    "notifyHead": "Notifications",
+    "notifyNote": "Get a webhook message when someone comments or asks for a friend link. When you reply to a comment, readers who ticked the box get an email."
   },
   "descriptions": {
     "home": "Home",
@@ -56,6 +58,13 @@
     "locate": "Use my location",
     "locating": "Locating…",
     "locateFailed": "Couldn't get your location (no browser permission, or the site isn't on https). Typing the coordinates works just as well",
+    "signature": "Signature",
+    "signatureNone": "No signature; nothing appears at the end of posts.",
+    "signatureUpload": "Upload SVG",
+    "signatureReplace": "Replace",
+    "signatureRemove": "Remove",
+    "signatureHint": "At the end of every post, a small point of light writes it out stroke by stroke. Each <path> in the file is a stroke and each <circle> a dot, written in file order; single-line strokes (not filled outlines) look the most like handwriting.",
+    "signatureUnusable": "Couldn't find any strokes in this file: it needs a viewBox and at least one <path>.",
     "errors": {
       "nameRequired": "The site name can't be empty",
       "nameTooLong": "The site name can be at most {{max}} characters",
@@ -81,7 +90,10 @@
       "blackhole": "Lilac",
       "betelgeuse": "Red ochre"
     },
-    "preview": "See {{name}} on the site"
+    "preview": "See {{name}} on the site",
+    "readerSwitch": "Let readers pick the sky",
+    "readerSwitchOn": "On: readers can switch from the top bar, and their choice is kept in their browser",
+    "readerSwitchOff": "Off: everyone sees the one you chose; the body in the top bar is shown but not clickable"
   },
   "pages": {
     "groupOrbit": "Orbits on the home page",
@@ -122,5 +134,32 @@
     "menuAbout": "About",
     "menuMore": "More",
     "off": "OFF"
+  },
+  "notify": {
+    "webhook": "Webhook URL",
+    "optional": "optional, leave empty to turn off",
+    "formats": "Discord and Slack URLs get their own format; any other URL (ntfy, n8n, your own service) gets JSON with event, text and data. Readers' emails and IPs are never included.",
+    "onComment": "New comments (including ones awaiting review)",
+    "onFriend": "Friend link requests",
+    "test": "Send a test",
+    "save": "Save notification settings",
+    "saved": "Notification settings saved",
+    "testOk": "Sent. Check that it arrived",
+    "testFailed": "Not delivered: {{error}}",
+    "mailReady": "Reply emails: ready (using the newsletter's Resend settings). When a reader ticks “Email me when the author replies”, your reply is emailed to them.",
+    "mailOff": "Reply emails: off, RESEND_API_KEY and NEWSLETTER_FROM aren't set. Once they are, readers who ticked the box get an email when you reply.",
+    "loadFailed": "Couldn't load notification settings"
+  },
+  "backup": {
+    "head": "Backup and moving",
+    "note": "Download a copy of the current database (posts, comments, settings and collection history are all in it), for moving or safekeeping. Uploaded images and photos aren't in the database; copy the uploads and gallery folders on the host separately. The host also backs up to ./backups every day.",
+    "download": "Download backup",
+    "downloadFailed": "Couldn't download ({{status}})",
+    "restore": "Restore from backup…",
+    "restarting": "Got it. The backend is restarting with this backup; the page will reload when it is back…",
+    "confirmTitle": "Replace the whole site with this backup?",
+    "confirmBody": "\"{{name}}\" will replace every post, comment and setting. The current database is not deleted: it stays next to the database on the host (db.sqlite.before-restore-…) if you need it back.",
+    "confirm": "Use this backup",
+    "cancel": "Cancel"
   }
 }

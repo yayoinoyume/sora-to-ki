@@ -3,7 +3,8 @@
   "tab": {
     "watch": "Watching",
     "listen": "Listening",
-    "fav": "Favorites"
+    "fav": "Favorites",
+    "sources": "Sources"
   },
   "kind": {
     "anime": "Anime",
@@ -17,7 +18,165 @@
   "shownNow": "\"{{title}}\" is back on the site",
   "favRemoved": "\"{{title}}\" removed from favorites",
   "favAdded": "\"{{title}}\" added to favorites",
-  "sources": "Data sources",
+  "sources": {
+    "label": "Data sources",
+    "intro": "Where the collection page gets its data. Keys are stored in the site's database and never shown again once saved; anything in .env.backend still works, and what you enter here takes priority.",
+    "loading": "Loading sources",
+    "loadFailed": "Couldn't load the source settings",
+    "group": {
+      "watch": "Watching",
+      "read": "Reading",
+      "listen": "Listening",
+      "play": "Playing & coding"
+    },
+    "region": {
+      "tw": "Taiwan",
+      "global": "Global",
+      "cnjp": "China & Japan",
+      "kr": "Korea"
+    },
+    "status": {
+      "off": "Not set up",
+      "syncOff": "Sync is off",
+      "never": "Not synced yet",
+      "synced": "Synced {{when}} · {{count}} new",
+      "failed": "Failed {{when}}: {{error}}",
+      "connected": "Connected",
+      "connectedCount": "Connected · last {{count}} tracks",
+      "checkFailed": "Can't connect: {{error}}"
+    },
+    "sync": "Sync",
+    "settings": "Set up",
+    "collapse": "Close",
+    "save": "Save",
+    "syncNow": "Sync now",
+    "syncing": "Syncing…",
+    "clear": "Clear",
+    "optional": "optional",
+    "redirect": "Redirect URI",
+    "connectSpotify": "Connect Spotify account",
+    "placeholder": {
+      "admin": "Saved. Enter a new one to replace it",
+      "adminHint": "Saved · ends in {{hint}}. Enter a new one to replace it",
+      "env": "Using the value from .env.backend. Enter one to override it"
+    },
+    "saved": "{{name}} saved",
+    "cleared": "Cleared what was entered here for {{name}}",
+    "syncTurnedOn": "{{name}} sync is on",
+    "syncTurnedOff": "{{name}} sync is off",
+    "syncDone": "{{name}} synced, {{count}} new",
+    "syncFailed": "{{name}} sync failed: {{error}}",
+    "failed": "Didn't work: {{error}}",
+    "field": {
+      "TMDB_API_TOKEN": "API Read Access Token",
+      "SIMKL_CLIENT_ID": "Client ID",
+      "SIMKL_ACCESS_TOKEN": "Access Token",
+      "BAHAMUT_UID": "Account",
+      "BAHAMUT_PASSWORD": "Password",
+      "GOOGLE_BOOKS_API_KEY": "API key",
+      "SPOTIFY_CLIENT_ID": "Client ID",
+      "SPOTIFY_CLIENT_SECRET": "Client Secret",
+      "SPOTIFY_REFRESH_TOKEN": "Refresh Token",
+      "STEAM_API_KEY": "Web API key",
+      "STEAM_ID": "Steam ID",
+      "WAKATIME_API_KEY": "API key",
+      "BANGUMI_USERNAME": "Username",
+      "BANGUMI_TOKEN": "Access Token",
+      "ANILIST_USERNAME": "Username",
+      "MAL_USERNAME": "Username",
+      "MAL_CLIENT_ID": "Client ID",
+      "LETTERBOXD_USERNAME": "Username",
+      "NLK_API_KEY": "API key",
+      "NEODB_TOKEN": "Access Token",
+      "NEODB_URL": "Instance URL",
+      "LASTFM_USERNAME": "Username",
+      "LASTFM_API_KEY": "API key",
+      "LISTENBRAINZ_USERNAME": "Username"
+    },
+    "src": {
+      "tmdb": {
+        "name": "TMDB",
+        "what": "Titles and posters (needed for Watching)",
+        "help": "Sign in at themoviedb.org → Settings → API, and copy the long \"API Read Access Token\" (not the shorter API Key)."
+      },
+      "simkl": {
+        "name": "Simkl",
+        "what": "Watch history: films, series, anime",
+        "help": "Create an app at simkl.com/settings/developer for the Client ID; get the Access Token with the PIN flow in the Simkl API docs."
+      },
+      "bahamut": {
+        "name": "Bahamut Anime Crazy",
+        "what": "Watch history from Bahamut Anime Crazy (Taiwan)",
+        "help": "Your Bahamut account and password. If family members share the account they'll sign each other out; this signs back in automatically."
+      },
+      "bangumi": {
+        "name": "Bangumi",
+        "what": "Anime and live-action series, with progress",
+        "help": "Enter your Bangumi username (the last part of your profile URL). If your collection is private, also create an Access Token at next.bgm.tv/demo/access-token."
+      },
+      "anilist": {
+        "name": "AniList",
+        "what": "Anime watch progress",
+        "help": "Enter your AniList username. Your lists must be public (Settings → Lists, leave \"private\" unticked)."
+      },
+      "mal": {
+        "name": "MyAnimeList",
+        "what": "Anime watch progress",
+        "help": "Enter your MyAnimeList username, then create an app at myanimelist.net/apiconfig (type: web) and enter its Client ID. Your list must be public."
+      },
+      "letterboxd": {
+        "name": "Letterboxd",
+        "what": "Films watched, with ratings",
+        "help": "Enter your Letterboxd username. This reads the public RSS feed, which only has about the last 50 entries; new ones are picked up every six hours."
+      },
+      "googleBooks": {
+        "name": "Google Books",
+        "what": "Look up titles and covers by ISBN",
+        "help": "Lookups work without it (falling back to Open Library). To add one, enable the Books API in the Google Cloud Console and create an API key for a much larger quota. Japanese ISBNs are looked up at the National Diet Library first, automatically.",
+        "unset": "Not set, using Open Library"
+      },
+      "ncl": {
+        "name": "National Central Library (Taiwan)",
+        "what": "Books published in Taiwan, with their Chinese titles by ISBN",
+        "help": "No key needed. Once on, it downloads the library's new-book list once a day."
+      },
+      "nlk": {
+        "name": "National Library of Korea",
+        "what": "Books published in Korea, with their Korean titles by ISBN",
+        "help": "Request a free key under \"OPEN API\" at nl.go.kr/seoji. Once set, ISBNs starting with 978-89 or 979-11 are looked up here first."
+      },
+      "neodb": {
+        "name": "NeoDB",
+        "what": "Books, films and series you have marked (Douban data can be moved in)",
+        "help": "Generate an Access Token on your NeoDB instance's /developer/ page (neodb.social/developer for neodb.social). If you are not on neodb.social, enter your instance URL. Books go to the bookshelf; films and series you have watched go to Watching."
+      },
+      "spotify": {
+        "name": "Spotify",
+        "what": "Recently played and favourite genres",
+        "help": "Create an app at developer.spotify.com and use the Redirect URI below. Save the Client ID and Secret, press \"Connect Spotify account\", then paste the refresh token from the page you land on and save."
+      },
+      "lastfm": {
+        "name": "Last.fm",
+        "what": "Recently played (NetEase, KKBOX, Apple Music and more arrive through scrobblers)",
+        "help": "Enter your Last.fm username and create an API key at last.fm/api/account/create. Listening uses this when Spotify is not connected."
+      },
+      "listenbrainz": {
+        "name": "ListenBrainz",
+        "what": "Recently played (MusicBrainz's open listening history, no key needed)",
+        "help": "Just enter your ListenBrainz username. Listening uses this when neither Spotify nor Last.fm is connected."
+      },
+      "steam": {
+        "name": "Steam",
+        "what": "Games played recently",
+        "help": "Get a Web API key at steamcommunity.com/dev/apikey; the Steam ID is 17 digits. Your profile and game details must be public."
+      },
+      "wakatime": {
+        "name": "WakaTime",
+        "what": "Coding time and languages",
+        "help": "Copy the API key from wakatime.com/settings/api-key."
+      }
+    }
+  },
   "loginDaysLeft": "login days left: {{days}}",
   "cookieExpired": "cookie expired",
   "spotifyFailed": "unavailable",
@@ -50,5 +209,6 @@
   "remove": "Remove",
   "saved": "Saved",
   "quoteLabel": "Note for {{title}}",
-  "quotePlaceholder": "Leave a short note"
+  "quotePlaceholder": "Leave a short note",
+  "episodesWatched": "Episodes watched: {{count}}"
 }

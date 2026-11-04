@@ -1,6 +1,6 @@
 [package]
 name = "koimsurai-web-backend"
-version = "0.2.0"
+version = "0.2.2"
 edition = "2024"
 description = "koimsurai.com 的 API 後端（axum + sqlx + SQLite）"
 license = "AGPL-3.0-only"
@@ -8,6 +8,8 @@ license = "AGPL-3.0-only"
 [dependencies]
 axum = { version = "0.8", features = ["multipart"] }  # multipart 給 /admin/upload
 tokio = { version = "1", features = ["full"] }
+# 備份還原（handlers/backup.rs）把上傳的檔案一塊一塊寫到硬碟，要 StreamExt::next。axum 本來就帶著它
+futures-util = { version = "0.3", default-features = false }
 serde = { version = "1", features = ["derive"] }
 # preserve_order：讓解析 JSON（thoughts 的 ref）再序列化時保留原始 key 順序，
 # 與 Express 的 JSON.parse→res.json 一致（byte-level 對拍）。
@@ -97,6 +99,8 @@ specta-serde = "0.0.12"
 utoipa = { version = "5.5.0", features = ["axum_extras"] }
 utoipa-scalar = { version = "0.3.0", features = ["axum"] }
 csv = "1"
+maxminddb = "0.32.0"
+flate2 = "1.1.10"
 
 # jemalloc（tikv fork）：長跑 server 降 RSS/碎片化。MSVC 不支援 → target cfg 排除。
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
@@ -118,6 +122,9 @@ wiremock = "0.6"
 # property testing：JS 相容層（util.rs / og.rs）的不變量——手挑案例只能覆蓋想得到的，
 # 這些函式要對齊 JS 的 UTF-16 語意，CJK/emoji/surrogate 的邊界靠隨機輸入才掃得到。
 proptest = "1"
+# 時間可以暫停、快轉（`#[tokio::test(start_paused = true)]`）：同步 worker 的開關要驗「關著的一小時內
+# 一輪都不跑」，真的等一小時不可能。正式建置的 tokio 不帶這個 feature
+tokio = { version = "1", features = ["test-util"] }
 
 # Lint 規則在 workspace root 的 Cargo.toml，單一來源。
 [lints]

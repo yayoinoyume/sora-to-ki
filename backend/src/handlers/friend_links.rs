@@ -525,8 +525,11 @@ pub async fn apply(
     .execute(pool)
     .await;
     match r {
-        Ok(r) => (StatusCode::CREATED, Json(json!({ "message": "Received", "id": r.last_insert_rowid() })))
-            .into_response(),
+        Ok(r) => {
+            crate::handlers::notify::friend_applied(&state, &app.name, &app.url, app.message.as_deref());
+            (StatusCode::CREATED, Json(json!({ "message": "Received", "id": r.last_insert_rowid() })))
+                .into_response()
+        }
         Err(e) => crate::error::internal_error(StatusCode::INTERNAL_SERVER_ERROR, e),
     }
 }
@@ -820,7 +823,7 @@ pub async fn admin_update_friend(
 
     let mail = match (reply, before.email.as_deref()) {
         (Some(text), Some(to)) => {
-            let subject = format!("關於「{}」的友鏈申請", app.name);
+            let subject = crate::handlers::mailer::friend_reply_subject(&app.name);
             let (html, plain) =
                 crate::handlers::mailer::render_friend_reply(&crate::identity::site_url(), &app.name, text);
             Some(match crate::handlers::mailer::send_one(&state, to, &subject, &plain, &html).await {

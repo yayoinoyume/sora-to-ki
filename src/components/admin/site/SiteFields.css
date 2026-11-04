@@ -207,6 +207,18 @@
   color: var(--ink);
 }
 
+/* 讀者能不能自己換天體：開關（後台共用的 Radix Switch）＋一行字，下面一行小字說現在是哪一種 */
+.sf-theme-switch {
+  margin-top: var(--space-4);
+}
+
+.sf-theme-switch em {
+  display: block;
+  font-style: normal;
+  font-size: var(--fs-12);
+  color: var(--ink-subtle);
+}
+
 .sf-checks {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -364,4 +376,31 @@
   .sf-toggle-desc {
     display: none;
   }
+}
+
+/* 文末簽名：畫寫好的樣子讓站長看一眼，下面兩顆按鈕 */
+.sf-signature-preview {
+  max-width: 420px;
+  padding: var(--space-3) 0;
+}
+
+.sf-signature-preview svg {
+  width: 100%;
+}
+
+.sf-signature-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+/* 備份：兩顆按鈕並排。「還原」是包著 file input 的 label，後台的 label 規則會把字放大，對回按鈕的字級 */
+.sf-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sf-backup-actions label.adm-btn-small {
+  font-size: var(--fs-11);
 }

@@ -12,11 +12,17 @@ index idx_anime_history_video
 index idx_anime_history_watched
   CREATE INDEX idx_anime_history_watched ON anime_history(last_watched_at DESC)
 
+index idx_books_external_id
+  CREATE UNIQUE INDEX idx_books_external_id ON books(external_id) WHERE external_id IS NOT NULL
+
 index idx_books_reading_status
   CREATE INDEX idx_books_reading_status ON books(reading_status)
 
 index idx_collection_type
   CREATE INDEX idx_collection_type ON collection_items(collection_type)
+
+index idx_comments_notify_token
+  CREATE UNIQUE INDEX idx_comments_notify_token ON comments(notify_token)
 
 index idx_comments_page
   CREATE INDEX idx_comments_page ON comments(page, status)
@@ -85,7 +91,7 @@ table anime_history
   CREATE TABLE anime_history ( anime_sn INTEGER NOT NULL, video_sn INTEGER NOT NULL, title TEXT, cover_url TEXT, episode TEXT, last_watched_at DATETIME DEFAULT CURRENT_TIMESTAMP, synced_at DATETIME DEFAULT CURRENT_TIMESTAMP, tmdb_id INTEGER, PRIMARY KEY (anime_sn, video_sn) )
 
 table books
-  CREATE TABLE books ( id INTEGER PRIMARY KEY AUTOINCREMENT, isbn TEXT, title TEXT NOT NULL, authors TEXT, publisher TEXT, published_date TEXT, description TEXT, cover_url TEXT, page_count INTEGER, language TEXT, categories TEXT, reading_status TEXT DEFAULT 'to-read', rating REAL, personal_notes TEXT, date_added DATETIME DEFAULT CURRENT_TIMESTAMP, date_updated DATETIME DEFAULT CURRENT_TIMESTAMP, date_started DATETIME, date_finished DATETIME )
+  CREATE TABLE books ( id INTEGER PRIMARY KEY AUTOINCREMENT, isbn TEXT, title TEXT NOT NULL, authors TEXT, publisher TEXT, published_date TEXT, description TEXT, cover_url TEXT, page_count INTEGER, language TEXT, categories TEXT, reading_status TEXT DEFAULT 'to-read', rating REAL, personal_notes TEXT, date_added DATETIME DEFAULT CURRENT_TIMESTAMP, date_updated DATETIME DEFAULT CURRENT_TIMESTAMP, date_started DATETIME, date_finished DATETIME , source TEXT, external_id TEXT)
 
 table categories
   CREATE TABLE categories ( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE NOT NULL, slug TEXT UNIQUE NOT NULL, description TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP, short_description TEXT DEFAULT '' , name_en TEXT, name_ja TEXT, name_ko TEXT, name_zh_cn TEXT, description_en TEXT, description_ja TEXT, description_ko TEXT, description_zh_cn TEXT, short_description_en TEXT, short_description_ja TEXT, short_description_ko TEXT, short_description_zh_cn TEXT, name_zh_tw TEXT, description_zh_tw TEXT, short_description_zh_tw TEXT)
@@ -97,13 +103,16 @@ table collection_items
   CREATE TABLE collection_items ( id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, original_title TEXT, year INTEGER, poster_url TEXT, overview TEXT, external_id TEXT, collection_type TEXT NOT NULL, media_format TEXT NOT NULL, source TEXT DEFAULT 'manual', status TEXT DEFAULT 'completed', rating INTEGER, review TEXT, is_favorite BOOLEAN DEFAULT 0, watch_date DATE, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP )
 
 table comments
-  CREATE TABLE comments ( id INTEGER PRIMARY KEY AUTOINCREMENT, post_id INTEGER, author TEXT NOT NULL, content TEXT NOT NULL, likes INTEGER DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, status TEXT DEFAULT 'approved', ip TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, is_admin INTEGER DEFAULT 0, email TEXT DEFAULT '', website TEXT DEFAULT '', avatar_url TEXT DEFAULT '', thought_id INTEGER DEFAULT NULL, page TEXT DEFAULT NULL, FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE )
+  CREATE TABLE comments ( id INTEGER PRIMARY KEY AUTOINCREMENT, post_id INTEGER, author TEXT NOT NULL, content TEXT NOT NULL, likes INTEGER DEFAULT 0, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, status TEXT DEFAULT 'approved', ip TEXT DEFAULT '', parent_id INTEGER DEFAULT NULL, is_admin INTEGER DEFAULT 0, email TEXT DEFAULT '', website TEXT DEFAULT '', avatar_url TEXT DEFAULT '', thought_id INTEGER DEFAULT NULL, page TEXT DEFAULT NULL, notify_reply INTEGER DEFAULT 0, notify_token TEXT DEFAULT NULL, locale TEXT DEFAULT NULL, FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE )
 
 table film_history
   CREATE TABLE film_history ( id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, watched_date DATE, rating INTEGER, source TEXT, tmdb_id INTEGER, poster_url TEXT, release_year INTEGER, genres TEXT, notes TEXT, synced_at DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(title, watched_date) )
 
 table friend_links
   CREATE TABLE friend_links ( id INTEGER PRIMARY KEY AUTOINCREMENT, slug TEXT UNIQUE, name TEXT NOT NULL, url TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', feed_url TEXT, email TEXT, message TEXT, status TEXT NOT NULL DEFAULT 'pending', checks TEXT, checked_at DATETIME, ip TEXT, sort_order INTEGER NOT NULL DEFAULT 0, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, reviewed_at DATETIME )
+
+table integration_settings
+  CREATE TABLE integration_settings ( name TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP )
 
 table ip_blacklist
   CREATE TABLE ip_blacklist ( id INTEGER PRIMARY KEY AUTOINCREMENT, ip TEXT UNIQUE NOT NULL, reason TEXT DEFAULT '', created_at DATETIME DEFAULT CURRENT_TIMESTAMP )

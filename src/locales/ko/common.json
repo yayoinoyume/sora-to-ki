@@ -391,12 +391,26 @@
     "bodyDoneEmail": "<em>{{email}}</em>를 구독 목록에서 제거했어요.",
     "bodyDoneFarewell": "함께하지 못해 아쉽지만, 언제든 다시 와주세요.",
     "viewLatest": "최근 글 보기 →",
-    "btnBackHome": "홈으로"
+    "btnBackHome": "홈으로",
+    "replyConfirmTitle": "답글 알림을 끌까요?",
+    "replyBodyConfirm": "운영자가 댓글에 답글을 달아도 더 이상 메일을 보내지 않습니다. 다음에 댓글을 남길 때 다시 선택하면 켜집니다.",
+    "replyBtnConfirm": "알림 끄기",
+    "replyDoneTitle": "껐습니다 ✓",
+    "replyBodyDone": "이 주소로 알림을 선택했던 댓글에는 더 이상 답글 알림이 가지 않습니다."
   },
   "oauth": {
-    "loggingIn": "로그인 중...",
-    "errorNoCode": "로그인 실패: 인증 코드를 받지 못했어요",
-    "errorGeneric": "로그인에 실패했어요. 나중에 다시 시도해주세요"
+    "back": "보던 페이지로 돌아가기",
+    "failTitle": "로그인하지 못했습니다.",
+    "fail": {
+      "cancelled": "{{provider}} 인증 페이지에서 취소해서 이 사이트에는 아무것도 전달되지 않았습니다.",
+      "noCode": "이 주소에는 {{provider}} 인증 코드가 없습니다. 이 페이지를 직접 연 것 같습니다.",
+      "rejected": "{{provider}}에서 인증은 됐지만 이 사이트에서 본인 확인을 하지 못했습니다. 코드는 한 번만 쓸 수 있어서 다시 시도하면 새 코드를 받습니다."
+    },
+    "from": "인증한 곳",
+    "stoppedAt": "멈춘 단계",
+    "stepAuthorize": "인증",
+    "stepVerify": "본인 확인",
+    "retry": "{{provider}}로 다시 시도"
   },
   "about": {
     "title": "소개",
@@ -634,6 +648,7 @@
     "useAccount": "계정으로",
     "fieldName": "이름",
     "fieldEmail": "이메일 (선택, 비공개)",
+    "notifyReply": "운영자가 답글을 달면 메일로 알림",
     "fieldWebsite": "웹사이트 (선택)",
     "fieldText": "남길 말",
     "meter": "{{count}}자 · 신호 길이 {{seconds}}초",

@@ -69,7 +69,12 @@ import {
 import type { Theme } from './theme';
 import type { Fold } from './viewportFold';
 import { inspectWebGL } from './webglRenderer';
+import type { LabelGeometry, LabelImage, LabelShow } from '@/store/canvasLabels';
 import type { SatelliteScreen, SaturnGrow } from '@/store/homeOrbit';
+import { createLabelOverlay, type LabelOverlay } from './labelOverlay';
+import { orbitFrame } from './orbitLabels';
+import { flightAt } from './transition/geometry';
+import type { SkyFlight } from '@/store/skyPan';
 
 /** 環在半徑 1（土星赤道半徑）處的角速度（rad/s）；實際照半徑的 -1.5 次方遞減 */
 const RING_SPIN = 0.3;
@@ -113,12 +118,21 @@ export interface StarfieldRunner {
   setSaturn(visible: boolean, animate: boolean): void;
   /** 首頁衛星的亮度（見 store/homeOrbit） */
   setSatelliteGlow(glow: number[]): void;
+  /** 首頁字卡與標註的 DOM 快照（HTML-in-Canvas，見 lib/labelOverlay）；畫不了的 renderer 直接丟掉 */
+  setLabelImages(list: LabelImage[]): void;
+  /** 每顆衛星的字該多亮、是不是正在換頁 */
+  setLabelShow(show: LabelShow): void;
   /** 換頁轉場的「收」：土星整組收進第 index 顆衛星，-1 是收進中心 */
   collapseSaturnTo(index: number): void;
   /** 星星淡出／淡回（頁面自己畫背景的時候讓出來） */
   setStars(visible: boolean): void;
   /** 換頁的鏡頭移動：星空要在畫面上挪多少（累積的像素），換成星空鏡頭轉的角度 */
   setPan(x: number, y: number): void;
+  /**
+   * 換頁的鏡頭整段路（store/skyPan 的 SkyFlight，時間是這裡的時鐘）：照它自己算每一幀星空挪多少，
+   * 主執行緒卡住時照樣挪；跑完停在最後的位置。這段期間主執行緒送來的 setPan 不理（它晚到、會倒退）
+   */
+  setPanFlight(flight: SkyFlight | null): void;
   /** 開著幾個主要分區：土星留下幾條軌道（站台設定改了就呼叫，多的收起來、少的長出來） */
   setSections(count: number): void;
   /**
@@ -166,6 +180,10 @@ export interface StarfieldInit {
    * 剛載入時很忙，這裡的一幀最多只走 0.05 秒，實際長得比時間表慢，小環照自己的時鐘走會跑到前面
    */
   onSaturnGrow?: (grow: SaturnGrow) => void;
+  /** 畫進 3D 的首頁字卡與標註（lib/labelOverlay）在畫面上的框變了：主執行緒交給瀏覽器做點擊（store/canvasLabels） */
+  onLabelGeometry?: (geometry: LabelGeometry) => void;
+  /** 快照沒傳上去：請主執行緒再拍一次 */
+  onLabelsRetry?: () => void;
   /** 手機：星星只畫三分之一左右（手機只在首頁跑 3D，主角是土星與衛星） */
   lite?: boolean;
   /** 開著幾個主要分區（站台設定）＝土星有幾條軌道。沒給就是全部 */
@@ -1150,9 +1168,13 @@ async function softwareRendering(): Promise<boolean> {
   return inspectWebGL(canvas) !== 'hardware';
 }
 
-export async function createStarfieldRunner(
-  init: StarfieldInit,
-): Promise<{ runner: StarfieldRunner; backend: 'WebGPU' | 'WebGL2'; timing: InitTiming }> {
+export async function createStarfieldRunner(init: StarfieldInit): Promise<{
+  runner: StarfieldRunner;
+  backend: 'WebGPU' | 'WebGL2';
+  timing: InitTiming;
+  /** 畫得了首頁字卡與標註的 DOM 快照（lib/labelOverlay） */
+  drawables: boolean;
+}> {
   let mark = performance.now();
   const lap = () => {
     const now = performance.now();
@@ -1272,7 +1294,11 @@ export async function createStarfieldRunner(
   const saturnPass = pass(saturnScene, saturnCam, { samples: msaa });
   const sat = saturnPass.getTextureNode('output');
   const sceneOut = vec4(combined.rgb.mul(float(1).sub(sat.a)).add(sat.rgb), max(starsColor.a, sat.a));
-  const pipeline = new THREE.RenderPipeline(renderer, sceneOut);
+  // 首頁的字卡與標註畫在最上層（HTML-in-Canvas）。只做了 WebGPU：WebGL2 與不支援的瀏覽器主執行緒照舊用 DOM，
+  // 這一層連 pass 都不建
+  const labels: LabelOverlay | null = backend === 'WebGPU' ? createLabelOverlay(renderer, dprUsed) : null;
+  labels?.setView(init.width, init.height);
+  const pipeline = new THREE.RenderPipeline(renderer, labels ? labels.over(sceneOut) : sceneOut);
 
   // ── 暖機：所有會用到的管線都在 ready 之前編譯完 ──
   // three 預設在「第一次畫到」時才編譯，那會是土星出現的那一刻的一次停頓。
@@ -1310,6 +1336,14 @@ export async function createStarfieldRunner(
   };
   markActive();
   let lastRender = -1;
+  /** 換頁的鏡頭整段路（setPanFlight）；沒有在換頁是 null */
+  let panFlight: SkyFlight | null = null;
+  /** 星空挪多少（畫面像素）→ 鏡頭轉幾度：一個像素是多少弧度，鏡頭的垂直視角攤在畫面高度上。星在球面上，怎麼轉都不會露出邊 */
+  const pan = (x: number, y: number) => {
+    const k = (camera.fov * Math.PI) / 180 / Math.max(1, viewH);
+    camera.rotation.set(y * k, x * k, 0);
+    markActive();
+  };
   let frames = 0;
   let acc = 0;
   let saturnZooming = false;
@@ -1354,6 +1388,15 @@ export async function createStarfieldRunner(
     if (!pacer.shouldRender(now, fullRate ? 0 : active ? ACTIVE_FRAME_MS : IDLE_FRAME_MS)) return;
     // delta 是距離上一次「真的畫」的時間：跳幀不會讓動畫變慢；夾住是為了分頁切回時不暴衝
     const delta = lastRender < 0 ? 0.016 : Math.min((now - lastRender) / 1000, 0.05);
+    // 換頁的鏡頭：照整段路算這一幀挪到哪（lib/transition/geometry 的 flightAt，跟轉場同一個式子）
+    if (panFlight) {
+      const f = panFlight;
+      const end = f.path.acquire + f.path.dur;
+      const el = Math.min(end, performance.now() - f.path.at);
+      const { cam } = flightAt(f.path, f.offset, { x: f.w / 2, y: f.h / 2 }, f.blackhole, el);
+      pan(f.base.x - cam.x * f.parallax, f.base.y - cam.y * f.parallax);
+      if (el >= end) panFlight = null;
+    }
     lastRender = now;
     for (const l of layers) {
       l.points.rotation.x += delta * l.cfg.rotX;
@@ -1382,8 +1425,15 @@ export async function createStarfieldRunner(
       lensShadow.value = lensAt ? (0.95 * lensAt.r) / LENS_EINSTEIN / viewH : 0;
       if (lensAt) lensCenter.value.set(lensAt.x / viewW, lensAt.y / viewH);
       // 附上算出位置的時間（跟主執行緒共用的時基），首頁的字照它推算到自己那一幀（store/homeOrbit）
-      init.onSatellites?.(saturn.project(saturnCam, viewW, viewH), performance.timeOrigin + performance.now());
+      const projected = saturn.project(saturnCam, viewW, viewH);
+      init.onSatellites?.(projected, performance.timeOrigin + performance.now());
       if (s.grow) init.onSaturnGrow?.(s.grow);
+      if (labels) {
+        // 字跟衛星同一幀：直接用這一幀投影出來的位置，不必像主執行緒那樣往前推算
+        const placed = labels.update(performance.now(), projected, orbitFrame(viewW, viewH, viewFold));
+        if (placed.moving) markActive();
+        if (placed.geometry) init.onLabelGeometry?.(placed.geometry);
+      }
     }
     try {
       pipeline.render();
@@ -1471,7 +1521,20 @@ export async function createStarfieldRunner(
   return {
     backend,
     timing: { probe, device, compile, first },
+    drawables: labels !== null,
     runner: {
+      setLabelImages(list) {
+        if (!labels) {
+          for (const item of list) item.image.close();
+          return;
+        }
+        markActive();
+        if (!labels.setImages(list)) init.onLabelsRetry?.();
+      },
+      setLabelShow(show) {
+        markActive();
+        labels?.setShow(show);
+      },
       setSize(width, height, fold) {
         markActive();
         viewW = width;
@@ -1480,6 +1543,7 @@ export async function createStarfieldRunner(
         saturn.setView(width, height, fold ?? null);
         camera.aspect = width / height;
         lensAspect.value = width / Math.max(1, height);
+        labels?.setView(width, height);
         saturnCam.aspect = camera.aspect;
         saturnCam.updateProjectionMatrix();
         camera.updateProjectionMatrix();
@@ -1491,7 +1555,11 @@ export async function createStarfieldRunner(
       },
       setSaturn(visible, animate) {
         markActive();
-        if (saturnVisible && !visible) init.onSatellites?.([], performance.timeOrigin + performance.now());
+        if (saturnVisible && !visible) {
+          init.onSatellites?.([], performance.timeOrigin + performance.now());
+          const geometry = labels?.hide();
+          if (geometry) init.onLabelGeometry?.(geometry);
+        }
         // 每次重新出現都從一點撐開（換頁轉場的「長」）
         if (!saturnVisible && visible) saturn.collapse();
         // 換主題收到一半就離開首頁：不等收完，直接換
@@ -1515,9 +1583,11 @@ export async function createStarfieldRunner(
         darkDrawn = false;
       },
       setPan(x, y) {
-        // 一個像素是多少弧度：鏡頭的垂直視角攤在畫面高度上。星在球面上，怎麼轉都不會露出邊
-        const k = (camera.fov * Math.PI) / 180 / Math.max(1, viewH);
-        camera.rotation.set(y * k, x * k, 0);
+        if (panFlight) return;
+        pan(x, y);
+      },
+      setPanFlight(flight) {
+        panFlight = flight;
         markActive();
       },
       collapseSaturnTo(index) {
@@ -1549,6 +1619,7 @@ export async function createStarfieldRunner(
       },
       dispose() {
         void renderer.setAnimationLoop(null);
+        labels?.dispose();
         pipeline.dispose();
         for (const l of layers) {
           // Sprite 的 quad geometry 為 three 內部共享，不 dispose；材質是我們的

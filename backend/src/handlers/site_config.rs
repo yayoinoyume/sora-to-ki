@@ -23,6 +23,8 @@ use parking_lot::RwLock;
 use serde::{Deserialize, Serialize};
 use sqlx::SqlitePool;
 
+use crate::handlers::signature::Signature;
+
 use crate::{
     auth::AdminAuth,
     error::{AppError, JsonBody, Problem},
@@ -83,6 +85,9 @@ pub struct SiteSettings {
     /// 預設天體（主題）：讀者沒在頂欄選過時看到的那顆，分享圖也畫這顆。`None`＝土星
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub theme: Option<String>,
+    /// 讀者能不能在頂欄自己換天體。`None`＝能（預設開放）；`Some(false)`＝大家都看站長的預設
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub theme_switch: Option<bool>,
     /// 站長自己寫的介紹文字：哪一頁（[`DESCRIBABLE`]）→ 語系 → 字。
     /// 沒寫的就用前端字串檔裡的通用句子（各頁在搜尋結果裡的描述、「關於」選單開頭那一句）
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
@@ -90,6 +95,9 @@ pub struct SiteSettings {
     /// 發射台：站長在哪裡（航行日誌的火箭從這裡升空、收藏頁地球上的琥珀點）。`None`＝台灣
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub launch_pad: Option<LaunchPad>,
+    /// 文末的手寫簽名（handlers/signature.rs）。`None`＝沒有簽名，文末不顯示
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub signature: Option<Signature>,
 }
 
 /// 現在的發射台（沒設就是台灣）
@@ -133,6 +141,12 @@ pub fn theme() -> &'static str {
 #[cfg(test)]
 pub fn set_theme_for_test(theme: &str) {
     THEME.store(THEMES.iter().position(|t| *t == theme).unwrap_or(0), Ordering::Relaxed);
+}
+
+/// 只換預設語系（測試用；nextest 每個測試各自一個行程，不會互相影響）
+#[cfg(test)]
+pub fn set_default_locale_for_test(locale: &str) {
+    set_current(SiteSettings { default_locale: Some(locale.to_string()), ..SiteSettings::default() });
 }
 
 /// 字串 → 能選的天體（大小寫不拘）
@@ -249,8 +263,10 @@ pub async fn load_or_seed(pool: &SqlitePool) -> Result<SiteSettings, AppError> {
         default_locale: None,
         locales: None,
         theme: None,
+        theme_switch: None,
         page_descriptions: BTreeMap::new(),
         launch_pad: None,
+        signature: crate::handlers::signature::seed_file(),
     };
     // OR IGNORE：兩個程序同時開機的話，以先寫進去的那份為準
     sqlx::query("INSERT OR IGNORE INTO site_settings (key, value) VALUES (?, ?)")
@@ -293,10 +309,14 @@ pub struct SiteConfig {
     pub locales: Vec<String>,
     /// 預設天體（saturn、neptune、blackhole、betelgeuse）：讀者沒選過時看到的那顆
     pub theme: String,
+    /// 讀者能不能在頂欄自己換天體；不能的話大家都看預設那顆
+    pub theme_switch: bool,
     /// 站長自己寫的介紹文字：哪一頁 → 語系 → 字。沒有的就用通用句子
     pub page_descriptions: BTreeMap<String, BTreeMap<String, String>>,
     /// 發射台（站長在哪裡）；沒設就是台灣
     pub launch_pad: LaunchPad,
+    /// 文末的手寫簽名；沒有是 null（文末就不顯示）
+    pub signature: Option<Signature>,
 }
 
 impl From<SiteSettings> for SiteConfig {
@@ -314,8 +334,10 @@ impl From<SiteSettings> for SiteConfig {
             default_locale,
             locales,
             theme: theme_of(s.theme.as_deref()).unwrap_or(THEMES[0]).to_string(),
+            theme_switch: s.theme_switch.unwrap_or(true),
             page_descriptions: s.page_descriptions,
             launch_pad: s.launch_pad.unwrap_or(DEFAULT_PAD),
+            signature: s.signature,
         }
     }
 }
@@ -339,10 +361,14 @@ pub struct SiteConfigUpdate {
     pub locales: Option<Vec<String>>,
     /// 預設天體（saturn、neptune、blackhole、betelgeuse）
     pub theme: Option<String>,
+    /// 讀者能不能在頂欄自己換天體
+    pub theme_switch: Option<bool>,
     /// 介紹文字（整份換掉）：哪一頁（home、notes…、aboutLead）→ 語系 → 字；空字串＝用通用句子
     pub page_descriptions: Option<BTreeMap<String, BTreeMap<String, String>>>,
     /// 發射台：緯度（-70～70）、經度（-180～180），存到小數點後一位（大概的城市就好，不要填自己家）
     pub launch_pad: Option<LaunchPad>,
+    /// 文末的手寫簽名；`steps` 是空的＝拿掉簽名
+    pub signature: Option<Signature>,
 }
 
 /// 把 body 套到現有的設定上。錯誤給後台與 MCP 顯示：英文說明加代號（error::Problem），後台照代號翻
@@ -376,6 +402,10 @@ fn apply(mut s: SiteSettings, body: SiteConfigUpdate) -> Result<SiteSettings, Pr
                 .param("theme", t.as_str())
         })?;
         s.theme = Some(t.to_string());
+    }
+    if let Some(on) = body.theme_switch {
+        // 開著是預設：存成「沒設」，設定裡只留關掉這種例外
+        s.theme_switch = (!on).then_some(false);
     }
     if let Some(name) = body.name {
         let name = name.trim();
@@ -496,7 +526,37 @@ fn apply(mut s: SiteSettings, body: SiteConfigUpdate) -> Result<SiteSettings, Pr
         let pad = LaunchPad { lat: round(pad.lat), lon: round(pad.lon) };
         s.launch_pad = (pad != DEFAULT_PAD).then_some(pad);
     }
+    if let Some(sig) = body.signature {
+        s.signature = if sig.steps.is_empty() {
+            None
+        } else {
+            crate::handlers::signature::validate(&sig)?;
+            Some(sig)
+        };
+    }
     Ok(s)
+}
+
+/// `SITE_SIGNATURE_FILE`：已經有設定、但還沒有簽名的站（升級上來的），開機時讀一次那個 SVG。
+/// 全新的站在種子那一步就讀了；有簽名的不動（後台換過的不會被檔案蓋回去）
+pub async fn seed_signature(pool: &SqlitePool) -> Result<(), AppError> {
+    let s = loaded(pool).await?;
+    if s.signature.is_some() {
+        return Ok(());
+    }
+    let Some(signature) = crate::handlers::signature::seed_file() else { return Ok(()) };
+    let next = SiteSettings { signature: Some(signature), ..s };
+    sqlx::query(
+        "INSERT INTO site_settings (key, value) VALUES (?, ?) \
+         ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')",
+    )
+    .bind(KEY)
+    .bind(serde_json::to_string(&next).map_err(anyhow::Error::from)?)
+    .execute(pool)
+    .await?;
+    set_current(next);
+    tracing::info!("site signature read from SITE_SIGNATURE_FILE");
+    Ok(())
 }
 
 fn description_too_long() -> Problem {
@@ -566,9 +626,52 @@ mod tests {
             default_locale: None,
             locales: None,
             theme: None,
+            theme_switch: None,
             page_descriptions: BTreeMap::new(),
             launch_pad: None,
+            signature: None,
         }
+    }
+
+    #[test]
+    fn 讀者換天體預設開著_關掉才存() {
+        assert!(SiteConfig::from(base()).theme_switch);
+        let off = apply(base(), SiteConfigUpdate { theme_switch: Some(false), ..Default::default() })
+            .expect("收得下");
+        assert_eq!(off.theme_switch, Some(false));
+        assert!(!SiteConfig::from(off.clone()).theme_switch);
+        let on =
+            apply(off, SiteConfigUpdate { theme_switch: Some(true), ..Default::default() }).expect("收得下");
+        assert_eq!(on.theme_switch, None, "開著是預設，存成沒設");
+    }
+
+    #[test]
+    fn 簽名_空的是拿掉_不能用的擋下來() {
+        use crate::handlers::signature::{Signature, SignatureStep};
+        let sig = Signature {
+            view_box: "0 0 100 30".into(),
+            steps: vec![SignatureStep::Stroke { d: "M0 0L10 10".into() }],
+        };
+        let s = apply(base(), SiteConfigUpdate { signature: Some(sig.clone()), ..Default::default() })
+            .expect("收得下");
+        assert_eq!(s.signature.as_ref(), Some(&sig));
+        assert_eq!(SiteConfig::from(s.clone()).signature, Some(sig));
+        let cleared = apply(
+            s,
+            SiteConfigUpdate {
+                signature: Some(Signature { view_box: String::new(), steps: vec![] }),
+                ..Default::default()
+            },
+        )
+        .expect("清得掉");
+        assert_eq!(cleared.signature, None);
+        let bad = Signature {
+            view_box: "0 0 1 1".into(),
+            steps: vec![SignatureStep::Stroke { d: "<script>".into() }],
+        };
+        let err = apply(base(), SiteConfigUpdate { signature: Some(bad), ..Default::default() })
+            .expect_err("擋下來");
+        assert_eq!(err.code, "signature_invalid");
     }
 
     #[test]

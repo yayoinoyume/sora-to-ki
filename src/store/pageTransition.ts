@@ -154,6 +154,10 @@ export interface TransitionReport {
   maxFrame: number;
   /** 超過 50ms 的幀數 */
   long: number;
+  /** 收、飛、長各自最長的一幀（毫秒） */
+  phases: { leave: number; fly: number; grow: number };
+  /** 點是誰畫的：worker（預設）或主執行緒（不支援 OffscreenCanvas、?txw=0）。上面的幀就是照畫它的那條迴圈量的 */
+  host: 'worker' | 'main';
 }
 const transitionListeners = new Set<(r: TransitionReport) => void>();
 export function reportTransition(r: TransitionReport) {
@@ -179,8 +183,13 @@ export interface BootReport {
   startedAt: number;
   /** 等完（或等到上限）的時間；之後是最短停留與收場動畫 */
   waitedAt: number;
-  /** 最後等到的那一項：load（整頁含圖片）、fonts、paint、sky（首頁的 3D）；cap 是等到上限 */
+  /**
+   * 最後等到的那一項：fonts、paint、sky（首頁的 3D）、hold（登入回呼要它等）；cap 是等到上限。
+   * 2026-11-04 之前還有 load（整頁含圖片），之後不等它了
+   */
   waitedFor: string;
+  /** 等到上限時還沒等到的那幾項（沒等到上限是空的） */
+  pending: string[];
 }
 let lastBoot: BootReport | null = null;
 const bootListeners = new Set<(r: BootReport) => void>();
@@ -188,6 +197,26 @@ export function reportBoot(r: BootReport) {
   lastBoot = r;
   for (const fn of bootListeners) fn(r);
 }
+/**
+ * 開場先別退場：登入回呼（account/OAuthCallback）換授權碼的時候，開場那顆點與環繼續停著。
+ * 成功就整頁跳回原本那頁（開場根本沒退場，下一頁的開場接著演），失敗才放手、露出失敗頁。
+ * 開場等完載入才來看有沒有人要它等（layout/TransitionLayer 的 enter），那時這一頁的 effect 早就掛上了
+ */
+const bootHolds = new Set<Promise<void>>();
+export function holdBoot(p: Promise<unknown>) {
+  const held: Promise<void> = p
+    .then(
+      () => undefined,
+      () => undefined,
+    )
+    .finally(() => bootHolds.delete(held));
+  bootHolds.add(held);
+}
+/** 有人要開場等的話，等他們都放手；沒有就是 null */
+export function bootHeld(): Promise<void> | null {
+  return bootHolds.size ? Promise.all(bootHolds).then(() => undefined) : null;
+}
+
 export function subscribeBoot(fn: (r: BootReport) => void): () => void {
   bootListeners.add(fn);
   if (lastBoot) fn(lastBoot);

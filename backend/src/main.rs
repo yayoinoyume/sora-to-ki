@@ -113,6 +113,12 @@ async fn run() -> anyhow::Result<()> {
     // sqlite：WAL 讓讀寫可重疊；busy_timeout 避免 SQLITE_BUSY；
     // create_if_missing 讓全新部署由 migrations 從零建出 DB。
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    // 後台或精靈上傳了備份：在連資料庫之前換上去（現在這份改名留著；見 handlers/backup.rs）
+    if handlers::backup::apply_pending(&database_url)? {
+        tracing::warn!(
+            "restore: switched to the uploaded backup; the previous database was kept as *.before-restore-*"
+        );
+    }
     let connect_opts = SqliteConnectOptions::from_str(&database_url)?
         .busy_timeout(Duration::from_secs(5))
         .journal_mode(SqliteJournalMode::Wal)
@@ -132,6 +138,12 @@ async fn run() -> anyhow::Result<()> {
     handlers::site_config::load_or_seed(&pool)
         .await
         .map_err(|e| anyhow::anyhow!("couldn't load site settings: {e:?}"))?;
+    // 已經有設定、還沒有簽名的站：SITE_SIGNATURE_FILE 有給就讀一次（見 handlers/signature.rs）
+    handlers::site_config::seed_signature(&pool)
+        .await
+        .map_err(|e| anyhow::anyhow!("couldn't seed the signature: {e:?}"))?;
+    // 收藏來源的金鑰與同步開關（後台填的）；要在下面的同步 worker 起來之前
+    koimsurai_web_backend::integrations::load(&pool).await?;
 
     if let Some(username) = handlers::auth::bootstrap_admin(&pool).await? {
         tracing::info!(username = %username, "全新部署：已用 ADMIN_USERNAME / ADMIN_PASSWORD 建立第一個管理員");
@@ -168,6 +180,12 @@ async fn run() -> anyhow::Result<()> {
     handlers::tw_isbn::spawn_sync(state.clone());
     // 排程發佈與回收桶：一律啟動（見 handlers/post_lifecycle.rs）
     handlers::post_lifecycle::spawn(state.clone());
+    // 依地區挑的觀看紀錄：Bangumi、AniList、MyAnimeList、Letterboxd（開關在後台；見 handlers/watch_sources.rs）
+    handlers::watch_sources::spawn_all(&state);
+    // NeoDB 的書架與觀看紀錄（見 handlers/read_sources.rs）
+    handlers::read_sources::spawn_sync(&state);
+    // 讀者的國家（反應紀錄用）：DB-IP 的國家資料庫，預設每月自己抓（GEOIP_DOWNLOAD=0 關掉；見 geo.rs）
+    koimsurai_web_backend::geo::spawn(&state);
 
     let app = router::build_router(state);
 

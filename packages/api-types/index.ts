@@ -266,7 +266,7 @@ export type AdminWatchItem = {
 	key: string,
 	title: string,
 	cover: string | null,
-	/**  動畫是最後一集、影集是看了幾集、電影是評分 */
+	/**  動畫是最後一集（巴哈原樣的字）、影集是看了幾集（只有數字，字由後台照語言組）、電影是評分 */
 	detail: string | null,
 	watched_at: string | null,
 	/**  bahamut | simkl | trakt … */
@@ -1294,6 +1294,17 @@ export type SetupSpec = {
 	value?: string,
 };
 
+export type Signature = {
+	/**  SVG 的 viewBox（四個數字） */
+	view_box: string,
+	steps: SignatureStep[],
+};
+
+/**  簽名的一步：一筆，或點一個點 */
+export type SignatureStep = 
+/**  SVG 路徑的 `d` */
+{ kind: "stroke"; d: string } | { kind: "dot"; x: number | null; y: number | null };
+
 /**  `GET /api/site/config` 的回應：資料庫那份加上部署層的網址 */
 export type SiteConfig = {
 	/**  站台網址（SITE_URL），唯讀 */
@@ -1314,10 +1325,23 @@ export type SiteConfig = {
 	locales: string[],
 	/**  預設天體（saturn、neptune、blackhole、betelgeuse）：讀者沒選過時看到的那顆 */
 	theme: string,
+	/**  讀者能不能在頂欄自己換天體；不能的話大家都看預設那顆 */
+	theme_switch: boolean,
 	/**  站長自己寫的介紹文字：哪一頁 → 語系 → 字。沒有的就用通用句子 */
 	page_descriptions: { [key in string]: { [key in string]: string } },
 	/**  發射台（站長在哪裡）；沒設就是台灣 */
 	launch_pad: LaunchPad,
+	/**  文末的手寫簽名；沒有是 null（文末就不顯示） */
+	signature: Signature | null,
+};
+
+/**  即時檢查的結果（沒有背景同步、讀者來的時候才去抓的那幾個：TMDB、Spotify、Steam…） */
+export type SourceCheck = {
+	ok: boolean,
+	/**  有的話是抓到幾筆（Spotify 最近播放） */
+	count?: number | null,
+	/**  失敗的理由（英文） */
+	error?: string | null,
 };
 
 /**  一個來源與從它進站時先看的那幾頁 */
@@ -1325,6 +1349,43 @@ export type SourceEntries = {
 	source: string,
 	visitors: number,
 	entries: AnalyticsRow[],
+};
+
+/**  一格設定的狀態 */
+export type SourceField = {
+	/**  環境變數名，也是寫入時的 key */
+	env: string,
+	secret: boolean,
+	optional: boolean,
+	/**  值從哪來：`admin`（後台填的）、`env`（環境變數）；沒填是 null */
+	from?: string | null,
+	/**  一般欄位的末四碼（密碼與 token 不給） */
+	hint?: string | null,
+};
+
+export type SourceInfo = {
+	key: string,
+	fields: SourceField[],
+	/**  必填的都填了 */
+	configured: boolean,
+	/**  有背景同步的話，開關現在的狀態 */
+	sync?: boolean | null,
+	/**  最近一次同步的結果 */
+	last?: SyncRecord | null,
+	/**  沒有背景同步的來源：這次打開頁面時的即時檢查 */
+	check?: SourceCheck | null,
+};
+
+/**  改一個來源：`values` 裡的值是新的金鑰，`null` 是清掉（退回環境變數）；沒帶的欄位不動 */
+export type SourceUpdate = {
+	values?: { [key in string]: string | null },
+	sync?: boolean | null,
+};
+
+export type SourcesResponse = {
+	sources: SourceInfo[],
+	/**  Spotify app 要填的 Redirect URI */
+	spotify_redirect: string,
 };
 
 export type SpotifyAlbum = {
@@ -1465,6 +1526,17 @@ export type SubscribersResponse = {
 	message: string,
 	subscribers: SubscriberRow[],
 	pagination: Pagination,
+};
+
+/**  某個來源最近一次同步的結果，存在 `sync_state` 的 `source:<key>` */
+export type SyncRecord = {
+	/**  UTC，`YYYY-MM-DD HH:MM:SS` */
+	at: string,
+	ok: boolean,
+	/**  這一輪新寫進來幾筆 */
+	count?: number | null,
+	/**  失敗的理由（英文，給站長看的診斷） */
+	error?: string | null,
 };
 
 /**  `POST /api/admin/tags` 的 201 回應。 */

@@ -15,7 +15,9 @@
     "confirmTitle": "換掉預設語系？",
     "confirmDesc": "預設語系會從{{from}}換成{{to}}。不帶前綴的網址（例如 {{host}}/blog）會改顯示{{to}}，已經分享出去的{{from}}連結打開也會變成{{to}}；{{from}}改到 /{{fromPrefix}}/ 底下。原本 /{{toPrefix}}/ 開頭的網址會自動轉到不帶前綴的那一條。搜尋引擎要一陣子才會重新收錄。",
     "confirmOk": "換掉並儲存",
-    "cancel": "先不要"
+    "cancel": "先不要",
+    "notifyHead": "通知",
+    "notifyNote": "有人留言、申請友鏈時送一則到你的 webhook；你回覆留言時，勾了通知的讀者會收到信。"
   },
   "descriptions": {
     "home": "首頁",
@@ -56,6 +58,13 @@
     "locate": "用目前的位置",
     "locating": "定位中…",
     "locateFailed": "拿不到位置（瀏覽器沒給權限，或這個網址不是 https）。手動填經緯度也一樣",
+    "signature": "文末簽名",
+    "signatureNone": "沒有簽名，文章結尾不會出現。",
+    "signatureUpload": "上傳 SVG",
+    "signatureReplace": "換一個",
+    "signatureRemove": "拿掉",
+    "signatureHint": "每篇文章結尾，一顆小光點照筆順把它寫出來。檔案裡的 <path> 是一筆、<circle> 是一個點，照檔案裡的順序寫；用單線描出來的（不是填色的外框）寫起來最像手寫。",
+    "signatureUnusable": "這個檔案讀不出筆畫：要有 viewBox，裡面至少一個 <path>。",
     "errors": {
       "nameRequired": "站名不能是空的",
       "nameTooLong": "站名最多 {{max}} 個字",
@@ -81,7 +90,10 @@
       "blackhole": "淡紫",
       "betelgeuse": "赭紅"
     },
-    "preview": "在前台看看{{name}}"
+    "preview": "在前台看看{{name}}",
+    "readerSwitch": "讓讀者自己挑天體",
+    "readerSwitchOn": "開著：讀者可以在頂欄換，選過的記在他的瀏覽器",
+    "readerSwitchOff": "關著：大家都看你選的這一顆，頂欄的天體只顯示、不能點"
   },
   "pages": {
     "groupOrbit": "首頁的軌道",
@@ -122,5 +134,32 @@
     "menuAbout": "關於",
     "menuMore": "更多",
     "off": "關"
+  },
+  "notify": {
+    "webhook": "Webhook 網址",
+    "optional": "選填，空著就不送",
+    "formats": "Discord、Slack 的網址送它們自己的格式；其他網址（ntfy、n8n、自己的服務）送 JSON：event、text、data。內容不帶讀者的信箱與 IP。",
+    "onComment": "新留言（含待審）",
+    "onFriend": "友鏈申請",
+    "test": "送一則測試",
+    "save": "儲存通知設定",
+    "saved": "通知設定存好了",
+    "testOk": "送到了，去看看有沒有收到",
+    "testFailed": "沒送到：{{error}}",
+    "mailReady": "回覆信：寄得出去（用電子報那組 Resend 設定）。讀者在留言表單勾了「站長回覆時寄信通知我」，你回覆時就會寄。",
+    "mailOff": "回覆信：寄不出去，還沒設 RESEND_API_KEY 與 NEWSLETTER_FROM。設好之後，讀者勾了通知的留言你一回覆就會寄信。",
+    "loadFailed": "讀不到通知設定"
+  },
+  "backup": {
+    "head": "備份與搬家",
+    "note": "下載一份現在的資料庫（文章、留言、設定、收藏紀錄都在裡面），搬家或保險用。上傳的圖片與照片不在資料庫裡，要另外複製主機上的 uploads 與 gallery 資料夾。主機上每天也會自動備份到 ./backups。",
+    "download": "下載備份",
+    "downloadFailed": "下載不了（{{status}}）",
+    "restore": "從備份還原…",
+    "restarting": "收到了，後端正在重開、換上這份備份，好了會自動重新整理…",
+    "confirmTitle": "用這份備份蓋掉整個站？",
+    "confirmBody": "「{{name}}」會取代現在所有的文章、留言與設定。現在這份不會刪掉，會留在主機的資料庫旁邊（db.sqlite.before-restore-…），要換回來可以找得到。",
+    "confirm": "換上這份",
+    "cancel": "取消"
   }
 }

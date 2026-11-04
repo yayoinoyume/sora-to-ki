@@ -12,15 +12,16 @@ import { at, useAdminT } from '@/i18n/admin-i18n';
 import AdminLoading from './AdminLoading';
 import { PageHead, TabPanel } from './AdminPage';
 import { formatWhen } from './adminFormat';
+import CollectionSources from './CollectionSources';
 import './CollectionManager.css';
 
 // 收藏（2026-10 後台提案的「收」）：在看、在聽都是同步進來的（巴哈、Simkl、Spotify），
 // 站長決定不了「有沒有看」，只能決定「這一部／這一首要不要出現在前台」，以及哪幾部放進最愛。
 // 書在書架頁（/admin/books），這裡不重複一份。
 
-type Tab = 'watch' | 'listen' | 'fav';
+type Tab = 'watch' | 'listen' | 'fav' | 'sources';
 
-const TABS: Tab[] = ['watch', 'listen', 'fav'];
+const TABS: Tab[] = ['watch', 'listen', 'fav', 'sources'];
 
 const KINDS = new Set(['anime', 'film', 'tv', 'track']);
 /** 巴哈要翻（是簡稱），其他是服務名 */
@@ -92,7 +93,8 @@ export default function CollectionManager() {
         : t('collection.favAdded', { title: w.title }),
     );
 
-  const countOf = (k: Tab) => (k === 'watch' ? watch.length : k === 'listen' ? tracks.length : favs.length);
+  const countOf = (k: Tab) =>
+    k === 'watch' ? watch.length : k === 'listen' ? tracks.length : k === 'fav' ? favs.length : '';
   const b = bahamut.data;
 
   return (
@@ -103,8 +105,9 @@ export default function CollectionManager() {
         meta={isPending ? t('common.loading') : t('collection.meta', { watch: watch.length, fav: favs.length })}
       />
 
-      <p className="adm-coll-sources" aria-label={t('collection.sources')}>
-        {b && (
+      {/* 一眼看的兩個：動畫瘋的登入還剩幾天、在聽抓不抓得到。沒接的不列（每個來源的完整狀態在「來源」分頁） */}
+      <p className="adm-coll-sources" aria-label={t('collection.sources.label')}>
+        {b && (b.ok || b.jwtExpiresAt !== null) && (
           <span data-bad={!b.ok || undefined}>
             {b.ok ? '●' : '×'} {t('collection.bahamut')}
             {b.ok
@@ -114,12 +117,15 @@ export default function CollectionManager() {
               : ` · ${t('collection.cookieExpired')}`}
           </span>
         )}
-        <span data-bad={data?.tracks_error ? true : undefined}>
-          {data?.tracks_error ? '×' : '●'} Spotify
-          {data?.tracks_error
-            ? ` · ${t('collection.spotifyFailed')}`
-            : ` · ${t('collection.spotifyRecent', { count: tracks.length })}`}
-        </span>
+        {/* 在聽可能是 Spotify、Last.fm 或 ListenBrainz，這裡只說抓不抓得到 */}
+        {(tracks.length > 0 || data?.tracks_error) && (
+          <span data-bad={data?.tracks_error ? true : undefined}>
+            {data?.tracks_error ? '×' : '●'} {t('collection.tab.listen')}
+            {data?.tracks_error
+              ? ` · ${t('collection.spotifyFailed')}`
+              : ` · ${t('collection.spotifyRecent', { count: tracks.length })}`}
+          </span>
+        )}
         <Link to="/admin/books" className="adm-coll-link">
           {t('collection.booksLink')}
         </Link>
@@ -145,7 +151,9 @@ export default function CollectionManager() {
         </div>
 
         <TabPanel tab={tab}>
-          {isPending ? (
+          {tab === 'sources' ? (
+            <CollectionSources />
+          ) : isPending ? (
             <AdminLoading label={t('collection.loadingCollection')} />
           ) : tab === 'watch' ? (
             <WatchList items={watch} busyKey={busyKey} onHide={setHidden} onFavorite={toggleFavorite} />
@@ -195,8 +203,12 @@ function WatchList({
               <span className="adm-meta">
                 {[
                   KINDS.has(w.kind) ? t(`collection.kind.${w.kind}`) : null,
-                  // 巴哈的集數是原樣的字（「[03]」「特別篇」），不再包一層「第…集」
-                  w.kind === 'anime' && w.detail ? t('collection.watchedUpTo', { detail: w.detail }) : w.detail,
+                  // 巴哈的集數是原樣的字（「[03]」「特別篇」），不再包一層「第…集」；影集只給集數
+                  w.kind === 'anime' && w.detail
+                    ? t('collection.watchedUpTo', { detail: w.detail })
+                    : w.kind === 'tv' && w.detail
+                      ? t('collection.episodesWatched', { count: Number(w.detail) })
+                      : w.detail,
                   formatWhen(w.watched_at, 'yyyy.MM.dd'),
                   w.source
                     ? w.source === 'bahamut'

@@ -122,5 +122,13 @@
     "milestones": "里程碑",
     "milestone": "里程碑",
     "excerptLinks": "摘要對應段落"
-  }
+  },
+  "source_unknown": "沒有「{{source}}」這個來源",
+  "source_field_unknown": "這個來源沒有「{{field}}」這一格",
+  "source_value_too_long": "「{{field}}」太長了，確認一下有沒有貼錯",
+  "webhook_url_invalid": "Webhook 網址要是 http:// 或 https:// 開頭",
+  "webhook_url_empty": "先填 webhook 網址",
+  "signature_invalid": "簽名不能用：要有 viewBox，筆畫只能是 SVG 路徑",
+  "restore_invalid": "這份備份不能用：{{error}}",
+  "restore_unavailable": "這台主機沒有用資料庫檔案，沒辦法還原"
 }

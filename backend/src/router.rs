@@ -90,6 +90,19 @@ pub fn build_router(state: AppState) -> Router {
         .route("/api/init/status", get(handlers::init::status))
         .route("/api/init/check", post(handlers::init::check))
         .route("/api/init/claim", post(handlers::init::claim))
+        // 搬家：還沒有站長時用設定碼上傳備份（handlers/backup.rs）
+        .route(
+            "/api/init/restore",
+            post(handlers::backup::init_restore)
+                .route_layer(DefaultBodyLimit::max(handlers::backup::MAX_UPLOAD)),
+        )
+        // 備份：站長下載現在的資料庫、上傳一份蓋回去
+        .route("/api/admin/backup", get(handlers::backup::download))
+        .route(
+            "/api/admin/backup/restore",
+            post(handlers::backup::admin_restore)
+                .route_layer(DefaultBodyLimit::max(handlers::backup::MAX_UPLOAD)),
+        )
         // 頁面內容（關於、作品…）：公開讀、管理員整份覆蓋
         .route("/api/pages/about", get(handlers::page_content::get_about))
         .route("/api/admin/pages/about", put(handlers::page_content::put_about))
@@ -142,6 +155,7 @@ pub fn build_router(state: AppState) -> Router {
         // newsletter
         .route("/api/newsletter/subscribe", post(handlers::newsletter::subscribe))
         .route("/api/newsletter/unsubscribe", post(handlers::newsletter::unsubscribe))
+        .route("/api/comments/notify/unsubscribe", post(handlers::notify::unsubscribe))
         .route("/api/newsletter/by-token/{token}", get(handlers::newsletter::by_token))
         .route("/api/newsletter/subscribers", get(handlers::newsletter::subscribers))
         // admin authed 讀 + CRUD 寫入
@@ -188,6 +202,8 @@ pub fn build_router(state: AppState) -> Router {
         .route("/api/admin/reactions", get(handlers::reaction_log::admin_reactions))
         .route("/api/admin/comments/{id}/status", patch(handlers::admin::patch_comment_status))
         .route("/api/admin/comments/{id}/reply", post(handlers::admin::reply_comment))
+        .route("/api/admin/notify", get(handlers::notify::admin_get).put(handlers::notify::admin_put))
+        .route("/api/admin/notify/test", post(handlers::notify::admin_test))
         .route(
             "/api/admin/comments/{id}",
             put(handlers::admin::update_comment).delete(handlers::admin::delete_comment),
@@ -223,6 +239,10 @@ pub fn build_router(state: AppState) -> Router {
         // 收藏頁：觀看紀錄與聽的歌要不要出現在前台
         .route("/api/admin/collection", get(handlers::collection::admin_collection))
         .route("/api/admin/collection/hidden", put(handlers::collection::admin_set_hidden))
+        // 收藏的來源：金鑰（只寫不讀）、同步開關、立刻同步
+        .route("/api/admin/sources", get(handlers::sources::list_sources))
+        .route("/api/admin/sources/{key}", put(handlers::sources::update_source))
+        .route("/api/admin/sources/{key}/sync", post(handlers::sources::sync_source))
         // OG 圖（takumi；axum 不支援 :id.png 部分參數，handler 內 strip 後綴）
         .route("/api/og/{file}", get(handlers::og::og_png))
         // 上傳（axum multipart；thumbhash 實測等價）

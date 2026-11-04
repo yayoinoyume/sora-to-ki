@@ -18,9 +18,17 @@ import { useEnabledSections } from '@/data/siteConfig';
 const describeInit = (t?: InitTiming) =>
   `就緒於 ${Math.round(performance.now())} ms${t ? `（偵測 ${t.probe}・GPU ${t.device}・編譯 ${t.compile}・首幀 ${t.first}）` : ''}`;
 import { takeSpaceWorker } from './prewarm';
+import { htmlInCanvasEnabled } from '@/lib/htmlInCanvas';
+import {
+  applyLabelGeometry,
+  retryLabels,
+  setCanvasDrawables,
+  setCanvasHost,
+  type LabelGeometry,
+} from '@/store/canvasLabels';
 import { isArriving } from '@/store/pageTransition';
 import { onShowcase, setShowcaseReady, showcaseShowing, skyBorrowed } from '@/store/themeShowcase';
-import { skyPan, subscribeSkyPan } from '@/store/skyPan';
+import { skyPan, subscribeSkyFlight, subscribeSkyPan, type SkyFlight } from '@/store/skyPan';
 import {
   publishSatellites,
   publishSaturnGrow,
@@ -112,6 +120,8 @@ export default function StarfieldGpu({
   const [failed, setFailed] = useState(false);
   const [perf, setPerf] = useState<PerfReport | null>(null);
   const perfDebug = useMemo(() => new URLSearchParams(window.location.search).get('debug') === 'perf', []);
+  // 首頁標註畫進這張 canvas（HTML-in-Canvas，store/canvasLabels）：只走 worker 的路徑
+  const drawable = useMemo(() => canOffscreen && htmlInCanvasEnabled(), []);
   // 統一控制介面：worker 路徑=postMessage、主執行緒路徑=直呼 runner（見下兩個 effect）
   const controlRef = useRef<{
     scroll(y: number): void;
@@ -120,6 +130,8 @@ export default function StarfieldGpu({
     collapse(index: number): void;
     stars(visible: boolean): void;
     pan(x: number, y: number): void;
+    /** 換頁的鏡頭整段路：worker 那邊自己照它算（主執行緒那條路沒有，照逐幀的 pan） */
+    flight?(f: SkyFlight | null): void;
     sections(count: number): void;
     theme(theme: Theme, palette: Palette): void;
   } | null>(null);
@@ -179,26 +191,68 @@ export default function StarfieldGpu({
   // 用完就收掉整個 3D，頁面留下黑紙與 CSS 星空。
   const MAX_RECOVERIES = 3;
 
-  const recover = useCallback((reason: string) => {
-    if (recoveriesRef.current >= MAX_RECOVERIES) {
-      console.warn(`[StarfieldGpu] ${reason}；已重建 ${MAX_RECOVERIES} 次仍失敗，放棄 3D（留下 CSS 星空）`);
-      setFailed(true);
-      return;
-    }
-    recoveriesRef.current += 1;
-    console.warn(`[StarfieldGpu] ${reason}；第 ${recoveriesRef.current} 次重建`);
-    // 分頁還在背景時重建沒有意義（GPU 資源正是那時候被回收的），等切回來再做。
-    if (document.hidden) {
-      const once = () => {
-        if (document.hidden) return;
-        document.removeEventListener('visibilitychange', once);
-        setGeneration((g) => g + 1);
-      };
-      document.addEventListener('visibilitychange', once);
-      return;
-    }
-    recoverTimerRef.current = setTimeout(() => setGeneration((g) => g + 1), 500);
+  // 上報到 GlitchTip：掉了幾次、當時分頁在不在背景、在背景放了多久。
+  // Console 那行只有開著 DevTools 才看得到，讀者那邊發生了什麼原本無從得知
+  const backendRef = useRef(backend);
+  backendRef.current = backend;
+  /** 這次藏起來的時間點（0 是看得見）、上一段在背景放了多久 */
+  const hiddenRef = useRef({ since: 0, last: 0 });
+  useEffect(() => {
+    const h = hiddenRef.current;
+    const onVis = () => {
+      if (document.hidden) h.since = performance.now();
+      else if (h.since) {
+        h.last = performance.now() - h.since;
+        h.since = 0;
+      }
+    };
+    onVis();
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
   }, []);
+  const reportLost = useCallback((reason: string, outcome: 'rebuild' | 'give-up') => {
+    const h = hiddenRef.current;
+    const now = performance.now();
+    void import('@/lib/errorReporting').then((m) =>
+      m.reportWarning(
+        '星空的 GPU 掉了',
+        { backend: backendRef.current, outcome, hidden: String(document.hidden) },
+        {
+          reason,
+          attempt: recoveriesRef.current,
+          hiddenMs: h.since ? Math.round(now - h.since) : 0,
+          lastHiddenMs: Math.round(h.last),
+          uptimeMs: Math.round(now),
+        },
+      ),
+    );
+  }, []);
+
+  const recover = useCallback(
+    (reason: string) => {
+      if (recoveriesRef.current >= MAX_RECOVERIES) {
+        console.warn(`[StarfieldGpu] ${reason}；已重建 ${MAX_RECOVERIES} 次仍失敗，放棄 3D（留下 CSS 星空）`);
+        reportLost(reason, 'give-up');
+        setFailed(true);
+        return;
+      }
+      recoveriesRef.current += 1;
+      console.warn(`[StarfieldGpu] ${reason}；第 ${recoveriesRef.current} 次重建`);
+      reportLost(reason, 'rebuild');
+      // 分頁還在背景時重建沒有意義（GPU 資源正是那時候被回收的），等切回來再做。
+      if (document.hidden) {
+        const once = () => {
+          if (document.hidden) return;
+          document.removeEventListener('visibilitychange', once);
+          setGeneration((g) => g + 1);
+        };
+        document.addEventListener('visibilitychange', once);
+        return;
+      }
+      recoverTimerRef.current = setTimeout(() => setGeneration((g) => g + 1), 500);
+    },
+    [reportLost],
+  );
 
   // 首頁衛星的亮度：首頁送過來就轉給 runner。控制介面就緒（backend 變了）時也補送一次
   useEffect(() => subscribeSatelliteGlow((g) => controlRef.current?.glow(g)), [backend]);
@@ -210,6 +264,7 @@ export default function StarfieldGpu({
     send(skyPan());
     return subscribeSkyPan(send);
   }, [backend]);
+  useEffect(() => subscribeSkyFlight((f) => controlRef.current?.flight?.(f)), [backend]);
   // 頁面自己畫背景時（hooks/useBareSky）、換主題的那幾秒，星星淡出讓位。控制介面就緒（backend 變了）時補送一次
   useEffect(() => {
     const root = document.documentElement;
@@ -293,6 +348,7 @@ export default function StarfieldGpu({
       // 主程式一開始就先建好的那個（backdrop/prewarm，three.js 多半已經載好了）；重建時是新的一個
       const worker = takeSpaceWorker();
       const offscreen = canvas.transferControlToOffscreen();
+      if (drawable) setCanvasHost({ canvas, post: (message, transfer) => worker.postMessage(message, transfer ?? []) });
       const cancelStart = whenSkyNeeded(() =>
         worker.postMessage(
           {
@@ -324,6 +380,7 @@ export default function StarfieldGpu({
         collapse: (index) => worker.postMessage({ type: 'collapse', index }),
         stars: (visible) => worker.postMessage({ type: 'stars', visible }),
         pan: (x, y) => worker.postMessage({ type: 'pan', x, y }),
+        flight: (f) => worker.postMessage({ type: 'panFlight', flight: f, origin: performance.timeOrigin }),
         sections: (count) => worker.postMessage({ type: 'sections', count }),
         theme: (theme, colors) => worker.postMessage({ type: 'theme', theme, palette: colors }),
       };
@@ -337,13 +394,18 @@ export default function StarfieldGpu({
           positions?: SatelliteScreen[];
           at?: number;
           grow?: SaturnGrow;
+          drawables?: boolean;
+          geometry?: LabelGeometry;
         }>,
       ) => {
         if (e.data.type === 'satellites') publishSatellites(e.data.positions ?? [], e.data.at);
+        else if (e.data.type === 'labelGeometry' && e.data.geometry) applyLabelGeometry(e.data.geometry);
+        else if (e.data.type === 'labelsRetry') retryLabels();
         else if (e.data.type === 'saturnGrow' && e.data.grow) publishSaturnGrow(e.data.grow);
         else if (e.data.type === 'ready') {
-          setBackend(`${e.data.backend} · worker`);
+          setBackend(`${e.data.backend} · worker${drawable && e.data.drawables ? ' · HTML-in-Canvas' : ''}`);
           setInitInfo(describeInit(e.data.timing));
+          if (drawable) setCanvasDrawables(e.data.drawables === true);
         } else if (e.data.type === 'perf') setPerf(e.data.report ?? null);
         else if (e.data.type === 'lost') recover(e.data.message ?? 'GPU device lost');
         else if (e.data.type === 'error') {
@@ -375,6 +437,7 @@ export default function StarfieldGpu({
         // 讀者去推敲 addEventListener 的對應在哪。
         worker.removeEventListener('message', onMsg);
         worker.terminate();
+        if (drawable) setCanvasHost(null);
       };
     }
 
@@ -452,7 +515,7 @@ export default function StarfieldGpu({
       runnerHandle?.dispose();
     };
     // generation 變化 = device lost 之後要整組重建（canvas 換了新的 DOM 節點，見上面的註解）
-  }, [generation, recover]);
+  }, [generation, recover, drawable]);
 
   // 初始化失敗（無 WebGPU 也無 WebGL 的機器）→ 優雅消失，頁面留下 CSS 星空
   if (failed) return null;
@@ -466,6 +529,7 @@ export default function StarfieldGpu({
       <canvas
         key={generation}
         ref={canvasRef}
+        content={drawable ? 'drawable' : undefined}
         style={{
           ...canvasStyle,
           zIndex,

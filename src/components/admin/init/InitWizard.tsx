@@ -9,11 +9,13 @@ import { adminLang, useAdminT } from '@/i18n/admin-i18n';
 import { apiErrorText } from '@/lib/apiError';
 import { jsonAuthHeaders } from '@/lib/authToken';
 import { SUPPORTED_LOCALES } from '@/lib/locales';
+import { sameTitle } from '@/lib/pageTitle';
 import AdminLangSwitch from '../AdminLangSwitch';
 import AdminLoading from '../AdminLoading';
 import OrbitPreview from '../site/OrbitPreview';
-import { IdentityFields, LocaleFields, PageToggles, SiteField } from '../site/SiteFields';
+import { IdentityFields, LocaleFields, PageToggles, SiteField, ThemeFields } from '../site/SiteFields';
 import { TOGGLE_GROUPS, draftOf, siteProblems, type Draft } from '../site/siteDraft';
+import { WizardRestore } from '../site/BackupSection';
 import OAuthGuide from './OAuthGuide';
 import { STEPS, clearSession, readSession, writeSession, type Step } from './initSession';
 import './InitWizard.css';
@@ -47,7 +49,7 @@ function PageHead({ kicker, title, latin, lede }: { kicker?: string; title: stri
       {kicker && <p className="wz-kicker">{kicker}</p>}
       <div className="wz-h">
         <h1>{title}</h1>
-        <span lang="en">{latin}</span>
+        {!sameTitle(title, latin) && <span lang="en">{latin}</span>}
       </div>
       <p className="wz-lede">{lede}</p>
     </>
@@ -229,6 +231,8 @@ export default function InitWizard() {
           />
         </SiteField>
         <p className="wz-hint">{t('init.gate.envHint')}</p>
+        {/* 搬家：舊站的備份直接換上來（要先填設定碼） */}
+        <WizardRestore code={code} />
       </>
     );
     foot = (
@@ -323,6 +327,9 @@ export default function InitWizard() {
       <>
         <PageHead title={t('init.site.title')} latin={t('init.site.latin')} lede={t('init.site.lede')} />
         <IdentityFields draft={draft} patch={patch} url={url} touched={touched} />
+        {/* 天體：四顆挑一顆當預設（讀者能不能自己換、試看連結在之後的站台設定頁） */}
+        <span className="sf-label">{t('init.site.theme')}</span>
+        <ThemeFields draft={draft} patch={patch} brief />
       </>
     );
     foot = (

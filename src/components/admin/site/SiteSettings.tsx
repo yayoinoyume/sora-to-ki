@@ -23,13 +23,16 @@ import { PageHead, SectionHead } from '../AdminPage';
 import { SaveBar } from '../pageEditorKit';
 import UnsavedGuard from '../UnsavedGuard';
 import DescriptionFields from './DescriptionFields';
+import BackupSection from './BackupSection';
+import NotifySettings from './NotifySettings';
 import OrbitPreview from './OrbitPreview';
+import SignatureField from './SignatureField';
 import { IdentityFields, LocaleFields, PageToggles, ThemeFields } from './SiteFields';
 import { draftOf, siteProblems, type Draft } from './siteDraft';
 import './SiteSettings.css';
 
 // 站台設定（/admin/site）：身分、天體、語系、頁面開關四段，欄位跟初次設定的精靈是同一組（SiteFields）。
-// 四段一起存（PUT /api/admin/site/config 收整份）。換預設語系會讓全站網址整批改掉，存之前再問一次。
+// 四段一起存（PUT /api/admin/site/config 收整份）；最後的通知是另一支 API，自己存（NotifySettings）。換預設語系會讓全站網址整批改掉，存之前再問一次。
 
 export default function SiteSettings() {
   const { t } = useAdminT();
@@ -93,6 +96,7 @@ export default function SiteSettings() {
       <section className="adm-stack" aria-labelledby="sfs-identity">
         <SectionHead id="sfs-identity">{t('site.settings.identityHead')}</SectionHead>
         <IdentityFields draft={draft} patch={patch} url={config.url} touched={touched} />
+        <SignatureField draft={draft} patch={patch} />
       </section>
 
       <section className="adm-stack" aria-labelledby="sfs-theme">
@@ -126,6 +130,17 @@ export default function SiteSettings() {
           locales={[config.default_locale, ...config.locales.filter((l) => l !== config.default_locale)]}
           disabled={draft.disabled_pages}
         />
+      </section>
+
+      <section className="adm-stack" aria-labelledby="sfs-notify">
+        <SectionHead id="sfs-notify">{t('site.settings.notifyHead')}</SectionHead>
+        <p className="adm-form-note">{t('site.settings.notifyNote')}</p>
+        <NotifySettings />
+      </section>
+
+      <section className="adm-stack" aria-labelledby="sfs-backup">
+        <SectionHead id="sfs-backup">{t('site.backup.head')}</SectionHead>
+        <BackupSection />
       </section>
 
       <SaveBar dirty={dirty} saving={saving} onReset={() => setEdited(null)} onSave={trySave} />
